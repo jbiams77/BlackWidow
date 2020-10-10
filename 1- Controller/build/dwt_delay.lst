@@ -1,0 +1,224 @@
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccrKGTkO.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"dwt_delay.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.DWT_Init,"ax",%progbits
+  16              		.align	1
+  17              		.global	DWT_Init
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	DWT_Init:
+  25              	.LFB65:
+  26              		.file 1 "Src/dwt_delay.c"
+   1:Src/dwt_delay.c **** 
+   2:Src/dwt_delay.c **** /*
+   3:Src/dwt_delay.c ****  * Simple microseconds delay routine, utilizing ARM's DWT
+   4:Src/dwt_delay.c ****  * (Data Watchpoint and Trace Unit) and HAL library.
+   5:Src/dwt_delay.c ****  * Intended to use with gcc compiler, but I hope it can be used
+   6:Src/dwt_delay.c ****  * with any other C compiler across the Universe (provided that
+   7:Src/dwt_delay.c ****  * ARM and CMSIS already invented) :)
+   8:Src/dwt_delay.c ****  * Max K
+   9:Src/dwt_delay.c ****  *
+  10:Src/dwt_delay.c ****  *
+  11:Src/dwt_delay.c ****  * This file is part of DWT_Delay package.
+  12:Src/dwt_delay.c ****  * DWT_Delay is free software: you can redistribute it and/or modify it
+  13:Src/dwt_delay.c ****  * under the terms of the GNU General Public License as published by
+  14:Src/dwt_delay.c ****  * the Free Software Foundation, either version 3 of the License,
+  15:Src/dwt_delay.c ****  * or (at your option) any later version.
+  16:Src/dwt_delay.c ****  *
+  17:Src/dwt_delay.c ****  * us_delay is distributed in the hope that it will be useful,
+  18:Src/dwt_delay.c ****  * but WITHOUT ANY WARRANTY; without even the implied warranty
+  19:Src/dwt_delay.c ****  * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+  20:Src/dwt_delay.c ****  * the GNU General Public License for more details.
+  21:Src/dwt_delay.c ****  * http://www.gnu.org/licenses/.
+  22:Src/dwt_delay.c ****  */
+  23:Src/dwt_delay.c **** 
+  24:Src/dwt_delay.c **** #include "stm32f1xx_hal.h"          // change to whatever MCU you use
+  25:Src/dwt_delay.c **** #include "dwt_delay.h"
+  26:Src/dwt_delay.c **** 
+  27:Src/dwt_delay.c **** /**
+  28:Src/dwt_delay.c ****  * Initialization routine.
+  29:Src/dwt_delay.c ****  * You might need to enable access to DWT registers on Cortex-M7
+  30:Src/dwt_delay.c ****  *   DWT->LAR = 0xC5ACCE55
+  31:Src/dwt_delay.c ****  */
+  32:Src/dwt_delay.c **** void DWT_Init(void)
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccrKGTkO.s 			page 2
+
+
+  33:Src/dwt_delay.c **** {
+  27              		.loc 1 33 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  34:Src/dwt_delay.c ****     if (!(CoreDebug->DEMCR & CoreDebug_DEMCR_TRCENA_Msk)) {
+  32              		.loc 1 34 5 view .LVU1
+  33              		.loc 1 34 20 is_stmt 0 view .LVU2
+  34 0000 084B     		ldr	r3, .L3
+  35 0002 DB68     		ldr	r3, [r3, #12]
+  36              		.loc 1 34 8 view .LVU3
+  37 0004 13F0807F 		tst	r3, #16777216
+  38 0008 0BD1     		bne	.L1
+  35:Src/dwt_delay.c ****         CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+  39              		.loc 1 35 9 is_stmt 1 view .LVU4
+  40              		.loc 1 35 26 is_stmt 0 view .LVU5
+  41 000a 064A     		ldr	r2, .L3
+  42 000c D368     		ldr	r3, [r2, #12]
+  43 000e 43F08073 		orr	r3, r3, #16777216
+  44 0012 D360     		str	r3, [r2, #12]
+  36:Src/dwt_delay.c ****         DWT->CYCCNT = 0;
+  45              		.loc 1 36 9 is_stmt 1 view .LVU6
+  46              		.loc 1 36 21 is_stmt 0 view .LVU7
+  47 0014 044B     		ldr	r3, .L3+4
+  48 0016 0022     		movs	r2, #0
+  49 0018 5A60     		str	r2, [r3, #4]
+  37:Src/dwt_delay.c ****         DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+  50              		.loc 1 37 9 is_stmt 1 view .LVU8
+  51              		.loc 1 37 19 is_stmt 0 view .LVU9
+  52 001a 1A68     		ldr	r2, [r3]
+  53 001c 42F00102 		orr	r2, r2, #1
+  54 0020 1A60     		str	r2, [r3]
+  55              	.L1:
+  38:Src/dwt_delay.c ****     }
+  39:Src/dwt_delay.c **** }
+  56              		.loc 1 39 1 view .LVU10
+  57 0022 7047     		bx	lr
+  58              	.L4:
+  59              		.align	2
+  60              	.L3:
+  61 0024 F0ED00E0 		.word	-536810000
+  62 0028 001000E0 		.word	-536866816
+  63              		.cfi_endproc
+  64              	.LFE65:
+  66              		.section	.text.DWT_Delay,"ax",%progbits
+  67              		.align	1
+  68              		.global	DWT_Delay
+  69              		.syntax unified
+  70              		.thumb
+  71              		.thumb_func
+  72              		.fpu softvfp
+  74              	DWT_Delay:
+  75              	.LVL0:
+  76              	.LFB66:
+  40:Src/dwt_delay.c **** 
+  41:Src/dwt_delay.c **** #if DWT_DELAY_NEWBIE
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccrKGTkO.s 			page 3
+
+
+  42:Src/dwt_delay.c **** /**
+  43:Src/dwt_delay.c ****  * If you are a newbie and see magic in DWT_Delay, consider this more
+  44:Src/dwt_delay.c ****  * illustrative function, where you explicitly determine a counter
+  45:Src/dwt_delay.c ****  * value when delay should stop while keeping things in bounds of uint32.
+  46:Src/dwt_delay.c **** */
+  47:Src/dwt_delay.c **** void DWT_Delay(uint32_t us) // microseconds
+  48:Src/dwt_delay.c **** {
+  49:Src/dwt_delay.c ****     uint32_t startTick  = DWT->CYCCNT,
+  50:Src/dwt_delay.c ****              targetTick = DWT->CYCCNT + us * (SystemCoreClock/1000000);
+  51:Src/dwt_delay.c **** 
+  52:Src/dwt_delay.c ****     // Must check if target tick is out of bounds and overflowed
+  53:Src/dwt_delay.c ****     if (targetTick > startTick) {
+  54:Src/dwt_delay.c ****         // Not overflowed
+  55:Src/dwt_delay.c ****         while (DWT->CYCCNT < targetTick);
+  56:Src/dwt_delay.c ****     } else {
+  57:Src/dwt_delay.c ****         // Overflowed
+  58:Src/dwt_delay.c ****         while (DWT->CYCCNT > startTick || DWT->CYCCNT < targetTick);
+  59:Src/dwt_delay.c ****     }
+  60:Src/dwt_delay.c **** }
+  61:Src/dwt_delay.c **** #else
+  62:Src/dwt_delay.c **** /**
+  63:Src/dwt_delay.c ****  * Delay routine itself.
+  64:Src/dwt_delay.c ****  * Time is in microseconds (1/1000000th of a second), not to be
+  65:Src/dwt_delay.c ****  * confused with millisecond (1/1000th).
+  66:Src/dwt_delay.c ****  *
+  67:Src/dwt_delay.c ****  * No need to check an overflow. Let it just tick :)
+  68:Src/dwt_delay.c ****  *
+  69:Src/dwt_delay.c ****  * @param uint32_t us  Number of microseconds to delay for
+  70:Src/dwt_delay.c ****  */
+  71:Src/dwt_delay.c **** void DWT_Delay(uint32_t us) // microseconds
+  72:Src/dwt_delay.c **** {
+  77              		.loc 1 72 1 is_stmt 1 view -0
+  78              		.cfi_startproc
+  79              		@ args = 0, pretend = 0, frame = 0
+  80              		@ frame_needed = 0, uses_anonymous_args = 0
+  81              		@ link register save eliminated.
+  73:Src/dwt_delay.c ****     uint32_t startTick = DWT->CYCCNT,
+  82              		.loc 1 73 5 view .LVU12
+  83              		.loc 1 73 14 is_stmt 0 view .LVU13
+  84 0000 074B     		ldr	r3, .L7
+  85 0002 5A68     		ldr	r2, [r3, #4]
+  86              	.LVL1:
+  74:Src/dwt_delay.c ****              delayTicks = us * (SystemCoreClock/1000000);
+  87              		.loc 1 74 48 view .LVU14
+  88 0004 074B     		ldr	r3, .L7+4
+  89 0006 1B68     		ldr	r3, [r3]
+  90 0008 0749     		ldr	r1, .L7+8
+  91 000a A1FB0313 		umull	r1, r3, r1, r3
+  92 000e 9B0C     		lsrs	r3, r3, #18
+  93              		.loc 1 74 14 view .LVU15
+  94 0010 00FB03F0 		mul	r0, r0, r3
+  95              	.LVL2:
+  75:Src/dwt_delay.c **** 
+  76:Src/dwt_delay.c ****     while (DWT->CYCCNT - startTick < delayTicks);
+  96              		.loc 1 76 5 is_stmt 1 view .LVU16
+  97              	.L6:
+  98              		.loc 1 76 49 discriminator 1 view .LVU17
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccrKGTkO.s 			page 4
+
+
+  99              		.loc 1 76 11 discriminator 1 view .LVU18
+ 100              		.loc 1 76 15 is_stmt 0 discriminator 1 view .LVU19
+ 101 0014 024B     		ldr	r3, .L7
+ 102 0016 5B68     		ldr	r3, [r3, #4]
+ 103              		.loc 1 76 24 discriminator 1 view .LVU20
+ 104 0018 9B1A     		subs	r3, r3, r2
+ 105              		.loc 1 76 11 discriminator 1 view .LVU21
+ 106 001a 8342     		cmp	r3, r0
+ 107 001c FAD3     		bcc	.L6
+  77:Src/dwt_delay.c **** }
+ 108              		.loc 1 77 1 view .LVU22
+ 109 001e 7047     		bx	lr
+ 110              	.L8:
+ 111              		.align	2
+ 112              	.L7:
+ 113 0020 001000E0 		.word	-536866816
+ 114 0024 00000000 		.word	SystemCoreClock
+ 115 0028 83DE1B43 		.word	1125899907
+ 116              		.cfi_endproc
+ 117              	.LFE66:
+ 119              		.text
+ 120              	.Letext0:
+ 121              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 122              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 123              		.file 4 "Drivers/CMSIS/Include/core_cm3.h"
+ 124              		.file 5 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
+ 125              		.file 6 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccrKGTkO.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 dwt_delay.c
+C:\Users\Brandon\AppData\Local\Temp\ccrKGTkO.s:16     .text.DWT_Init:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccrKGTkO.s:24     .text.DWT_Init:00000000 DWT_Init
+C:\Users\Brandon\AppData\Local\Temp\ccrKGTkO.s:61     .text.DWT_Init:00000024 $d
+C:\Users\Brandon\AppData\Local\Temp\ccrKGTkO.s:67     .text.DWT_Delay:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccrKGTkO.s:74     .text.DWT_Delay:00000000 DWT_Delay
+C:\Users\Brandon\AppData\Local\Temp\ccrKGTkO.s:113    .text.DWT_Delay:00000020 $d
+
+UNDEFINED SYMBOLS
+SystemCoreClock

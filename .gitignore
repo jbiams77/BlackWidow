@@ -1,0 +1,12 @@
+ControllerCopy/*
+5 - Communication
+.vs
+.vscode
+.mxproject
+.stm32ignore
+.stmignore
+BlackWidow.ioc
+Makefile
+startup_stm32f103xb.s
+STM32F103C8Tx.FLASH.Id
+STM32Make.make
