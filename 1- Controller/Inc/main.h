@@ -29,6 +29,17 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
+#include "stm32f1xx_ll_dma.h"
+#include "stm32f1xx_ll_rcc.h"
+#include "stm32f1xx_ll_bus.h"
+#include "stm32f1xx_ll_system.h"
+#include "stm32f1xx_ll_exti.h"
+#include "stm32f1xx_ll_cortex.h"
+#include "stm32f1xx_ll_utils.h"
+#include "stm32f1xx_ll_pwr.h"
+#include "stm32f1xx_ll_usart.h"
+#include "stm32f1xx.h"
+#include "stm32f1xx_ll_gpio.h"
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -87,7 +98,6 @@ void Error_Handler(void);
 #define PACKET_ID  4
 #define LENGTH_LOW 5
 #define LENGTH_HIGH 6
-
 
 
 #ifdef __cplusplus

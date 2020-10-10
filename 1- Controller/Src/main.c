@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "queue.h"
+#include "port_handler.h"
 #include <stdint.h>
 
 
@@ -38,18 +38,8 @@ static void MX_USART1_UART_Init(void);
 uint16_t angleToHex(uint16_t angle);
 void Packet_Handlers(uint8_t*);
 
-uint8_t rx_buff[20];
 
-
-/* USER CODE BEGIN 4 */
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-
-}
-
-
-/* USER CODE END 4 */
-
+/* MAIN ------------------------------------------------------------*/
 int main(void)
 {
   
@@ -64,9 +54,7 @@ int main(void)
 	DRV8825_initStepper();
   AS5600_SetZero();
   HAL_GPIO_WritePin(DATA_DIR_GPIO_Port, DATA_DIR_Pin, 0);
-  HAL_UART_Receive_DMA(&huart1, rx_buff, sizeof(rx_buff));
-  //HAL_UART_Receive_IT(&huart1, rx_buff, sizeof(rx_buff));
-  /**********************/
+  UARTRXInit();
 
   //DRV8825_setCurrentAngle(AS5600_GetCalAngle());
   volatile uint16_t angle;
@@ -76,8 +64,7 @@ int main(void)
 
   int count = 0;
   while(1){
-    
-    
+
 
   }
 

@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -24,7 +24,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
   21              		.thumb_func
   22              		.fpu softvfp
   24              	HAL_MspInit:
-  25              	.LFB65:
+  25              	.LFB527:
   26              		.file 1 "Src/stm32f1xx_hal_msp.c"
    1:Src/stm32f1xx_hal_msp.c **** /* USER CODE BEGIN Header */
    2:Src/stm32f1xx_hal_msp.c **** /**
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
   30:Src/stm32f1xx_hal_msp.c **** /* USER CODE BEGIN TD */
   31:Src/stm32f1xx_hal_msp.c **** 
   32:Src/stm32f1xx_hal_msp.c **** /* USER CODE END TD */
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 2
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 2
 
 
   33:Src/stm32f1xx_hal_msp.c **** 
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
   42 000a 9A61     		str	r2, [r3, #24]
   43              		.loc 1 71 3 view .LVU4
   44 000c 9A69     		ldr	r2, [r3, #24]
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 3
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 3
 
 
   45 000e 02F00102 		and	r2, r2, #1
@@ -178,14 +178,14 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
   87 0038 7047     		bx	lr
   88              	.L4:
   89 003a 00BF     		.align	2
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 4
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 4
 
 
   90              	.L3:
   91 003c 00100240 		.word	1073876992
   92 0040 00000140 		.word	1073807360
   93              		.cfi_endproc
-  94              	.LFE65:
+  94              	.LFE527:
   96              		.section	.text.HAL_I2C_MspInit,"ax",%progbits
   97              		.align	1
   98              		.global	HAL_I2C_MspInit
@@ -195,7 +195,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  102              		.fpu softvfp
  104              	HAL_I2C_MspInit:
  105              	.LVL3:
- 106              	.LFB66:
+ 106              	.LFB528:
   84:Src/stm32f1xx_hal_msp.c **** 
   85:Src/stm32f1xx_hal_msp.c **** /**
   86:Src/stm32f1xx_hal_msp.c **** * @brief I2C MSP Initialization
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  135              	.L5:
   95:Src/stm32f1xx_hal_msp.c ****   {
   96:Src/stm32f1xx_hal_msp.c ****   /* USER CODE BEGIN I2C2_MspInit 0 */
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 5
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 5
 
 
   97:Src/stm32f1xx_hal_msp.c **** 
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  105:Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
  163              		.loc 1 105 5 view .LVU34
  105:Src/stm32f1xx_hal_msp.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 6
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 6
 
 
  164              		.loc 1 105 25 is_stmt 0 view .LVU35
@@ -355,10 +355,10 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  203 005c 00100240 		.word	1073876992
  204 0060 000C0140 		.word	1073810432
  205              		.cfi_endproc
- 206              	.LFE66:
+ 206              	.LFE528:
  208              		.section	.text.HAL_I2C_MspDeInit,"ax",%progbits
  209              		.align	1
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 7
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 7
 
 
  210              		.global	HAL_I2C_MspDeInit
@@ -368,7 +368,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  214              		.fpu softvfp
  216              	HAL_I2C_MspDeInit:
  217              	.LVL8:
- 218              	.LFB67:
+ 218              	.LFB529:
  118:Src/stm32f1xx_hal_msp.c **** 
  119:Src/stm32f1xx_hal_msp.c **** /**
  120:Src/stm32f1xx_hal_msp.c **** * @brief I2C MSP De-Initialization
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  145:Src/stm32f1xx_hal_msp.c **** 
  146:Src/stm32f1xx_hal_msp.c **** }
  238              		.loc 1 146 1 view .LVU54
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 8
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 8
 
 
  239 000a 08BD     		pop	{r3, pc}
@@ -448,7 +448,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  260 0028 00100240 		.word	1073876992
  261 002c 000C0140 		.word	1073810432
  262              		.cfi_endproc
- 263              	.LFE67:
+ 263              	.LFE529:
  265              		.section	.text.HAL_UART_MspInit,"ax",%progbits
  266              		.align	1
  267              		.global	HAL_UART_MspInit
@@ -458,7 +458,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  271              		.fpu softvfp
  273              	HAL_UART_MspInit:
  274              	.LVL13:
- 275              	.LFB68:
+ 275              	.LFB530:
  147:Src/stm32f1xx_hal_msp.c **** 
  148:Src/stm32f1xx_hal_msp.c **** /**
  149:Src/stm32f1xx_hal_msp.c **** * @brief UART MSP Initialization
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  283              		.cfi_def_cfa_offset 24
  284              		.cfi_offset 4, -24
  285              		.cfi_offset 5, -20
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 9
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 9
 
 
  286              		.cfi_offset 6, -16
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  187:Src/stm32f1xx_hal_msp.c ****     hdma_usart1_rx.Init.MemInc = DMA_MINC_ENABLE;
  188:Src/stm32f1xx_hal_msp.c ****     hdma_usart1_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
  189:Src/stm32f1xx_hal_msp.c ****     hdma_usart1_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 10
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 10
 
 
  190:Src/stm32f1xx_hal_msp.c ****     hdma_usart1_rx.Init.Mode = DMA_NORMAL;
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  338              		.loc 1 165 5 view .LVU74
  339              	.LBB8:
  165:Src/stm32f1xx_hal_msp.c ****     /**USART1 GPIO Configuration    
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 11
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 11
 
 
  340              		.loc 1 165 5 view .LVU75
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  378              		.loc 1 176 26 is_stmt 0 view .LVU91
  379 0066 0025     		movs	r5, #0
  380 0068 0395     		str	r5, [sp, #12]
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 12
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 12
 
 
  177:Src/stm32f1xx_hal_msp.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  418              		.loc 1 186 35 is_stmt 0 view .LVU108
  419 008c 8560     		str	r5, [r0, #8]
  187:Src/stm32f1xx_hal_msp.c ****     hdma_usart1_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 13
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 13
 
 
  420              		.loc 1 187 5 is_stmt 1 view .LVU109
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  456 00ae 2520     		movs	r0, #37
  457 00b0 FFF7FEFF 		bl	HAL_NVIC_EnableIRQ
  458              	.LVL26:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 14
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 14
 
 
  459              		.loc 1 207 1 is_stmt 0 view .LVU128
@@ -798,7 +798,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  472 00c8 00000000 		.word	hdma_usart1_rx
  473 00cc 58000240 		.word	1073872984
  474              		.cfi_endproc
- 475              	.LFE68:
+ 475              	.LFE530:
  477              		.section	.text.HAL_UART_MspDeInit,"ax",%progbits
  478              		.align	1
  479              		.global	HAL_UART_MspDeInit
@@ -808,7 +808,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  483              		.fpu softvfp
  485              	HAL_UART_MspDeInit:
  486              	.LVL28:
- 487              	.LFB69:
+ 487              	.LFB531:
  208:Src/stm32f1xx_hal_msp.c **** 
  209:Src/stm32f1xx_hal_msp.c **** /**
  210:Src/stm32f1xx_hal_msp.c **** * @brief UART MSP De-Initialization
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  503              	.LCFI11:
  504              		.cfi_def_cfa_offset 8
  505              		.cfi_offset 4, -8
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 15
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 15
 
 
  506              		.cfi_offset 14, -4
@@ -896,9 +896,9 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  536 0034 00100240 		.word	1073876992
  537 0038 000C0140 		.word	1073810432
  538              		.cfi_endproc
- 539              	.LFE69:
+ 539              	.LFE531:
  541              		.text
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 16
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 16
 
 
  542              	.Letext0:
@@ -918,28 +918,29 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 1
  556              		.file 15 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eab
  557              		.file 16 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
  558              		.file 17 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
- 559              		.file 18 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h"
- 560              		.file 19 "Inc/main.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s 			page 17
+ 559              		.file 18 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
+ 560              		.file 19 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h"
+ 561              		.file 20 "Inc/main.h"
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s 			page 17
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 stm32f1xx_hal_msp.c
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:16     .text.HAL_MspInit:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:24     .text.HAL_MspInit:00000000 HAL_MspInit
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:91     .text.HAL_MspInit:0000003c $d
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:97     .text.HAL_I2C_MspInit:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:104    .text.HAL_I2C_MspInit:00000000 HAL_I2C_MspInit
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:202    .text.HAL_I2C_MspInit:00000058 $d
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:209    .text.HAL_I2C_MspDeInit:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:216    .text.HAL_I2C_MspDeInit:00000000 HAL_I2C_MspDeInit
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:259    .text.HAL_I2C_MspDeInit:00000024 $d
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:266    .text.HAL_UART_MspInit:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:273    .text.HAL_UART_MspInit:00000000 HAL_UART_MspInit
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:469    .text.HAL_UART_MspInit:000000bc $d
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:478    .text.HAL_UART_MspDeInit:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:485    .text.HAL_UART_MspDeInit:00000000 HAL_UART_MspDeInit
-C:\Users\Brandon\AppData\Local\Temp\ccRNdf0N.s:535    .text.HAL_UART_MspDeInit:00000030 $d
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:16     .text.HAL_MspInit:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:24     .text.HAL_MspInit:00000000 HAL_MspInit
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:91     .text.HAL_MspInit:0000003c $d
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:97     .text.HAL_I2C_MspInit:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:104    .text.HAL_I2C_MspInit:00000000 HAL_I2C_MspInit
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:202    .text.HAL_I2C_MspInit:00000058 $d
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:209    .text.HAL_I2C_MspDeInit:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:216    .text.HAL_I2C_MspDeInit:00000000 HAL_I2C_MspDeInit
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:259    .text.HAL_I2C_MspDeInit:00000024 $d
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:266    .text.HAL_UART_MspInit:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:273    .text.HAL_UART_MspInit:00000000 HAL_UART_MspInit
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:469    .text.HAL_UART_MspInit:000000bc $d
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:478    .text.HAL_UART_MspDeInit:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:485    .text.HAL_UART_MspDeInit:00000000 HAL_UART_MspDeInit
+C:\Users\Brandon\AppData\Local\Temp\ccGyw7gM.s:535    .text.HAL_UART_MspDeInit:00000030 $d
 
 UNDEFINED SYMBOLS
 HAL_GPIO_Init

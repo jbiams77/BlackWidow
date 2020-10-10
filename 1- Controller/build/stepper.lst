@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -24,7 +24,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
   21              		.thumb_func
   22              		.fpu softvfp
   24              	DRV8825_setMode:
-  25              	.LFB66:
+  25              	.LFB528:
   26              		.file 1 "Src/stepper.c"
    1:Src/stepper.c **** #include "stepper.h"
    2:Src/stepper.c **** #include "main.h"
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
   30              		@ frame_needed = 0, uses_anonymous_args = 0
   31 0000 10B5     		push	{r4, lr}
   32              	.LCFI0:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 2
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s 			page 2
 
 
   33              		.cfi_def_cfa_offset 8
@@ -95,7 +95,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
   59              	.L3:
   60 002c 000C0140 		.word	1073810432
   61              		.cfi_endproc
-  62              	.LFE66:
+  62              	.LFE528:
   64              		.section	.text.DRV8825_findDirection,"ax",%progbits
   65              		.align	1
   66              		.global	DRV8825_findDirection
@@ -104,7 +104,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
   69              		.thumb_func
   70              		.fpu softvfp
   72              	DRV8825_findDirection:
-  73              	.LFB67:
+  73              	.LFB529:
   32:Src/stepper.c **** 
   33:Src/stepper.c **** 
   34:Src/stepper.c **** void DRV8825_findDirection()
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
   80              		.cfi_def_cfa_offset 8
   81              		.cfi_offset 3, -8
   82              		.cfi_offset 14, -4
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 3
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s 			page 3
 
 
   36:Src/stepper.c ****     if(m.target_angle < m.current_angle) {
@@ -162,7 +162,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  113 0028 00000000 		.word	m
  114 002c 00080140 		.word	1073809408
  115              		.cfi_endproc
- 116              	.LFE67:
+ 116              	.LFE529:
  118              		.section	.text.DRV8825_enableStepper,"ax",%progbits
  119              		.align	1
  120              		.global	DRV8825_enableStepper
@@ -171,14 +171,14 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  123              		.thumb_func
  124              		.fpu softvfp
  126              	DRV8825_enableStepper:
- 127              	.LFB68:
+ 127              	.LFB530:
   43:Src/stepper.c **** 
   44:Src/stepper.c **** void DRV8825_enableStepper()
   45:Src/stepper.c **** {
  128              		.loc 1 45 1 is_stmt 1 view -0
  129              		.cfi_startproc
  130              		@ args = 0, pretend = 0, frame = 0
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 4
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s 			page 4
 
 
  131              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -202,7 +202,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  147              	.L13:
  148 0010 00080140 		.word	1073809408
  149              		.cfi_endproc
- 150              	.LFE68:
+ 150              	.LFE530:
  152              		.section	.text.DRV8825_initStepper,"ax",%progbits
  153              		.align	1
  154              		.global	DRV8825_initStepper
@@ -211,7 +211,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  157              		.thumb_func
  158              		.fpu softvfp
  160              	DRV8825_initStepper:
- 161              	.LFB65:
+ 161              	.LFB527:
    7:Src/stepper.c ****     m.delay = 60;
  162              		.loc 1 7 1 is_stmt 1 view -0
  163              		.cfi_startproc
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
   10:Src/stepper.c **** 	DRV8825_enableStepper();
  180              		.loc 1 10 5 is_stmt 1 view .LVU22
  181 000c FFF7FEFF 		bl	DRV8825_setMode
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 5
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s 			page 5
 
 
  182              	.LVL6:
@@ -254,7 +254,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  190              	.L17:
  191 0018 00000000 		.word	m
  192              		.cfi_endproc
- 193              	.LFE65:
+ 193              	.LFE527:
  195              		.section	.text.DRV8825_disableStepper,"ax",%progbits
  196              		.align	1
  197              		.global	DRV8825_disableStepper
@@ -263,7 +263,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  200              		.thumb_func
  201              		.fpu softvfp
  203              	DRV8825_disableStepper:
- 204              	.LFB69:
+ 204              	.LFB531:
   48:Src/stepper.c **** 
   49:Src/stepper.c **** void DRV8825_disableStepper()
   50:Src/stepper.c **** {
@@ -291,19 +291,19 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  224              	.L21:
  225 0010 00080140 		.word	1073809408
  226              		.cfi_endproc
- 227              	.LFE69:
+ 227              	.LFE531:
  229              		.section	.text.DRV8825_step,"ax",%progbits
  230              		.align	1
  231              		.global	DRV8825_step
  232              		.syntax unified
  233              		.thumb
  234              		.thumb_func
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 6
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s 			page 6
 
 
  235              		.fpu softvfp
  237              	DRV8825_step:
- 238              	.LFB71:
+ 238              	.LFB533:
   53:Src/stepper.c **** 
   54:Src/stepper.c **** uint8_t DRV8825_goToTarget()
   55:Src/stepper.c **** {
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  268 0020 FFF7FEFF 		bl	HAL_GPIO_WritePin
  269              	.LVL11:
   75:Src/stepper.c ****     DWT_Delay(m.delay);
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 7
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s 			page 7
 
 
  270              		.loc 1 75 5 view .LVU34
@@ -374,7 +374,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  279 002c 00080140 		.word	1073809408
  280 0030 00000000 		.word	m
  281              		.cfi_endproc
- 282              	.LFE71:
+ 282              	.LFE533:
  284              		.global	__aeabi_i2f
  285              		.global	__aeabi_fcmpgt
  286              		.section	.text.DRV8825_goToTarget,"ax",%progbits
@@ -385,7 +385,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  291              		.thumb_func
  292              		.fpu softvfp
  294              	DRV8825_goToTarget:
- 295              	.LFB70:
+ 295              	.LFB532:
   55:Src/stepper.c ****     int i;
  296              		.loc 1 55 1 is_stmt 1 view -0
  297              		.cfi_startproc
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  318 0010 FFF7FEFF 		bl	__aeabi_i2f
  319              	.LVL13:
  320 0014 0446     		mov	r4, r0
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 8
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s 			page 8
 
 
  321              	.LVL14:
@@ -478,13 +478,13 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  362              	.L35:
  363              		.align	2
  364              	.L34:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 9
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s 			page 9
 
 
  365 003c 00000000 		.word	m
  366 0040 0000A041 		.word	1101004800
  367              		.cfi_endproc
- 368              	.LFE70:
+ 368              	.LFE532:
  370              		.section	.text.DRV8825_setCurrentAngle,"ax",%progbits
  371              		.align	1
  372              		.global	DRV8825_setCurrentAngle
@@ -494,7 +494,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  376              		.fpu softvfp
  378              	DRV8825_setCurrentAngle:
  379              	.LVL22:
- 380              	.LFB72:
+ 380              	.LFB534:
   77:Src/stepper.c **** 
   78:Src/stepper.c **** void DRV8825_setCurrentAngle(uint16_t current_angle)
   79:Src/stepper.c **** {
@@ -516,7 +516,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  394              	.L37:
  395 0008 00000000 		.word	m
  396              		.cfi_endproc
- 397              	.LFE72:
+ 397              	.LFE534:
  399              		.section	.text.DRV8825_setTarget,"ax",%progbits
  400              		.align	1
  401              		.global	DRV8825_setTarget
@@ -526,7 +526,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  405              		.fpu softvfp
  407              	DRV8825_setTarget:
  408              	.LVL23:
- 409              	.LFB73:
+ 409              	.LFB535:
   82:Src/stepper.c **** 
   83:Src/stepper.c **** void DRV8825_setTarget(uint16_t new_angle)
   84:Src/stepper.c **** {
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
   85:Src/stepper.c ****     m.target_angle = new_angle;
  415              		.loc 1 85 5 view .LVU61
  416              		.loc 1 85 20 is_stmt 0 view .LVU62
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 10
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s 			page 10
 
 
  417 0000 014B     		ldr	r3, .L40
@@ -551,7 +551,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  423              	.L40:
  424 0008 00000000 		.word	m
  425              		.cfi_endproc
- 426              	.LFE73:
+ 426              	.LFE535:
  428              		.comm	m,8,4
  429              		.text
  430              	.Letext0:
@@ -569,39 +569,40 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 1
  442              		.file 13 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
  443              		.file 14 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
  444              		.file 15 "Inc/dwt_delay.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s 			page 11
+ 445              		.file 16 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s 			page 11
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 stepper.c
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:16     .text.DRV8825_setMode:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:24     .text.DRV8825_setMode:00000000 DRV8825_setMode
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:60     .text.DRV8825_setMode:0000002c $d
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:65     .text.DRV8825_findDirection:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:72     .text.DRV8825_findDirection:00000000 DRV8825_findDirection
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:113    .text.DRV8825_findDirection:00000028 $d
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:16     .text.DRV8825_setMode:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:24     .text.DRV8825_setMode:00000000 DRV8825_setMode
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:60     .text.DRV8825_setMode:0000002c $d
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:65     .text.DRV8825_findDirection:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:72     .text.DRV8825_findDirection:00000000 DRV8825_findDirection
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:113    .text.DRV8825_findDirection:00000028 $d
                             *COM*:00000008 m
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:119    .text.DRV8825_enableStepper:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:126    .text.DRV8825_enableStepper:00000000 DRV8825_enableStepper
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:148    .text.DRV8825_enableStepper:00000010 $d
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:153    .text.DRV8825_initStepper:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:160    .text.DRV8825_initStepper:00000000 DRV8825_initStepper
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:191    .text.DRV8825_initStepper:00000018 $d
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:196    .text.DRV8825_disableStepper:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:203    .text.DRV8825_disableStepper:00000000 DRV8825_disableStepper
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:225    .text.DRV8825_disableStepper:00000010 $d
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:230    .text.DRV8825_step:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:237    .text.DRV8825_step:00000000 DRV8825_step
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:279    .text.DRV8825_step:0000002c $d
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:287    .text.DRV8825_goToTarget:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:294    .text.DRV8825_goToTarget:00000000 DRV8825_goToTarget
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:365    .text.DRV8825_goToTarget:0000003c $d
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:371    .text.DRV8825_setCurrentAngle:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:378    .text.DRV8825_setCurrentAngle:00000000 DRV8825_setCurrentAngle
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:395    .text.DRV8825_setCurrentAngle:00000008 $d
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:400    .text.DRV8825_setTarget:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:407    .text.DRV8825_setTarget:00000000 DRV8825_setTarget
-C:\Users\Brandon\AppData\Local\Temp\cc1jyttF.s:424    .text.DRV8825_setTarget:00000008 $d
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:119    .text.DRV8825_enableStepper:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:126    .text.DRV8825_enableStepper:00000000 DRV8825_enableStepper
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:148    .text.DRV8825_enableStepper:00000010 $d
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:153    .text.DRV8825_initStepper:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:160    .text.DRV8825_initStepper:00000000 DRV8825_initStepper
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:191    .text.DRV8825_initStepper:00000018 $d
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:196    .text.DRV8825_disableStepper:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:203    .text.DRV8825_disableStepper:00000000 DRV8825_disableStepper
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:225    .text.DRV8825_disableStepper:00000010 $d
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:230    .text.DRV8825_step:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:237    .text.DRV8825_step:00000000 DRV8825_step
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:279    .text.DRV8825_step:0000002c $d
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:287    .text.DRV8825_goToTarget:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:294    .text.DRV8825_goToTarget:00000000 DRV8825_goToTarget
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:365    .text.DRV8825_goToTarget:0000003c $d
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:371    .text.DRV8825_setCurrentAngle:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:378    .text.DRV8825_setCurrentAngle:00000000 DRV8825_setCurrentAngle
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:395    .text.DRV8825_setCurrentAngle:00000008 $d
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:400    .text.DRV8825_setTarget:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:407    .text.DRV8825_setTarget:00000000 DRV8825_setTarget
+C:\Users\Brandon\AppData\Local\Temp\ccOu4meC.s:424    .text.DRV8825_setTarget:00000008 $d
 
 UNDEFINED SYMBOLS
 HAL_GPIO_WritePin

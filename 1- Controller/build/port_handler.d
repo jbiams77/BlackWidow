@@ -1,5 +1,5 @@
-build/stm32f1xx_it.o: Src/stm32f1xx_it.c Inc/main.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
+build/port_handler.o: Src/port_handler.c Inc/port_handler.h Inc/queue.h \
+ Inc/main.h Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  Inc/stm32f1xx_hal_conf.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h \
@@ -29,7 +29,11 @@ build/stm32f1xx_it.o: Src/stm32f1xx_it.c Inc/main.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_utils.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h Inc/stm32f1xx_it.h
+ Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h
+
+Inc/port_handler.h:
+
+Inc/queue.h:
 
 Inc/main.h:
 
@@ -98,5 +102,3 @@ Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h:
 Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h:
 
 Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h:
-
-Inc/stm32f1xx_it.h:

@@ -198,6 +198,7 @@ void SysTick_Handler(void)
 /* please refer to the startup file (startup_stm32f1xx.s).                    */
 /******************************************************************************/
 
+
 /**
   * @brief This function handles DMA1 channel5 global interrupt.
   */
@@ -221,7 +222,16 @@ void USART1_IRQHandler(void)
 
   /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart1);
-  /* USER CODE END USART1_IRQn 1 */      
+  /* USER CODE END USART1_IRQn 1 */   
+  if (__HAL_UART_GET_FLAG (&huart1, UART_FLAG_IDLE))
+
+  {
+
+   HAL_UART_RxCpltCallback (&huart1);
+
+   __HAL_UART_CLEAR_IDLEFLAG (&huart1); 
+
+  }   
 }
 
 /* USER CODE BEGIN 1 */

@@ -1,0 +1,314 @@
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"port_handler.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.UARTRXInit,"ax",%progbits
+  16              		.align	1
+  17              		.global	UARTRXInit
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	UARTRXInit:
+  25              	.LFB527:
+  26              		.file 1 "Src/port_handler.c"
+   1:Src/port_handler.c **** #include "port_handler.h"
+   2:Src/port_handler.c **** #include "main.h"
+   3:Src/port_handler.c **** 
+   4:Src/port_handler.c **** extern DMA_HandleTypeDef hdma_usart1_rx;
+   5:Src/port_handler.c **** extern UART_HandleTypeDef huart1;
+   6:Src/port_handler.c **** extern MessageQueue *message;
+   7:Src/port_handler.c **** 
+   8:Src/port_handler.c **** /* UART Managemnt ------------------------------------------------------------*/
+   9:Src/port_handler.c **** 
+  10:Src/port_handler.c **** 
+  11:Src/port_handler.c **** void UARTRXInit(void) {
+  27              		.loc 1 11 23 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 08B5     		push	{r3, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 3, -8
+  35              		.cfi_offset 14, -4
+  12:Src/port_handler.c ****   rxLastPos=0;
+  36              		.loc 1 12 3 view .LVU1
+  37              		.loc 1 12 12 is_stmt 0 view .LVU2
+  38 0002 0023     		movs	r3, #0
+  39 0004 074A     		ldr	r2, .L3
+  40 0006 1380     		strh	r3, [r2]	@ movhi
+  13:Src/port_handler.c ****   rxThisPos=0; 
+  41              		.loc 1 13 3 is_stmt 1 view .LVU3
+  42              		.loc 1 13 12 is_stmt 0 view .LVU4
+  43 0008 074A     		ldr	r2, .L3+4
+  44 000a 1380     		strh	r3, [r2]	@ movhi
+  14:Src/port_handler.c ****   __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // enable idle line interrupt
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s 			page 2
+
+
+  45              		.loc 1 14 3 is_stmt 1 view .LVU5
+  46 000c 0748     		ldr	r0, .L3+8
+  47 000e 0268     		ldr	r2, [r0]
+  48 0010 D368     		ldr	r3, [r2, #12]
+  49 0012 43F01003 		orr	r3, r3, #16
+  50 0016 D360     		str	r3, [r2, #12]
+  15:Src/port_handler.c ****   //hdma_uart1_rx.Instance->CR &= ~DMA_SxCR_HTIE;  // disable uart half tx interrupt
+  16:Src/port_handler.c ****   HAL_UART_Receive_DMA(&huart1,rxBuf,UART_RX_RINGBUFF_SZ); 
+  51              		.loc 1 16 3 view .LVU6
+  52 0018 4FF40072 		mov	r2, #512
+  53 001c 0449     		ldr	r1, .L3+12
+  54 001e FFF7FEFF 		bl	HAL_UART_Receive_DMA
+  55              	.LVL0:
+  17:Src/port_handler.c **** }
+  56              		.loc 1 17 1 is_stmt 0 view .LVU7
+  57 0022 08BD     		pop	{r3, pc}
+  58              	.L4:
+  59              		.align	2
+  60              	.L3:
+  61 0024 00000000 		.word	rxLastPos
+  62 0028 00000000 		.word	rxThisPos
+  63 002c 00000000 		.word	huart1
+  64 0030 00000000 		.word	rxBuf
+  65              		.cfi_endproc
+  66              	.LFE527:
+  68              		.section	.text.UARTRxComplete,"ax",%progbits
+  69              		.align	1
+  70              		.global	UARTRxComplete
+  71              		.syntax unified
+  72              		.thumb
+  73              		.thumb_func
+  74              		.fpu softvfp
+  76              	UARTRxComplete:
+  77              	.LFB528:
+  18:Src/port_handler.c **** 
+  19:Src/port_handler.c **** void UARTRxComplete(void) {
+  78              		.loc 1 19 27 is_stmt 1 view -0
+  79              		.cfi_startproc
+  80              		@ args = 0, pretend = 0, frame = 0
+  81              		@ frame_needed = 0, uses_anonymous_args = 0
+  82 0000 38B5     		push	{r3, r4, r5, lr}
+  83              	.LCFI1:
+  84              		.cfi_def_cfa_offset 16
+  85              		.cfi_offset 3, -16
+  86              		.cfi_offset 4, -12
+  87              		.cfi_offset 5, -8
+  88              		.cfi_offset 14, -4
+  20:Src/port_handler.c ****   uint8_t addr;
+  89              		.loc 1 20 3 view .LVU9
+  21:Src/port_handler.c ****   uint16_t len;
+  90              		.loc 1 21 3 view .LVU10
+  22:Src/port_handler.c ****   rxThisPos = UART_DMA_WRITE_PTR; //get current write pointer
+  91              		.loc 1 22 3 view .LVU11
+  92              		.loc 1 22 15 is_stmt 0 view .LVU12
+  93 0002 124B     		ldr	r3, .L10
+  94 0004 5B6B     		ldr	r3, [r3, #52]
+  95 0006 1B68     		ldr	r3, [r3]
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s 			page 3
+
+
+  96 0008 5D68     		ldr	r5, [r3, #4]
+  97 000a ADB2     		uxth	r5, r5
+  98 000c 6D42     		rsbs	r5, r5, #0
+  99 000e C5F30805 		ubfx	r5, r5, #0, #9
+ 100              		.loc 1 22 13 view .LVU13
+ 101 0012 0F4B     		ldr	r3, .L10+4
+ 102 0014 1D80     		strh	r5, [r3]	@ movhi
+  23:Src/port_handler.c ****   len=(rxThisPos-rxLastPos+UART_RX_RINGBUFF_SZ)%UART_RX_RINGBUFF_SZ; //calculate how far the DMA wr
+ 103              		.loc 1 23 3 is_stmt 1 view .LVU14
+ 104              		.loc 1 23 17 is_stmt 0 view .LVU15
+ 105 0016 0F4B     		ldr	r3, .L10+8
+ 106 0018 1C88     		ldrh	r4, [r3]
+ 107 001a 2D1B     		subs	r5, r5, r4
+ 108              		.loc 1 23 27 view .LVU16
+ 109 001c 05F50075 		add	r5, r5, #512
+ 110              		.loc 1 23 48 view .LVU17
+ 111 0020 6B42     		rsbs	r3, r5, #0
+ 112 0022 C5F30805 		ubfx	r5, r5, #0, #9
+ 113 0026 C3F30803 		ubfx	r3, r3, #0, #9
+ 114 002a 58BF     		it	pl
+ 115 002c 5D42     		rsbpl	r5, r3, #0
+ 116              	.LVL1:
+  24:Src/port_handler.c ****   int i;
+ 117              		.loc 1 24 3 is_stmt 1 view .LVU18
+  25:Src/port_handler.c ****   for (i=rxLastPos; i<(rxThisPos+len);i++){
+ 118              		.loc 1 25 3 view .LVU19
+ 119              	.L6:
+ 120              		.loc 1 25 21 discriminator 1 view .LVU20
+ 121              		.loc 1 25 33 is_stmt 0 discriminator 1 view .LVU21
+ 122 002e 084B     		ldr	r3, .L10+4
+ 123 0030 1B88     		ldrh	r3, [r3]
+ 124 0032 AAB2     		uxth	r2, r5
+ 125 0034 1344     		add	r3, r3, r2
+ 126              		.loc 1 25 3 discriminator 1 view .LVU22
+ 127 0036 A342     		cmp	r3, r4
+ 128 0038 07DD     		ble	.L9
+  26:Src/port_handler.c ****     enQueue(message, rxBuf[i]);
+ 129              		.loc 1 26 5 is_stmt 1 discriminator 3 view .LVU23
+ 130 003a 074B     		ldr	r3, .L10+12
+ 131 003c 195D     		ldrb	r1, [r3, r4]	@ zero_extendqisi2
+ 132 003e 074B     		ldr	r3, .L10+16
+ 133 0040 1868     		ldr	r0, [r3]
+ 134 0042 FFF7FEFF 		bl	enQueue
+ 135              	.LVL2:
+  25:Src/port_handler.c ****   for (i=rxLastPos; i<(rxThisPos+len);i++){
+ 136              		.loc 1 25 39 discriminator 3 view .LVU24
+  25:Src/port_handler.c ****   for (i=rxLastPos; i<(rxThisPos+len);i++){
+ 137              		.loc 1 25 40 is_stmt 0 discriminator 3 view .LVU25
+ 138 0046 0134     		adds	r4, r4, #1
+ 139              	.LVL3:
+  25:Src/port_handler.c ****   for (i=rxLastPos; i<(rxThisPos+len);i++){
+ 140              		.loc 1 25 40 discriminator 3 view .LVU26
+ 141 0048 F1E7     		b	.L6
+ 142              	.L9:
+  27:Src/port_handler.c ****   }
+  28:Src/port_handler.c **** }
+ 143              		.loc 1 28 1 view .LVU27
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s 			page 4
+
+
+ 144 004a 38BD     		pop	{r3, r4, r5, pc}
+ 145              	.LVL4:
+ 146              	.L11:
+ 147              		.loc 1 28 1 view .LVU28
+ 148              		.align	2
+ 149              	.L10:
+ 150 004c 00000000 		.word	huart1
+ 151 0050 00000000 		.word	rxThisPos
+ 152 0054 00000000 		.word	rxLastPos
+ 153 0058 00000000 		.word	rxBuf
+ 154 005c 00000000 		.word	message
+ 155              		.cfi_endproc
+ 156              	.LFE528:
+ 158              		.section	.text.HAL_UART_RxCpltCallback,"ax",%progbits
+ 159              		.align	1
+ 160              		.global	HAL_UART_RxCpltCallback
+ 161              		.syntax unified
+ 162              		.thumb
+ 163              		.thumb_func
+ 164              		.fpu softvfp
+ 166              	HAL_UART_RxCpltCallback:
+ 167              	.LVL5:
+ 168              	.LFB529:
+  29:Src/port_handler.c **** 
+  30:Src/port_handler.c **** void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+  31:Src/port_handler.c **** {
+ 169              		.loc 1 31 1 is_stmt 1 view -0
+ 170              		.cfi_startproc
+ 171              		@ args = 0, pretend = 0, frame = 0
+ 172              		@ frame_needed = 0, uses_anonymous_args = 0
+ 173              		.loc 1 31 1 is_stmt 0 view .LVU30
+ 174 0000 08B5     		push	{r3, lr}
+ 175              	.LCFI2:
+ 176              		.cfi_def_cfa_offset 8
+ 177              		.cfi_offset 3, -8
+ 178              		.cfi_offset 14, -4
+  32:Src/port_handler.c ****   if (huart->Instance == USART1) {       
+ 179              		.loc 1 32 3 is_stmt 1 view .LVU31
+ 180              		.loc 1 32 12 is_stmt 0 view .LVU32
+ 181 0002 0268     		ldr	r2, [r0]
+ 182              		.loc 1 32 6 view .LVU33
+ 183 0004 064B     		ldr	r3, .L16
+ 184 0006 9A42     		cmp	r2, r3
+ 185 0008 00D0     		beq	.L15
+ 186              	.LVL6:
+ 187              	.L12:
+  33:Src/port_handler.c ****     if (__HAL_UART_GET_FLAG (&huart1, UART_FLAG_IDLE)) {
+  34:Src/port_handler.c ****       UARTRxComplete();
+  35:Src/port_handler.c ****     }
+  36:Src/port_handler.c ****   }
+  37:Src/port_handler.c **** }...
+ 188              		.loc 1 37 1 view .LVU34
+ 189 000a 08BD     		pop	{r3, pc}
+ 190              	.LVL7:
+ 191              	.L15:
+  33:Src/port_handler.c ****     if (__HAL_UART_GET_FLAG (&huart1, UART_FLAG_IDLE)) {
+ 192              		.loc 1 33 5 is_stmt 1 view .LVU35
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s 			page 5
+
+
+  33:Src/port_handler.c ****     if (__HAL_UART_GET_FLAG (&huart1, UART_FLAG_IDLE)) {
+ 193              		.loc 1 33 9 is_stmt 0 view .LVU36
+ 194 000c 054B     		ldr	r3, .L16+4
+ 195 000e 1B68     		ldr	r3, [r3]
+ 196 0010 1B68     		ldr	r3, [r3]
+  33:Src/port_handler.c ****     if (__HAL_UART_GET_FLAG (&huart1, UART_FLAG_IDLE)) {
+ 197              		.loc 1 33 8 view .LVU37
+ 198 0012 13F0100F 		tst	r3, #16
+ 199 0016 F8D0     		beq	.L12
+  34:Src/port_handler.c ****       UARTRxComplete();
+ 200              		.loc 1 34 7 is_stmt 1 view .LVU38
+ 201 0018 FFF7FEFF 		bl	UARTRxComplete
+ 202              	.LVL8:
+ 203              		.loc 1 37 1 is_stmt 0 view .LVU39
+ 204 001c F5E7     		b	.L12
+ 205              	.L17:
+ 206 001e 00BF     		.align	2
+ 207              	.L16:
+ 208 0020 00380140 		.word	1073821696
+ 209 0024 00000000 		.word	huart1
+ 210              		.cfi_endproc
+ 211              	.LFE529:
+ 213              		.comm	rxThisPos,2,2
+ 214              		.comm	rxLastPos,2,2
+ 215              		.comm	rxLen,1,1
+ 216              		.comm	processBuf,512,4
+ 217              		.comm	rxBuf,512,4
+ 218              		.text
+ 219              	.Letext0:
+ 220              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 221              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 222              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 223              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 224              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
+ 225              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 226              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 227              		.file 9 "Inc/queue.h"
+ 228              		.file 10 "Inc/port_handler.h"
+ 229              		.file 11 "Drivers/CMSIS/Include/core_cm3.h"
+ 230              		.file 12 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
+ 231              		.file 13 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 232              		.file 14 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 233              		.file 15 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 234              		.file 16 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h"
+ 235              		.file 17 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 236              		.file 18 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 port_handler.c
+C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s:16     .text.UARTRXInit:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s:24     .text.UARTRXInit:00000000 UARTRXInit
+C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s:61     .text.UARTRXInit:00000024 $d
+                            *COM*:00000002 rxLastPos
+                            *COM*:00000002 rxThisPos
+                            *COM*:00000200 rxBuf
+C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s:69     .text.UARTRxComplete:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s:76     .text.UARTRxComplete:00000000 UARTRxComplete
+C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s:150    .text.UARTRxComplete:0000004c $d
+C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s:159    .text.HAL_UART_RxCpltCallback:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s:166    .text.HAL_UART_RxCpltCallback:00000000 HAL_UART_RxCpltCallback
+C:\Users\Brandon\AppData\Local\Temp\cc7Z89Mh.s:208    .text.HAL_UART_RxCpltCallback:00000020 $d
+                            *COM*:00000001 rxLen
+                            *COM*:00000200 processBuf
+
+UNDEFINED SYMBOLS
+HAL_UART_Receive_DMA
+huart1
+enQueue
+message
