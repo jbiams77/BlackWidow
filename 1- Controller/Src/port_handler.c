@@ -4,34 +4,49 @@
 extern DMA_HandleTypeDef hdma_usart1_rx;
 extern UART_HandleTypeDef huart1;
 extern MessageQueue *message;
+uint8_t temp_length;
 
 /* UART Managemnt ------------------------------------------------------------*/
 
 
-void UARTRXInit(void) {
-  rxLastPos=0;
-  rxThisPos=0; 
-  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // enable idle line interrupt
-  //hdma_uart1_rx.Instance->CR &= ~DMA_SxCR_HTIE;  // disable uart half tx interrupt
-  HAL_UART_Receive_DMA(&huart1,rxBuf,UART_RX_RINGBUFF_SZ); 
+void UART_DMA_Init(void) {
+  rd_ptr = 0;
+  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // enable idle line interrupt  
+  HAL_UART_Receive_DMA(&huart1, rxBuffer, UART_RX__SZ);
 }
 
-void UARTRxComplete(void) {
-  uint8_t addr;
-  uint16_t len;
-  rxThisPos = UART_DMA_WRITE_PTR; //get current write pointer
-  len=(rxThisPos-rxLastPos+UART_RX_RINGBUFF_SZ)%UART_RX_RINGBUFF_SZ; //calculate how far the DMA write pointer has moved
-  int i;
-  for (i=rxLastPos; i<(rxThisPos+len);i++){
-    enQueue(message, rxBuf[i]);
+
+void transmit_buffer(uint8_t response[], uint16_t length){
+  // transmit reply here
+}
+
+void UART_RxComplete(void) {
+  while(!rxBuffer_is_empty() && !isFull(message)){
+    enQueue(message, rxBuffer_Get());
   }
+  volatile int x = 1;
+}
+
+uint8_t rxBuffer_is_empty(void) {
+  uint16_t dma_ptr = UART_DMA_WRITE_PTR;
+	if(rd_ptr == dma_ptr) {
+		return 1;
+	}
+	return 0;
+}
+
+uint8_t rxBuffer_Get(void) {
+	uint8_t c = 0;
+  uint16_t dma_ptr = UART_DMA_WRITE_PTR;
+	if(rd_ptr != dma_ptr) {
+		c = rxBuffer[rd_ptr++];
+		rd_ptr &= (UART_RX__SZ - 1);
+	}
+	return c;
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  if (huart->Instance == USART1) {       
-    if (__HAL_UART_GET_FLAG (&huart1, UART_FLAG_IDLE)) {
-      UARTRxComplete();
-    }
-  }
+  UART_RxComplete();
 }
+

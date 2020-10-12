@@ -21,12 +21,12 @@ MessageQueue* constructMessage(){
 
 
 int enQueue(MessageQueue *queue, uint8_t data){
-    if(isEmpty(queue)){
+    if(isFull(queue)){
+        return FALSE;
+    } else if(isEmpty(queue)){
         queue->front = queue->rear;
         queue->message[queue->rear] = data;
         return TRUE;
-    } else if (isFull(queue)){
-        return FALSE;
     } else {
         queue->rear = nextRear(queue);
         queue->message[queue->rear] = data;
@@ -37,7 +37,7 @@ int enQueue(MessageQueue *queue, uint8_t data){
 
 uint8_t deQueue(MessageQueue *queue){
     if(isEmpty(queue)){
-        return 253;
+        return 0;
     } else if (queue->front==queue->rear){
         uint8_t temp = queue->message[queue->front];
         queue->front = -1;

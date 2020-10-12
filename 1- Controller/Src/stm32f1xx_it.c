@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "queue.h"
 #include "stm32f1xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -57,7 +58,9 @@
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_usart1_rx;
+extern DMA_HandleTypeDef hdma_usart1_tx;
 extern UART_HandleTypeDef huart1;
+extern MessageQueue *message;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -88,6 +91,7 @@ void HardFault_Handler(void)
   /* USER CODE END HardFault_IRQn 0 */
   while (1)
   {
+    isEmpty(message);
     /* USER CODE BEGIN W1_HardFault_IRQn 0 */
     /* USER CODE END W1_HardFault_IRQn 0 */
   }
@@ -183,7 +187,7 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-
+  
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
@@ -208,6 +212,7 @@ void DMA1_Channel5_IRQHandler(void)
 
   /* USER CODE END DMA1_Channel5_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_usart1_rx);
+  HAL_DMA_IRQHandler(&hdma_usart1_tx);
   /* USER CODE BEGIN DMA1_Channel5_IRQn 1 */
 
   /* USER CODE END DMA1_Channel5_IRQn 1 */
@@ -224,14 +229,11 @@ void USART1_IRQHandler(void)
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE END USART1_IRQn 1 */   
   if (__HAL_UART_GET_FLAG (&huart1, UART_FLAG_IDLE))
-
   {
-
-   HAL_UART_RxCpltCallback (&huart1);
-
-   __HAL_UART_CLEAR_IDLEFLAG (&huart1); 
-
+    __HAL_UART_CLEAR_IDLEFLAG (&huart1); 
+    HAL_UART_RxCpltCallback (&huart1);   
   }   
+
 }
 
 /* USER CODE BEGIN 1 */

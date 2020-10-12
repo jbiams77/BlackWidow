@@ -90,14 +90,6 @@ void Error_Handler(void);
 #define DATA_DIR_Pin GPIO_PIN_5
 #define DATA_DIR_GPIO_Port GPIOB
 
-#define BUFFER_SIZE 8
-#define HEADER1 0
-#define HEADER2 1
-#define HEADER3 2
-#define RESERVED 3
-#define PACKET_ID  4
-#define LENGTH_LOW 5
-#define LENGTH_HIGH 6
 
 
 #ifdef __cplusplus

@@ -26,6 +26,7 @@
 I2C_HandleTypeDef hi2c2;
 UART_HandleTypeDef huart1;
 DMA_HandleTypeDef hdma_usart1_rx;
+DMA_HandleTypeDef hdma_usart1_tx;
 MessageQueue *message;
 Parameters *PARAM;
 
@@ -43,6 +44,9 @@ void Packet_Handlers(uint8_t*);
 int main(void)
 {
   
+  message = constructMessage();
+  PARAM = initializeParameters(5, 115200);
+
   /*** Initialization ***/
   HAL_Init();
   SystemClock_Config();
@@ -50,46 +54,23 @@ int main(void)
   MX_DMA_Init();
   MX_I2C2_Init();
   MX_USART1_UART_Init();
- 	DWT_Init();
+ 	//DWT_Init();
 	DRV8825_initStepper();
   AS5600_SetZero();
   HAL_GPIO_WritePin(DATA_DIR_GPIO_Port, DATA_DIR_Pin, 0);
-  UARTRXInit();
+  UART_DMA_Init();
 
   //DRV8825_setCurrentAngle(AS5600_GetCalAngle());
   volatile uint16_t angle;
 
-  message = constructMessage();
-  PARAM = initializeParameters(5, 57600);
 
   int count = 0;
   while(1){
-
-
+    process_queue();
   }
 
 }
 
-
-// void packet_handler(){
-//   uint8_t h1 = rx_buff[HEADER1];
-//   uint8_t h2 = rx_buff[HEADER2];
-//   uint8_t h3 = rx_buff[HEADER3];
-//   uint8_t reserved = rx_buff[RESERVED];
-//   uint8_t id = rx_buff[PACKET_ID];
-//   uint8_t length1 = rx_buff[LENGTH_LOW];
-//   uint8_t length2 = rx_buff[LENGTH_HIGH];
-//   uint16_t message_length = (length2 << 8) + length1;
-//   volatile uint8_t trash;
-//   int i;
-//   for (i=0; i<message_length; i++){
-//     if(id==PARAM->ID){
-//       enQueue(message, rx_buff[i]);
-//     } else {
-//       trash = rx_buff[i];
-//     }    
-//   }
-// }
 
 uint16_t angleToHex(uint16_t angle){
   float factor = (4096.0/360.0);
@@ -181,7 +162,7 @@ static void MX_USART1_UART_Init(void)
 
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
-  huart1.Init.BaudRate = 57600;
+  huart1.Init.BaudRate = PARAM->BAUD;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -209,7 +190,7 @@ static void MX_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA1_Channel5_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 1, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
 
 }
