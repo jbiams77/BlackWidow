@@ -9,10 +9,6 @@
 #define FALSE	0
 #define SIZE   512
 
-typedef struct Parameters{
-  int ID;
-  int BAUD;
-} Parameters;
 
 
 /* the HEAD of the MessageQueue, hold the amount of node's that are in the queue*/
