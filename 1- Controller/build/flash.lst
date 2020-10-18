@@ -1,0 +1,371 @@
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"flash.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.GetPage,"ax",%progbits
+  16              		.align	1
+  17              		.arch armv7-m
+  18              		.syntax unified
+  19              		.thumb
+  20              		.thumb_func
+  21              		.fpu softvfp
+  23              	GetPage:
+  24              	.LVL0:
+  25              	.LFB68:
+  26              		.file 1 "Src/flash.c"
+   1:Src/flash.c   **** /*
+   2:Src/flash.c   ****  * FlASH_PAGE.c
+   3:Src/flash.c   ****  *
+   4:Src/flash.c   ****  *  Created on: 08-May-2020
+   5:Src/flash.c   ****  *      Author: controllerstech
+   6:Src/flash.c   ****  */
+   7:Src/flash.c   **** 
+   8:Src/flash.c   **** #include "flash.h"
+   9:Src/flash.c   **** #include "string.h"
+  10:Src/flash.c   **** #include "stdio.h"
+  11:Src/flash.c   **** 
+  12:Src/flash.c   **** static uint32_t GetPage(uint32_t Address)
+  13:Src/flash.c   **** {
+  27              		.loc 1 13 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31              		@ link register save eliminated.
+  32              		.loc 1 13 1 is_stmt 0 view .LVU1
+  33 0000 0146     		mov	r1, r0
+  14:Src/flash.c   ****   for (int indx=0; indx<128; indx++)
+  34              		.loc 1 14 3 is_stmt 1 view .LVU2
+  35              	.LBB2:
+  36              		.loc 1 14 8 view .LVU3
+  37              	.LVL1:
+  38              		.loc 1 14 12 is_stmt 0 view .LVU4
+  39 0002 0023     		movs	r3, #0
+  40              		.loc 1 14 3 view .LVU5
+  41 0004 00E0     		b	.L2
+  42              	.LVL2:
+  43              	.L3:
+  44              		.loc 1 14 30 is_stmt 1 discriminator 2 view .LVU6
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s 			page 2
+
+
+  45              		.loc 1 14 34 is_stmt 0 discriminator 2 view .LVU7
+  46 0006 0133     		adds	r3, r3, #1
+  47              	.LVL3:
+  48              	.L2:
+  49              		.loc 1 14 20 is_stmt 1 discriminator 1 view .LVU8
+  50              		.loc 1 14 3 is_stmt 0 discriminator 1 view .LVU9
+  51 0008 7F2B     		cmp	r3, #127
+  52 000a 0CDC     		bgt	.L6
+  15:Src/flash.c   ****   {
+  16:Src/flash.c   **** 	  if((Address < (0x08000000 + (1024 *(indx+1))) ) && (Address >= (0x08000000 + 1024*indx)))
+  53              		.loc 1 16 4 is_stmt 1 view .LVU10
+  54              		.loc 1 16 30 is_stmt 0 view .LVU11
+  55 000c 03F50032 		add	r2, r3, #131072
+  56 0010 0132     		adds	r2, r2, #1
+  57              		.loc 1 16 6 view .LVU12
+  58 0012 B1EB822F 		cmp	r1, r2, lsl #10
+  59 0016 F6D2     		bcs	.L3
+  60              		.loc 1 16 79 discriminator 1 view .LVU13
+  61 0018 03F50032 		add	r2, r3, #131072
+  62 001c 9002     		lsls	r0, r2, #10
+  63              		.loc 1 16 52 discriminator 1 view .LVU14
+  64 001e B1EB822F 		cmp	r1, r2, lsl #10
+  65 0022 F0D3     		bcc	.L3
+  66              	.L1:
+  67              		.loc 1 16 52 discriminator 1 view .LVU15
+  68              	.LBE2:
+  17:Src/flash.c   **** 	  {
+  18:Src/flash.c   **** 		  return (0x08000000 + 1024*indx);
+  19:Src/flash.c   **** 	  }
+  20:Src/flash.c   ****   }
+  21:Src/flash.c   **** 
+  22:Src/flash.c   ****   return -1;
+  23:Src/flash.c   **** }
+  69              		.loc 1 23 1 view .LVU16
+  70 0024 7047     		bx	lr
+  71              	.L6:
+  22:Src/flash.c   **** }
+  72              		.loc 1 22 10 view .LVU17
+  73 0026 4FF0FF30 		mov	r0, #-1
+  74 002a FBE7     		b	.L1
+  75              		.cfi_endproc
+  76              	.LFE68:
+  78              		.section	.text.Flash_Write_Data,"ax",%progbits
+  79              		.align	1
+  80              		.global	Flash_Write_Data
+  81              		.syntax unified
+  82              		.thumb
+  83              		.thumb_func
+  84              		.fpu softvfp
+  86              	Flash_Write_Data:
+  87              	.LVL4:
+  88              	.LFB69:
+  24:Src/flash.c   **** 
+  25:Src/flash.c   **** void Flash_Write_Data (uint32_t StartPageAddress, uint32_t DATA_32)
+  26:Src/flash.c   **** {
+  89              		.loc 1 26 1 is_stmt 1 view -0
+  90              		.cfi_startproc
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s 			page 3
+
+
+  91              		@ args = 0, pretend = 0, frame = 0
+  92              		@ frame_needed = 0, uses_anonymous_args = 0
+  93              		.loc 1 26 1 is_stmt 0 view .LVU19
+  94 0000 38B5     		push	{r3, r4, r5, lr}
+  95              	.LCFI0:
+  96              		.cfi_def_cfa_offset 16
+  97              		.cfi_offset 3, -16
+  98              		.cfi_offset 4, -12
+  99              		.cfi_offset 5, -8
+ 100              		.cfi_offset 14, -4
+ 101 0002 0446     		mov	r4, r0
+ 102 0004 0D46     		mov	r5, r1
+  27:Src/flash.c   **** 
+  28:Src/flash.c   **** 	static FLASH_EraseInitTypeDef EraseInitStruct;
+ 103              		.loc 1 28 2 is_stmt 1 view .LVU20
+  29:Src/flash.c   **** 	uint32_t PAGEError;
+ 104              		.loc 1 29 2 view .LVU21
+  30:Src/flash.c   **** 	int sofar=0;
+ 105              		.loc 1 30 2 view .LVU22
+ 106              	.LVL5:
+  31:Src/flash.c   **** 
+  32:Src/flash.c   **** 	// int numberofwords = (strlen(DATA_32)/4) + ((strlen(DATA_32) % 4) != 0);
+  33:Src/flash.c   **** 
+  34:Src/flash.c   **** 	  /* Unlock the Flash to enable the flash control register access *************/
+  35:Src/flash.c   **** 	   HAL_FLASH_Unlock();
+ 107              		.loc 1 35 5 view .LVU23
+ 108 0006 FFF7FEFF 		bl	HAL_FLASH_Unlock
+ 109              	.LVL6:
+  36:Src/flash.c   **** 
+  37:Src/flash.c   **** 	   /* Erase the user Flash area*/
+  38:Src/flash.c   **** 
+  39:Src/flash.c   **** 	  uint32_t StartPage = GetPage(StartPageAddress);
+ 110              		.loc 1 39 4 view .LVU24
+  40:Src/flash.c   **** 	  //uint32_t EndPageAdress = StartPageAddress + numberofwords*4;
+  41:Src/flash.c   **** 	  //uint32_t EndPage = GetPage(EndPageAdress);
+  42:Src/flash.c   **** 
+  43:Src/flash.c   **** 	   /* Fill EraseInit structure*/
+  44:Src/flash.c   **** 	   EraseInitStruct.TypeErase   = FLASH_TYPEERASE_PAGES;
+ 111              		.loc 1 44 5 view .LVU25
+  45:Src/flash.c   **** 	   EraseInitStruct.PageAddress = StartPage;
+ 112              		.loc 1 45 5 view .LVU26
+  46:Src/flash.c   **** 	   //EraseInitStruct.NbPages     = ((EndPage - StartPage)/FLASH_PAGE_SIZE) +1;
+  47:Src/flash.c   **** 
+  48:Src/flash.c   **** 	//    if (HAL_FLASHEx_Erase(&EraseInitStruct, &PAGEError) != HAL_OK)
+  49:Src/flash.c   **** 	//    {
+  50:Src/flash.c   **** 	//      /*Error occurred while page erase.*/
+  51:Src/flash.c   **** 	// 		Error_Handler();
+  52:Src/flash.c   **** 	//    }
+  53:Src/flash.c   **** 
+  54:Src/flash.c   **** 	   /* Program the user Flash area word by word*/
+  55:Src/flash.c   **** 
+  56:Src/flash.c   **** 	//    while (sofar<numberofwords)
+  57:Src/flash.c   **** 	//    {
+  58:Src/flash.c   **** 	     HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, StartPageAddress, DATA_32); //== HAL_OK));
+ 113              		.loc 1 58 7 view .LVU27
+ 114 000a 2A46     		mov	r2, r5
+ 115 000c 0023     		movs	r3, #0
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s 			page 4
+
+
+ 116 000e 2146     		mov	r1, r4
+ 117 0010 0220     		movs	r0, #2
+ 118 0012 FFF7FEFF 		bl	HAL_FLASH_Program
+ 119              	.LVL7:
+  59:Src/flash.c   **** 	//    }
+  60:Src/flash.c   **** 
+  61:Src/flash.c   **** 	   /* Lock the Flash to disable the flash control register access (recommended
+  62:Src/flash.c   **** 	      to protect the FLASH memory against possible unwanted operation) *********/
+  63:Src/flash.c   **** 	   HAL_FLASH_Lock();
+ 120              		.loc 1 63 5 view .LVU28
+ 121 0016 FFF7FEFF 		bl	HAL_FLASH_Lock
+ 122              	.LVL8:
+  64:Src/flash.c   **** 
+  65:Src/flash.c   **** }
+ 123              		.loc 1 65 1 is_stmt 0 view .LVU29
+ 124 001a 38BD     		pop	{r3, r4, r5, pc}
+ 125              		.loc 1 65 1 view .LVU30
+ 126              		.cfi_endproc
+ 127              	.LFE69:
+ 129              		.section	.text.Flash_Read_Data,"ax",%progbits
+ 130              		.align	1
+ 131              		.global	Flash_Read_Data
+ 132              		.syntax unified
+ 133              		.thumb
+ 134              		.thumb_func
+ 135              		.fpu softvfp
+ 137              	Flash_Read_Data:
+ 138              	.LVL9:
+ 139              	.LFB70:
+  66:Src/flash.c   **** 
+  67:Src/flash.c   **** 
+  68:Src/flash.c   **** uint32_t* Flash_Read_Data (uint32_t StartPageAddress)
+  69:Src/flash.c   **** {
+ 140              		.loc 1 69 1 is_stmt 1 view -0
+ 141              		.cfi_startproc
+ 142              		@ args = 0, pretend = 0, frame = 0
+ 143              		@ frame_needed = 0, uses_anonymous_args = 0
+ 144              		@ link register save eliminated.
+  70:Src/flash.c   **** 
+  71:Src/flash.c   **** 	return *(__IO uint32_t *)StartPageAddress;
+ 145              		.loc 1 71 2 view .LVU32
+ 146              		.loc 1 71 9 is_stmt 0 view .LVU33
+ 147 0000 0068     		ldr	r0, [r0]
+ 148              	.LVL10:
+  72:Src/flash.c   **** 
+  73:Src/flash.c   **** }
+ 149              		.loc 1 73 1 view .LVU34
+ 150 0002 7047     		bx	lr
+ 151              		.cfi_endproc
+ 152              	.LFE70:
+ 154              		.section	.text.Convert_To_Str,"ax",%progbits
+ 155              		.align	1
+ 156              		.global	Convert_To_Str
+ 157              		.syntax unified
+ 158              		.thumb
+ 159              		.thumb_func
+ 160              		.fpu softvfp
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s 			page 5
+
+
+ 162              	Convert_To_Str:
+ 163              	.LVL11:
+ 164              	.LFB71:
+  74:Src/flash.c   **** 
+  75:Src/flash.c   **** void Convert_To_Str (uint32_t *data, char *str)
+  76:Src/flash.c   **** {
+ 165              		.loc 1 76 1 is_stmt 1 view -0
+ 166              		.cfi_startproc
+ 167              		@ args = 0, pretend = 0, frame = 0
+ 168              		@ frame_needed = 0, uses_anonymous_args = 0
+ 169              		.loc 1 76 1 is_stmt 0 view .LVU36
+ 170 0000 70B5     		push	{r4, r5, r6, lr}
+ 171              	.LCFI1:
+ 172              		.cfi_def_cfa_offset 16
+ 173              		.cfi_offset 4, -16
+ 174              		.cfi_offset 5, -12
+ 175              		.cfi_offset 6, -8
+ 176              		.cfi_offset 14, -4
+ 177 0002 0546     		mov	r5, r0
+ 178 0004 0C46     		mov	r4, r1
+  77:Src/flash.c   **** 	int numberofbytes = ((strlen(data)/4) + ((strlen(data) % 4) != 0)) *4;
+ 179              		.loc 1 77 2 is_stmt 1 view .LVU37
+ 180              		.loc 1 77 24 is_stmt 0 view .LVU38
+ 181 0006 FFF7FEFF 		bl	strlen
+ 182              	.LVL12:
+ 183              		.loc 1 77 62 view .LVU39
+ 184 000a 10F00306 		ands	r6, r0, #3
+ 185 000e 18BF     		it	ne
+ 186 0010 0126     		movne	r6, #1
+ 187              		.loc 1 77 40 view .LVU40
+ 188 0012 06EB9006 		add	r6, r6, r0, lsr #2
+ 189              		.loc 1 77 69 view .LVU41
+ 190 0016 B600     		lsls	r6, r6, #2
+ 191              	.LVL13:
+  78:Src/flash.c   **** 
+  79:Src/flash.c   **** 	for (int i=0; i<numberofbytes; i++)
+ 192              		.loc 1 79 2 is_stmt 1 view .LVU42
+ 193              	.LBB3:
+ 194              		.loc 1 79 7 view .LVU43
+ 195              		.loc 1 79 11 is_stmt 0 view .LVU44
+ 196 0018 0023     		movs	r3, #0
+ 197              		.loc 1 79 2 view .LVU45
+ 198 001a 0EE0     		b	.L11
+ 199              	.LVL14:
+ 200              	.L12:
+  80:Src/flash.c   **** 	{
+  81:Src/flash.c   **** 		str[i] = data[i/4]>>(8*(i%4));
+ 201              		.loc 1 81 18 discriminator 3 view .LVU46
+ 202 001c 9210     		asrs	r2, r2, #2
+ 203              		.loc 1 81 16 discriminator 3 view .LVU47
+ 204 001e 55F82210 		ldr	r1, [r5, r2, lsl #2]
+ 205              		.loc 1 81 28 discriminator 3 view .LVU48
+ 206 0022 5842     		rsbs	r0, r3, #0
+ 207 0024 03F00302 		and	r2, r3, #3
+ 208 0028 00F00300 		and	r0, r0, #3
+ 209 002c 58BF     		it	pl
+ 210 002e 4242     		rsbpl	r2, r0, #0
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s 			page 6
+
+
+ 211              		.loc 1 81 25 discriminator 3 view .LVU49
+ 212 0030 D200     		lsls	r2, r2, #3
+ 213              		.loc 1 81 21 discriminator 3 view .LVU50
+ 214 0032 21FA02F2 		lsr	r2, r1, r2
+ 215              		.loc 1 81 10 discriminator 3 view .LVU51
+ 216 0036 E254     		strb	r2, [r4, r3]
+  79:Src/flash.c   **** 	{
+ 217              		.loc 1 79 33 is_stmt 1 discriminator 3 view .LVU52
+  79:Src/flash.c   **** 	{
+ 218              		.loc 1 79 34 is_stmt 0 discriminator 3 view .LVU53
+ 219 0038 0133     		adds	r3, r3, #1
+ 220              	.LVL15:
+ 221              	.L11:
+  79:Src/flash.c   **** 	{
+ 222              		.loc 1 79 16 is_stmt 1 discriminator 1 view .LVU54
+  79:Src/flash.c   **** 	{
+ 223              		.loc 1 79 2 is_stmt 0 discriminator 1 view .LVU55
+ 224 003a B342     		cmp	r3, r6
+ 225 003c 04DA     		bge	.L15
+ 226              		.loc 1 81 3 is_stmt 1 discriminator 3 view .LVU56
+ 227              		.loc 1 81 18 is_stmt 0 discriminator 3 view .LVU57
+ 228 003e 1A46     		mov	r2, r3
+ 229 0040 002B     		cmp	r3, #0
+ 230 0042 EBDA     		bge	.L12
+ 231 0044 DA1C     		adds	r2, r3, #3
+ 232 0046 E9E7     		b	.L12
+ 233              	.L15:
+ 234              	.LBE3:
+  82:Src/flash.c   **** 	}
+  83:Src/flash.c   **** }
+ 235              		.loc 1 83 1 view .LVU58
+ 236 0048 70BD     		pop	{r4, r5, r6, pc}
+ 237              		.loc 1 83 1 view .LVU59
+ 238              		.cfi_endproc
+ 239              	.LFE71:
+ 241              		.text
+ 242              	.Letext0:
+ 243              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 244              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 245              		.file 4 "Drivers/CMSIS/Include/core_cm3.h"
+ 246              		.file 5 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
+ 247              		.file 6 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h"
+ 248              		.file 7 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 249              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 250              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 251              		.file 10 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eab
+ 252              		.file 11 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 253              		.file 12 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 254              		.file 13 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h"
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 flash.c
+C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s:16     .text.GetPage:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s:23     .text.GetPage:00000000 GetPage
+C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s:79     .text.Flash_Write_Data:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s:86     .text.Flash_Write_Data:00000000 Flash_Write_Data
+C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s:130    .text.Flash_Read_Data:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s:137    .text.Flash_Read_Data:00000000 Flash_Read_Data
+C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s:155    .text.Convert_To_Str:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccVaHv23.s:162    .text.Convert_To_Str:00000000 Convert_To_Str
+
+UNDEFINED SYMBOLS
+HAL_FLASH_Unlock
+HAL_FLASH_Program
+HAL_FLASH_Lock
+strlen

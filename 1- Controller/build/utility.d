@@ -1,4 +1,4 @@
-build/main.o: Src/main.c Inc/main.h \
+build/utility.o: Src/utility.c Inc/utility.h Inc/main.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  Inc/stm32f1xx_hal_conf.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -30,7 +30,9 @@ build/main.o: Src/main.c Inc/main.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h Inc/port_handler.h \
- Inc/queue.h Inc/utility.h Inc/flash.h
+ Inc/queue.h
+
+Inc/utility.h:
 
 Inc/main.h:
 
@@ -103,7 +105,3 @@ Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h:
 Inc/port_handler.h:
 
 Inc/queue.h:
-
-Inc/utility.h:
-
-Inc/flash.h:

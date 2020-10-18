@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -24,1648 +24,952 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 1
   21              		.thumb_func
   22              		.fpu softvfp
   24              	ping:
-  25              	.LFB529:
+  25              	.LFB530:
   26              		.file 1 "Src/packet_handler.c"
    1:Src/packet_handler.c **** #include "packet_handler.h"
    2:Src/packet_handler.c **** #include "main.h"
    3:Src/packet_handler.c **** #include "port_handler.h"
    4:Src/packet_handler.c **** 
-   5:Src/packet_handler.c **** 
-   6:Src/packet_handler.c **** 
-   7:Src/packet_handler.c **** 
-   8:Src/packet_handler.c **** void process_queue(){
-   9:Src/packet_handler.c **** 
-  10:Src/packet_handler.c ****     // header
-  11:Src/packet_handler.c ****     uint8_t h1 = 0;
-  12:Src/packet_handler.c ****     uint8_t h2 = 0;
-  13:Src/packet_handler.c ****     uint8_t h3 = 0;
-  14:Src/packet_handler.c ****     uint32_t header_block=0;
-  15:Src/packet_handler.c ****     uint8_t found = 0;
-  16:Src/packet_handler.c **** 
-  17:Src/packet_handler.c ****     //REVIEW: review shift and clear cache
-  18:Src/packet_handler.c ****     // find 0xFFFFFD by dequeing 3 bytes and shifting until match is met
-  19:Src/packet_handler.c ****     while (!found && !isEmpty(message)){
-  20:Src/packet_handler.c **** 
-  21:Src/packet_handler.c ****         // shift one byte
-  22:Src/packet_handler.c ****         h1 = h2;
-  23:Src/packet_handler.c ****         h2 = h3;
-  24:Src/packet_handler.c ****         h3 = deQueue(message);
-  25:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
-  26:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
-  27:Src/packet_handler.c ****             found = 1;
-  28:Src/packet_handler.c ****         }
-  29:Src/packet_handler.c **** 
-  30:Src/packet_handler.c ****     }
-  31:Src/packet_handler.c ****     if (found){
-  32:Src/packet_handler.c ****         
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 2
+   5:Src/packet_handler.c **** /* Fields -------------------------------------------------------------------*/
+   6:Src/packet_handler.c **** extern MessageQueue *message;
+   7:Src/packet_handler.c **** uint8_t instruction;
+   8:Src/packet_handler.c **** uint8_t param[20];
+   9:Src/packet_handler.c **** uint8_t crc[2];
+  10:Src/packet_handler.c **** extern Parameters *PARAM;
+  11:Src/packet_handler.c **** int delay_transmit_uS = 50;
+  12:Src/packet_handler.c **** 
+  13:Src/packet_handler.c **** /* Methods ------------------------------------------------------------------*/
+  14:Src/packet_handler.c **** 
+  15:Src/packet_handler.c **** /* @brief Moves through queue to look for header block.
+  16:Src/packet_handler.c ****  * 
+  17:Src/packet_handler.c ****  * @param void 
+  18:Src/packet_handler.c ****  * @return void
+  19:Src/packet_handler.c ****  */
+  20:Src/packet_handler.c **** void process_queue(){
+  21:Src/packet_handler.c **** 
+  22:Src/packet_handler.c ****     // header
+  23:Src/packet_handler.c ****     uint8_t h1 = 0;
+  24:Src/packet_handler.c ****     uint8_t h2 = 0;
+  25:Src/packet_handler.c ****     uint8_t h3 = 0;
+  26:Src/packet_handler.c ****     uint32_t header_block=0;
+  27:Src/packet_handler.c ****     uint8_t header_block_found = 0;
+  28:Src/packet_handler.c **** 
+  29:Src/packet_handler.c ****     while (!header_block_found && !isEmpty(message)){
+  30:Src/packet_handler.c **** 
+  31:Src/packet_handler.c ****         // shift one byte
+  32:Src/packet_handler.c ****         h1 = h2;
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 2
 
 
-  33:Src/packet_handler.c ****         uint8_t reserved = deQueue(message);
-  34:Src/packet_handler.c ****         uint8_t id = deQueue(message);
-  35:Src/packet_handler.c ****         uint8_t length1 = deQueue(message);
-  36:Src/packet_handler.c ****         uint8_t length2 = deQueue(message);
-  37:Src/packet_handler.c ****         uint16_t length = (length2 << 8) + (length1);
-  38:Src/packet_handler.c ****         instruction = deQueue(message);
-  39:Src/packet_handler.c ****         int i;
-  40:Src/packet_handler.c ****         if(length<10){
-  41:Src/packet_handler.c ****             // grab the parameters
-  42:Src/packet_handler.c ****             for (i=0; i< (length-3); i++){
-  43:Src/packet_handler.c ****                 param[i] = deQueue(message);
-  44:Src/packet_handler.c ****             }
-  45:Src/packet_handler.c ****         }
-  46:Src/packet_handler.c ****         // grab CRC used for checking data loss
-  47:Src/packet_handler.c ****         crc[0] = deQueue(message);
-  48:Src/packet_handler.c ****         crc[1] = deQueue(message);
-  49:Src/packet_handler.c **** 
-  50:Src/packet_handler.c ****         // message fully received, proccess
-  51:Src/packet_handler.c ****         if (id==PARAM->ID){
-  52:Src/packet_handler.c ****             process_message(length);
-  53:Src/packet_handler.c ****         }
-  54:Src/packet_handler.c ****     }
-  55:Src/packet_handler.c **** }
-  56:Src/packet_handler.c **** 
-  57:Src/packet_handler.c **** void process_message(uint16_t length){
-  58:Src/packet_handler.c **** 
-  59:Src/packet_handler.c ****     switch (instruction){
-  60:Src/packet_handler.c ****         case PING: ping(); break;
-  61:Src/packet_handler.c ****         case READ : read(); break;
-  62:Src/packet_handler.c ****         case WRITE : write(); break;
-  63:Src/packet_handler.c ****         case REG_WRITE : reg_write(); break;
-  64:Src/packet_handler.c ****         case ACTION : action(); break;
-  65:Src/packet_handler.c ****         case FACTORY_RESET : factory_reset(); break;        
-  66:Src/packet_handler.c ****         case REBOOT : reboot(); break;
-  67:Src/packet_handler.c ****         case CLEAR  : clear(); break;
-  68:Src/packet_handler.c ****         case STATUS  : status(); break;
-  69:Src/packet_handler.c ****         case SYNC_READ  : sync_read(); break;
-  70:Src/packet_handler.c ****         case SYNC_WRITE  : sync_write(); break;
-  71:Src/packet_handler.c ****         case BULK_READ  : bulk_read(); break;
-  72:Src/packet_handler.c ****         case BULK_WRITE  : bulk_write(); break;
-  73:Src/packet_handler.c ****     }
-  74:Src/packet_handler.c **** 
-  75:Src/packet_handler.c **** }
+  33:Src/packet_handler.c ****         h2 = h3;
+  34:Src/packet_handler.c ****         h3 = deQueue(message);
+  35:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
+  36:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
+  37:Src/packet_handler.c ****             header_block_found = 1;
+  38:Src/packet_handler.c ****         }
+  39:Src/packet_handler.c ****     }
+  40:Src/packet_handler.c ****     
+  41:Src/packet_handler.c ****     if (header_block_found){
+  42:Src/packet_handler.c ****         extract_message();
+  43:Src/packet_handler.c ****     }
+  44:Src/packet_handler.c **** 
+  45:Src/packet_handler.c **** }
+  46:Src/packet_handler.c **** 
+  47:Src/packet_handler.c **** /* @brief After header block is found, extract reserved, id, length,
+  48:Src/packet_handler.c ****  * instruction, and message parameters.
+  49:Src/packet_handler.c ****  * 
+  50:Src/packet_handler.c ****  * @param void 
+  51:Src/packet_handler.c ****  * @return void
+  52:Src/packet_handler.c ****  */
+  53:Src/packet_handler.c **** void extract_message(){
+  54:Src/packet_handler.c **** 
+  55:Src/packet_handler.c ****     uint8_t reserved = deQueue(message);
+  56:Src/packet_handler.c ****     uint8_t id = deQueue(message);
+  57:Src/packet_handler.c ****     uint8_t length1 = deQueue(message);
+  58:Src/packet_handler.c ****     uint8_t length2 = deQueue(message);
+  59:Src/packet_handler.c ****     uint16_t length = (length2 << 8) + (length1);
+  60:Src/packet_handler.c ****     instruction = deQueue(message);
+  61:Src/packet_handler.c ****     int i;
+  62:Src/packet_handler.c ****     if(length<10){
+  63:Src/packet_handler.c ****         // grab the parameters
+  64:Src/packet_handler.c ****         for (i=0; i< (length-3); i++){
+  65:Src/packet_handler.c ****             param[i] = deQueue(message);
+  66:Src/packet_handler.c ****         }
+  67:Src/packet_handler.c ****     }
+  68:Src/packet_handler.c ****     // grab CRC used for checking data loss
+  69:Src/packet_handler.c ****     crc[0] = deQueue(message);
+  70:Src/packet_handler.c ****     crc[1] = deQueue(message);
+  71:Src/packet_handler.c **** 
+  72:Src/packet_handler.c ****     // message fully received, proccess
+  73:Src/packet_handler.c ****     if (id==PARAM->ID){
+  74:Src/packet_handler.c ****         process_message();
+  75:Src/packet_handler.c ****     }
   76:Src/packet_handler.c **** 
-  77:Src/packet_handler.c **** void ping(){
-  27              		.loc 1 77 12 view -0
+  77:Src/packet_handler.c **** }
+  78:Src/packet_handler.c **** 
+  79:Src/packet_handler.c **** /* @brief Execute the response for message.
+  80:Src/packet_handler.c ****  * 
+  81:Src/packet_handler.c ****  * @param void 
+  82:Src/packet_handler.c ****  * @return void
+  83:Src/packet_handler.c ****  */
+  84:Src/packet_handler.c **** void process_message(){
+  85:Src/packet_handler.c ****     // TODO: calculate delay time based on UART baud rate. 
+  86:Src/packet_handler.c ****     /* Important to have small delay to ensure master is ready to receive*/
+  87:Src/packet_handler.c ****     DWT_Delay(delay_transmit_uS);
+  88:Src/packet_handler.c ****     delay_transmit_uS += 50;
+  89:Src/packet_handler.c ****     switch (instruction){
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 3
+
+
+  90:Src/packet_handler.c ****         case PING: ping(); break;
+  91:Src/packet_handler.c ****         case READ : read(); break;
+  92:Src/packet_handler.c ****         case WRITE : write(); break;
+  93:Src/packet_handler.c ****         case REG_WRITE : reg_write(); break;
+  94:Src/packet_handler.c ****         case ACTION : action(); break;
+  95:Src/packet_handler.c ****         case FACTORY_RESET : factory_reset(); break;        
+  96:Src/packet_handler.c ****         case REBOOT : reboot(); break;
+  97:Src/packet_handler.c ****         case CLEAR  : clear(); break;
+  98:Src/packet_handler.c ****         case STATUS  : status(); break;
+  99:Src/packet_handler.c ****         case SYNC_READ  : sync_read(); break;
+ 100:Src/packet_handler.c ****         case SYNC_WRITE  : sync_write(); break;
+ 101:Src/packet_handler.c ****         case BULK_READ  : bulk_read(); break;
+ 102:Src/packet_handler.c ****         case BULK_WRITE  : bulk_write(); break;
+ 103:Src/packet_handler.c ****     }
+ 104:Src/packet_handler.c **** 
+ 105:Src/packet_handler.c **** }
+ 106:Src/packet_handler.c **** 
+ 107:Src/packet_handler.c **** // TODO: finish instruction
+ 108:Src/packet_handler.c **** void ping(){    
+  27              		.loc 1 108 12 view -0
   28              		.cfi_startproc
-  29              		@ args = 0, pretend = 0, frame = 0
+  29              		@ args = 0, pretend = 0, frame = 16
   30              		@ frame_needed = 0, uses_anonymous_args = 0
-  31              		@ link register save eliminated.
-  78:Src/packet_handler.c ****     uint8_t response[4] = {0xFF, 0xFF, 0xFF, 0xFF};
-  32              		.loc 1 78 5 view .LVU1
-  79:Src/packet_handler.c ****     //transmit_buffer(response, sizeof(response));
-  80:Src/packet_handler.c **** }
-  33              		.loc 1 80 1 is_stmt 0 view .LVU2
-  34 0000 7047     		bx	lr
-  35              		.cfi_endproc
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 3
+  31 0000 10B5     		push	{r4, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 4, -8
+  35              		.cfi_offset 14, -4
+  36 0002 84B0     		sub	sp, sp, #16
+  37              	.LCFI1:
+  38              		.cfi_def_cfa_offset 24
+ 109:Src/packet_handler.c ****     uint8_t response[] = {0xFF, 0xFF, 0xFD, 0x00, 0x01, 0x07, 0x00, 0x55, 0x00, 0x06, 0x04, 0x26, 0
+  39              		.loc 1 109 5 view .LVU1
+  40              		.loc 1 109 13 is_stmt 0 view .LVU2
+  41 0004 054B     		ldr	r3, .L3
+  42 0006 6C46     		mov	r4, sp
+  43 0008 0FCB     		ldm	r3, {r0, r1, r2, r3}
+  44 000a 07C4     		stmia	r4!, {r0, r1, r2}
+  45 000c 2380     		strh	r3, [r4]	@ movhi
+ 110:Src/packet_handler.c ****     transmit_buffer(response, sizeof(response));
+  46              		.loc 1 110 5 is_stmt 1 view .LVU3
+  47 000e 0E21     		movs	r1, #14
+  48 0010 6846     		mov	r0, sp
+  49 0012 FFF7FEFF 		bl	transmit_buffer
+  50              	.LVL0:
+ 111:Src/packet_handler.c **** }
+  51              		.loc 1 111 1 is_stmt 0 view .LVU4
+  52 0016 04B0     		add	sp, sp, #16
+  53              	.LCFI2:
+  54              		.cfi_def_cfa_offset 8
+  55              		@ sp needed
+  56 0018 10BD     		pop	{r4, pc}
+  57              	.L4:
+  58 001a 00BF     		.align	2
+  59              	.L3:
+  60 001c 00000000 		.word	.LANCHOR0
+  61              		.cfi_endproc
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 4
 
 
-  36              	.LFE529:
-  38              		.section	.text.read,"ax",%progbits
-  39              		.align	1
-  40              		.global	read
-  41              		.syntax unified
-  42              		.thumb
-  43              		.thumb_func
-  44              		.fpu softvfp
-  46              	read:
-  47              	.LFB530:
-  81:Src/packet_handler.c **** 
-  82:Src/packet_handler.c **** void read(void){
-  48              		.loc 1 82 16 is_stmt 1 view -0
-  49              		.cfi_startproc
-  50              		@ args = 0, pretend = 0, frame = 0
-  51              		@ frame_needed = 0, uses_anonymous_args = 0
-  52              		@ link register save eliminated.
-  83:Src/packet_handler.c **** 
-  84:Src/packet_handler.c **** }
-  53              		.loc 1 84 1 view .LVU4
-  54 0000 7047     		bx	lr
-  55              		.cfi_endproc
-  56              	.LFE530:
-  58              		.section	.text.write,"ax",%progbits
-  59              		.align	1
-  60              		.global	write
-  61              		.syntax unified
-  62              		.thumb
-  63              		.thumb_func
-  64              		.fpu softvfp
-  66              	write:
-  67              	.LFB531:
-  85:Src/packet_handler.c **** 
-  86:Src/packet_handler.c **** void write(void){
-  68              		.loc 1 86 17 view -0
-  69              		.cfi_startproc
-  70              		@ args = 0, pretend = 0, frame = 0
-  71              		@ frame_needed = 0, uses_anonymous_args = 0
-  72              		@ link register save eliminated.
-  87:Src/packet_handler.c **** 
-  88:Src/packet_handler.c **** }
-  73              		.loc 1 88 1 view .LVU6
-  74 0000 7047     		bx	lr
-  75              		.cfi_endproc
-  76              	.LFE531:
-  78              		.section	.text.reg_write,"ax",%progbits
-  79              		.align	1
-  80              		.global	reg_write
-  81              		.syntax unified
-  82              		.thumb
-  83              		.thumb_func
-  84              		.fpu softvfp
-  86              	reg_write:
-  87              	.LFB532:
-  89:Src/packet_handler.c **** 
-  90:Src/packet_handler.c **** void reg_write(void){
-  88              		.loc 1 90 21 view -0
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 4
+  62              	.LFE530:
+  64              		.section	.text.process_message,"ax",%progbits
+  65              		.align	1
+  66              		.global	process_message
+  67              		.syntax unified
+  68              		.thumb
+  69              		.thumb_func
+  70              		.fpu softvfp
+  72              	process_message:
+  73              	.LFB529:
+  84:Src/packet_handler.c ****     // TODO: calculate delay time based on UART baud rate. 
+  74              		.loc 1 84 23 is_stmt 1 view -0
+  75              		.cfi_startproc
+  76              		@ args = 0, pretend = 0, frame = 0
+  77              		@ frame_needed = 0, uses_anonymous_args = 0
+  78 0000 10B5     		push	{r4, lr}
+  79              	.LCFI3:
+  80              		.cfi_def_cfa_offset 8
+  81              		.cfi_offset 4, -8
+  82              		.cfi_offset 14, -4
+  87:Src/packet_handler.c ****     delay_transmit_uS += 50;
+  83              		.loc 1 87 5 view .LVU6
+  84 0002 074C     		ldr	r4, .L9
+  85 0004 2068     		ldr	r0, [r4]
+  86 0006 FFF7FEFF 		bl	DWT_Delay
+  87              	.LVL1:
+  88:Src/packet_handler.c ****     switch (instruction){
+  88              		.loc 1 88 5 view .LVU7
+  88:Src/packet_handler.c ****     switch (instruction){
+  89              		.loc 1 88 23 is_stmt 0 view .LVU8
+  90 000a 2368     		ldr	r3, [r4]
+  91 000c 3233     		adds	r3, r3, #50
+  92 000e 2360     		str	r3, [r4]
+  89:Src/packet_handler.c ****         case PING: ping(); break;
+  93              		.loc 1 89 5 is_stmt 1 view .LVU9
+  94 0010 044B     		ldr	r3, .L9+4
+  95 0012 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  96 0014 012B     		cmp	r3, #1
+  97 0016 00D0     		beq	.L8
+  98              	.L5:
+ 105:Src/packet_handler.c **** 
+  99              		.loc 1 105 1 is_stmt 0 view .LVU10
+ 100 0018 10BD     		pop	{r4, pc}
+ 101              	.L8:
+  90:Src/packet_handler.c ****         case READ : read(); break;
+ 102              		.loc 1 90 20 is_stmt 1 view .LVU11
+ 103 001a FFF7FEFF 		bl	ping
+ 104              	.LVL2:
+  90:Src/packet_handler.c ****         case READ : read(); break;
+ 105              		.loc 1 90 28 view .LVU12
+ 105:Src/packet_handler.c **** 
+ 106              		.loc 1 105 1 is_stmt 0 view .LVU13
+ 107 001e FBE7     		b	.L5
+ 108              	.L10:
+ 109              		.align	2
+ 110              	.L9:
+ 111 0020 00000000 		.word	.LANCHOR1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 5
 
 
-  89              		.cfi_startproc
-  90              		@ args = 0, pretend = 0, frame = 0
-  91              		@ frame_needed = 0, uses_anonymous_args = 0
-  92 0000 38B5     		push	{r3, r4, r5, lr}
-  93              	.LCFI0:
-  94              		.cfi_def_cfa_offset 16
-  95              		.cfi_offset 3, -16
-  96              		.cfi_offset 4, -12
-  97              		.cfi_offset 5, -8
-  98              		.cfi_offset 14, -4
-  91:Src/packet_handler.c ****     int i;
-  99              		.loc 1 91 5 view .LVU8
-  92:Src/packet_handler.c ****     for (i=0;i<REG_WRITE;i++){
- 100              		.loc 1 92 5 view .LVU9
- 101              	.LVL0:
- 102              		.loc 1 92 11 is_stmt 0 view .LVU10
- 103 0002 0024     		movs	r4, #0
- 104              		.loc 1 92 5 view .LVU11
- 105 0004 11E0     		b	.L5
- 106              	.LVL1:
- 107              	.L6:
-  93:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 108              		.loc 1 93 9 is_stmt 1 discriminator 3 view .LVU12
- 109 0006 0A4D     		ldr	r5, .L8
- 110 0008 0122     		movs	r2, #1
- 111 000a 0821     		movs	r1, #8
- 112 000c 2846     		mov	r0, r5
- 113 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
- 114              	.LVL2:
-  94:Src/packet_handler.c ****         HAL_Delay(50);
- 115              		.loc 1 94 9 discriminator 3 view .LVU13
- 116 0012 3220     		movs	r0, #50
- 117 0014 FFF7FEFF 		bl	HAL_Delay
- 118              	.LVL3:
-  95:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, LOW);
- 119              		.loc 1 95 9 discriminator 3 view .LVU14
- 120 0018 0022     		movs	r2, #0
- 121 001a 0821     		movs	r1, #8
- 122 001c 2846     		mov	r0, r5
- 123 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
- 124              	.LVL4:
-  96:Src/packet_handler.c ****         HAL_Delay(50);
- 125              		.loc 1 96 9 discriminator 3 view .LVU15
- 126 0022 3220     		movs	r0, #50
- 127 0024 FFF7FEFF 		bl	HAL_Delay
- 128              	.LVL5:
-  92:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 129              		.loc 1 92 26 discriminator 3 view .LVU16
-  92:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 130              		.loc 1 92 27 is_stmt 0 discriminator 3 view .LVU17
- 131 0028 0134     		adds	r4, r4, #1
- 132              	.LVL6:
- 133              	.L5:
-  92:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 134              		.loc 1 92 14 is_stmt 1 discriminator 1 view .LVU18
-  92:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 135              		.loc 1 92 5 is_stmt 0 discriminator 1 view .LVU19
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 5
+ 112 0024 00000000 		.word	instruction
+ 113              		.cfi_endproc
+ 114              	.LFE529:
+ 116              		.section	.text.extract_message,"ax",%progbits
+ 117              		.align	1
+ 118              		.global	extract_message
+ 119              		.syntax unified
+ 120              		.thumb
+ 121              		.thumb_func
+ 122              		.fpu softvfp
+ 124              	extract_message:
+ 125              	.LFB528:
+  53:Src/packet_handler.c **** 
+ 126              		.loc 1 53 23 is_stmt 1 view -0
+ 127              		.cfi_startproc
+ 128              		@ args = 0, pretend = 0, frame = 0
+ 129              		@ frame_needed = 0, uses_anonymous_args = 0
+ 130 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 131              	.LCFI4:
+ 132              		.cfi_def_cfa_offset 24
+ 133              		.cfi_offset 3, -24
+ 134              		.cfi_offset 4, -20
+ 135              		.cfi_offset 5, -16
+ 136              		.cfi_offset 6, -12
+ 137              		.cfi_offset 7, -8
+ 138              		.cfi_offset 14, -4
+  55:Src/packet_handler.c ****     uint8_t id = deQueue(message);
+ 139              		.loc 1 55 5 view .LVU15
+  55:Src/packet_handler.c ****     uint8_t id = deQueue(message);
+ 140              		.loc 1 55 24 is_stmt 0 view .LVU16
+ 141 0002 1D4C     		ldr	r4, .L19
+ 142 0004 2068     		ldr	r0, [r4]
+ 143 0006 FFF7FEFF 		bl	deQueue
+ 144              	.LVL3:
+  56:Src/packet_handler.c ****     uint8_t length1 = deQueue(message);
+ 145              		.loc 1 56 5 is_stmt 1 view .LVU17
+  56:Src/packet_handler.c ****     uint8_t length1 = deQueue(message);
+ 146              		.loc 1 56 18 is_stmt 0 view .LVU18
+ 147 000a 2068     		ldr	r0, [r4]
+ 148 000c FFF7FEFF 		bl	deQueue
+ 149              	.LVL4:
+ 150 0010 0646     		mov	r6, r0
+ 151              	.LVL5:
+  57:Src/packet_handler.c ****     uint8_t length2 = deQueue(message);
+ 152              		.loc 1 57 5 is_stmt 1 view .LVU19
+  57:Src/packet_handler.c ****     uint8_t length2 = deQueue(message);
+ 153              		.loc 1 57 23 is_stmt 0 view .LVU20
+ 154 0012 2068     		ldr	r0, [r4]
+ 155 0014 FFF7FEFF 		bl	deQueue
+ 156              	.LVL6:
+ 157 0018 0746     		mov	r7, r0
+ 158              	.LVL7:
+  58:Src/packet_handler.c ****     uint16_t length = (length2 << 8) + (length1);
+ 159              		.loc 1 58 5 is_stmt 1 view .LVU21
+  58:Src/packet_handler.c ****     uint16_t length = (length2 << 8) + (length1);
+ 160              		.loc 1 58 23 is_stmt 0 view .LVU22
+ 161 001a 2068     		ldr	r0, [r4]
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 6
 
 
- 136 002a 032C     		cmp	r4, #3
- 137 002c EBDD     		ble	.L6
-  97:Src/packet_handler.c ****     }
-  98:Src/packet_handler.c **** }
- 138              		.loc 1 98 1 view .LVU20
- 139 002e 38BD     		pop	{r3, r4, r5, pc}
- 140              	.LVL7:
- 141              	.L9:
- 142              		.loc 1 98 1 view .LVU21
- 143              		.align	2
- 144              	.L8:
- 145 0030 00080140 		.word	1073809408
- 146              		.cfi_endproc
- 147              	.LFE532:
- 149              		.section	.text.action,"ax",%progbits
- 150              		.align	1
- 151              		.global	action
- 152              		.syntax unified
- 153              		.thumb
- 154              		.thumb_func
- 155              		.fpu softvfp
- 157              	action:
- 158              	.LFB533:
-  99:Src/packet_handler.c **** 
- 100:Src/packet_handler.c **** void action(void){
- 159              		.loc 1 100 18 is_stmt 1 view -0
- 160              		.cfi_startproc
- 161              		@ args = 0, pretend = 0, frame = 0
- 162              		@ frame_needed = 0, uses_anonymous_args = 0
- 163 0000 38B5     		push	{r3, r4, r5, lr}
- 164              	.LCFI1:
- 165              		.cfi_def_cfa_offset 16
- 166              		.cfi_offset 3, -16
- 167              		.cfi_offset 4, -12
- 168              		.cfi_offset 5, -8
- 169              		.cfi_offset 14, -4
- 101:Src/packet_handler.c ****     int i;
- 170              		.loc 1 101 5 view .LVU23
- 102:Src/packet_handler.c ****     for (i=0;i<ACTION;i++){
- 171              		.loc 1 102 5 view .LVU24
- 172              	.LVL8:
- 173              		.loc 1 102 11 is_stmt 0 view .LVU25
- 174 0002 0024     		movs	r4, #0
- 175              	.LVL9:
- 176              	.L11:
- 177              		.loc 1 102 14 is_stmt 1 discriminator 1 view .LVU26
- 178              		.loc 1 102 5 is_stmt 0 discriminator 1 view .LVU27
- 179 0004 042C     		cmp	r4, #4
- 180 0006 12DC     		bgt	.L14
- 103:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 181              		.loc 1 103 9 is_stmt 1 discriminator 3 view .LVU28
- 182 0008 094D     		ldr	r5, .L15
- 183 000a 0122     		movs	r2, #1
- 184 000c 0821     		movs	r1, #8
- 185 000e 2846     		mov	r0, r5
- 186 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 187              	.LVL10:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 6
+ 162 001c FFF7FEFF 		bl	deQueue
+ 163              	.LVL8:
+  59:Src/packet_handler.c ****     instruction = deQueue(message);
+ 164              		.loc 1 59 5 is_stmt 1 view .LVU23
+  59:Src/packet_handler.c ****     instruction = deQueue(message);
+ 165              		.loc 1 59 32 is_stmt 0 view .LVU24
+ 166 0020 0502     		lsls	r5, r0, #8
+ 167 0022 ADB2     		uxth	r5, r5
+  59:Src/packet_handler.c ****     instruction = deQueue(message);
+ 168              		.loc 1 59 38 view .LVU25
+ 169 0024 BFB2     		uxth	r7, r7
+ 170              	.LVL9:
+  59:Src/packet_handler.c ****     instruction = deQueue(message);
+ 171              		.loc 1 59 14 view .LVU26
+ 172 0026 3D44     		add	r5, r5, r7
+ 173 0028 ADB2     		uxth	r5, r5
+ 174              	.LVL10:
+  60:Src/packet_handler.c ****     int i;
+ 175              		.loc 1 60 5 is_stmt 1 view .LVU27
+  60:Src/packet_handler.c ****     int i;
+ 176              		.loc 1 60 19 is_stmt 0 view .LVU28
+ 177 002a 2068     		ldr	r0, [r4]
+ 178              	.LVL11:
+  60:Src/packet_handler.c ****     int i;
+ 179              		.loc 1 60 19 view .LVU29
+ 180 002c FFF7FEFF 		bl	deQueue
+ 181              	.LVL12:
+  60:Src/packet_handler.c ****     int i;
+ 182              		.loc 1 60 17 view .LVU30
+ 183 0030 124B     		ldr	r3, .L19+4
+ 184 0032 1870     		strb	r0, [r3]
+  61:Src/packet_handler.c ****     if(length<10){
+ 185              		.loc 1 61 5 is_stmt 1 view .LVU31
+  62:Src/packet_handler.c ****         // grab the parameters
+ 186              		.loc 1 62 5 view .LVU32
+  62:Src/packet_handler.c ****         // grab the parameters
+ 187              		.loc 1 62 7 is_stmt 0 view .LVU33
+ 188 0034 092D     		cmp	r5, #9
+ 189 0036 0FD9     		bls	.L16
+ 190              	.L13:
+  69:Src/packet_handler.c ****     crc[1] = deQueue(message);
+ 191              		.loc 1 69 5 is_stmt 1 view .LVU34
+  69:Src/packet_handler.c ****     crc[1] = deQueue(message);
+ 192              		.loc 1 69 14 is_stmt 0 view .LVU35
+ 193 0038 0F4D     		ldr	r5, .L19
+ 194              	.LVL13:
+  69:Src/packet_handler.c ****     crc[1] = deQueue(message);
+ 195              		.loc 1 69 14 view .LVU36
+ 196 003a 2868     		ldr	r0, [r5]
+ 197 003c FFF7FEFF 		bl	deQueue
+ 198              	.LVL14:
+  69:Src/packet_handler.c ****     crc[1] = deQueue(message);
+ 199              		.loc 1 69 12 view .LVU37
+ 200 0040 0F4C     		ldr	r4, .L19+8
+ 201 0042 2070     		strb	r0, [r4]
+  70:Src/packet_handler.c **** 
+ 202              		.loc 1 70 5 is_stmt 1 view .LVU38
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 7
 
 
- 104:Src/packet_handler.c ****         HAL_Delay(50);
- 188              		.loc 1 104 9 discriminator 3 view .LVU29
- 189 0014 3220     		movs	r0, #50
- 190 0016 FFF7FEFF 		bl	HAL_Delay
- 191              	.LVL11:
- 105:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, LOW);
- 192              		.loc 1 105 9 discriminator 3 view .LVU30
- 193 001a 0022     		movs	r2, #0
- 194 001c 0821     		movs	r1, #8
- 195 001e 2846     		mov	r0, r5
- 196 0020 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 197              	.LVL12:
- 106:Src/packet_handler.c ****         HAL_Delay(50);
- 198              		.loc 1 106 9 discriminator 3 view .LVU31
- 199 0024 3220     		movs	r0, #50
- 200 0026 FFF7FEFF 		bl	HAL_Delay
- 201              	.LVL13:
- 102:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 202              		.loc 1 102 23 discriminator 3 view .LVU32
- 102:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 203              		.loc 1 102 24 is_stmt 0 discriminator 3 view .LVU33
- 204 002a 0134     		adds	r4, r4, #1
- 205              	.LVL14:
- 102:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 206              		.loc 1 102 24 discriminator 3 view .LVU34
- 207 002c EAE7     		b	.L11
- 208              	.L14:
- 107:Src/packet_handler.c ****     }
- 108:Src/packet_handler.c **** }
- 209              		.loc 1 108 1 view .LVU35
- 210 002e 38BD     		pop	{r3, r4, r5, pc}
- 211              	.LVL15:
- 212              	.L16:
- 213              		.loc 1 108 1 view .LVU36
- 214              		.align	2
- 215              	.L15:
- 216 0030 00080140 		.word	1073809408
- 217              		.cfi_endproc
- 218              	.LFE533:
- 220              		.section	.text.factory_reset,"ax",%progbits
- 221              		.align	1
- 222              		.global	factory_reset
- 223              		.syntax unified
- 224              		.thumb
- 225              		.thumb_func
- 226              		.fpu softvfp
- 228              	factory_reset:
- 229              	.LFB534:
- 109:Src/packet_handler.c **** 
- 110:Src/packet_handler.c **** void factory_reset(void){
- 230              		.loc 1 110 25 is_stmt 1 view -0
- 231              		.cfi_startproc
- 232              		@ args = 0, pretend = 0, frame = 0
- 233              		@ frame_needed = 0, uses_anonymous_args = 0
- 234 0000 38B5     		push	{r3, r4, r5, lr}
- 235              	.LCFI2:
- 236              		.cfi_def_cfa_offset 16
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 7
+  70:Src/packet_handler.c **** 
+ 203              		.loc 1 70 14 is_stmt 0 view .LVU39
+ 204 0044 2868     		ldr	r0, [r5]
+ 205 0046 FFF7FEFF 		bl	deQueue
+ 206              	.LVL15:
+  70:Src/packet_handler.c **** 
+ 207              		.loc 1 70 12 view .LVU40
+ 208 004a 6070     		strb	r0, [r4, #1]
+  73:Src/packet_handler.c ****         process_message();
+ 209              		.loc 1 73 5 is_stmt 1 view .LVU41
+  73:Src/packet_handler.c ****         process_message();
+ 210              		.loc 1 73 18 is_stmt 0 view .LVU42
+ 211 004c 0D4B     		ldr	r3, .L19+12
+ 212 004e 1B68     		ldr	r3, [r3]
+ 213 0050 1B68     		ldr	r3, [r3]
+  73:Src/packet_handler.c ****         process_message();
+ 214              		.loc 1 73 8 view .LVU43
+ 215 0052 9E42     		cmp	r6, r3
+ 216 0054 0CD0     		beq	.L18
+ 217              	.L11:
+  77:Src/packet_handler.c **** 
+ 218              		.loc 1 77 1 view .LVU44
+ 219 0056 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 220              	.LVL16:
+ 221              	.L16:
+  64:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 222              		.loc 1 64 15 view .LVU45
+ 223 0058 0024     		movs	r4, #0
+ 224              	.L12:
+ 225              	.LVL17:
+  64:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 226              		.loc 1 64 19 is_stmt 1 discriminator 1 view .LVU46
+  64:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 227              		.loc 1 64 29 is_stmt 0 discriminator 1 view .LVU47
+ 228 005a EB1E     		subs	r3, r5, #3
+  64:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 229              		.loc 1 64 9 discriminator 1 view .LVU48
+ 230 005c A342     		cmp	r3, r4
+ 231 005e EBDD     		ble	.L13
+  65:Src/packet_handler.c ****         }
+ 232              		.loc 1 65 13 is_stmt 1 discriminator 3 view .LVU49
+  65:Src/packet_handler.c ****         }
+ 233              		.loc 1 65 24 is_stmt 0 discriminator 3 view .LVU50
+ 234 0060 054B     		ldr	r3, .L19
+ 235 0062 1868     		ldr	r0, [r3]
+ 236 0064 FFF7FEFF 		bl	deQueue
+ 237              	.LVL18:
+  65:Src/packet_handler.c ****         }
+ 238              		.loc 1 65 22 discriminator 3 view .LVU51
+ 239 0068 074B     		ldr	r3, .L19+16
+ 240 006a 1855     		strb	r0, [r3, r4]
+  64:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 241              		.loc 1 64 34 is_stmt 1 discriminator 3 view .LVU52
+  64:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 242              		.loc 1 64 35 is_stmt 0 discriminator 3 view .LVU53
+ 243 006c 0134     		adds	r4, r4, #1
+ 244              	.LVL19:
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 8
 
 
- 237              		.cfi_offset 3, -16
- 238              		.cfi_offset 4, -12
- 239              		.cfi_offset 5, -8
- 240              		.cfi_offset 14, -4
- 111:Src/packet_handler.c ****     int i;
- 241              		.loc 1 111 5 view .LVU38
- 112:Src/packet_handler.c ****     for (i=0;i<FACTORY_RESET;i++){
- 242              		.loc 1 112 5 view .LVU39
- 243              	.LVL16:
- 244              		.loc 1 112 11 is_stmt 0 view .LVU40
- 245 0002 0024     		movs	r4, #0
- 246              	.LVL17:
- 247              	.L18:
- 248              		.loc 1 112 14 is_stmt 1 discriminator 1 view .LVU41
- 249              		.loc 1 112 5 is_stmt 0 discriminator 1 view .LVU42
- 250 0004 052C     		cmp	r4, #5
- 251 0006 12DC     		bgt	.L21
- 113:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 252              		.loc 1 113 9 is_stmt 1 discriminator 3 view .LVU43
- 253 0008 094D     		ldr	r5, .L22
- 254 000a 0122     		movs	r2, #1
- 255 000c 0821     		movs	r1, #8
- 256 000e 2846     		mov	r0, r5
- 257 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 258              	.LVL18:
- 114:Src/packet_handler.c ****         HAL_Delay(50);
- 259              		.loc 1 114 9 discriminator 3 view .LVU44
- 260 0014 3220     		movs	r0, #50
- 261 0016 FFF7FEFF 		bl	HAL_Delay
- 262              	.LVL19:
- 115:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, LOW);
- 263              		.loc 1 115 9 discriminator 3 view .LVU45
- 264 001a 0022     		movs	r2, #0
- 265 001c 0821     		movs	r1, #8
- 266 001e 2846     		mov	r0, r5
- 267 0020 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 268              	.LVL20:
- 116:Src/packet_handler.c ****         HAL_Delay(50);
- 269              		.loc 1 116 9 discriminator 3 view .LVU46
- 270 0024 3220     		movs	r0, #50
- 271 0026 FFF7FEFF 		bl	HAL_Delay
- 272              	.LVL21:
- 112:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 273              		.loc 1 112 30 discriminator 3 view .LVU47
- 112:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 274              		.loc 1 112 31 is_stmt 0 discriminator 3 view .LVU48
- 275 002a 0134     		adds	r4, r4, #1
- 276              	.LVL22:
- 112:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 277              		.loc 1 112 31 discriminator 3 view .LVU49
- 278 002c EAE7     		b	.L18
- 279              	.L21:
- 117:Src/packet_handler.c ****     }
- 118:Src/packet_handler.c **** }
- 280              		.loc 1 118 1 view .LVU50
- 281 002e 38BD     		pop	{r3, r4, r5, pc}
- 282              	.LVL23:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 8
+  64:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 245              		.loc 1 64 35 discriminator 3 view .LVU54
+ 246 006e F4E7     		b	.L12
+ 247              	.LVL20:
+ 248              	.L18:
+  74:Src/packet_handler.c ****     }
+ 249              		.loc 1 74 9 is_stmt 1 view .LVU55
+ 250 0070 FFF7FEFF 		bl	process_message
+ 251              	.LVL21:
+  77:Src/packet_handler.c **** 
+ 252              		.loc 1 77 1 is_stmt 0 view .LVU56
+ 253 0074 EFE7     		b	.L11
+ 254              	.L20:
+ 255 0076 00BF     		.align	2
+ 256              	.L19:
+ 257 0078 00000000 		.word	message
+ 258 007c 00000000 		.word	instruction
+ 259 0080 00000000 		.word	crc
+ 260 0084 00000000 		.word	PARAM
+ 261 0088 00000000 		.word	param
+ 262              		.cfi_endproc
+ 263              	.LFE528:
+ 265              		.section	.text.process_queue,"ax",%progbits
+ 266              		.align	1
+ 267              		.global	process_queue
+ 268              		.syntax unified
+ 269              		.thumb
+ 270              		.thumb_func
+ 271              		.fpu softvfp
+ 273              	process_queue:
+ 274              	.LFB527:
+  20:Src/packet_handler.c **** 
+ 275              		.loc 1 20 21 is_stmt 1 view -0
+ 276              		.cfi_startproc
+ 277              		@ args = 0, pretend = 0, frame = 0
+ 278              		@ frame_needed = 0, uses_anonymous_args = 0
+ 279 0000 70B5     		push	{r4, r5, r6, lr}
+ 280              	.LCFI5:
+ 281              		.cfi_def_cfa_offset 16
+ 282              		.cfi_offset 4, -16
+ 283              		.cfi_offset 5, -12
+ 284              		.cfi_offset 6, -8
+ 285              		.cfi_offset 14, -4
+  23:Src/packet_handler.c ****     uint8_t h2 = 0;
+ 286              		.loc 1 23 5 view .LVU58
+ 287              	.LVL22:
+  24:Src/packet_handler.c ****     uint8_t h3 = 0;
+ 288              		.loc 1 24 5 view .LVU59
+  25:Src/packet_handler.c ****     uint32_t header_block=0;
+ 289              		.loc 1 25 5 view .LVU60
+  26:Src/packet_handler.c ****     uint8_t header_block_found = 0;
+ 290              		.loc 1 26 5 view .LVU61
+  27:Src/packet_handler.c **** 
+ 291              		.loc 1 27 5 view .LVU62
+  29:Src/packet_handler.c **** 
+ 292              		.loc 1 29 5 view .LVU63
+  27:Src/packet_handler.c **** 
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 9
 
 
- 283              	.L23:
- 284              		.loc 1 118 1 view .LVU51
- 285              		.align	2
- 286              	.L22:
- 287 0030 00080140 		.word	1073809408
- 288              		.cfi_endproc
- 289              	.LFE534:
- 291              		.section	.text.reboot,"ax",%progbits
- 292              		.align	1
- 293              		.global	reboot
- 294              		.syntax unified
- 295              		.thumb
- 296              		.thumb_func
- 297              		.fpu softvfp
- 299              	reboot:
- 300              	.LFB535:
- 119:Src/packet_handler.c **** 
- 120:Src/packet_handler.c **** void reboot(void){
- 301              		.loc 1 120 18 is_stmt 1 view -0
- 302              		.cfi_startproc
- 303              		@ args = 0, pretend = 0, frame = 0
- 304              		@ frame_needed = 0, uses_anonymous_args = 0
- 305 0000 38B5     		push	{r3, r4, r5, lr}
- 306              	.LCFI3:
- 307              		.cfi_def_cfa_offset 16
- 308              		.cfi_offset 3, -16
- 309              		.cfi_offset 4, -12
- 310              		.cfi_offset 5, -8
- 311              		.cfi_offset 14, -4
- 121:Src/packet_handler.c ****     int i;
- 312              		.loc 1 121 5 view .LVU53
- 122:Src/packet_handler.c ****     for (i=0;i<REBOOT;i++){
- 313              		.loc 1 122 5 view .LVU54
- 314              	.LVL24:
- 315              		.loc 1 122 11 is_stmt 0 view .LVU55
- 316 0002 0024     		movs	r4, #0
- 317              		.loc 1 122 5 view .LVU56
- 318 0004 11E0     		b	.L25
- 319              	.LVL25:
- 320              	.L26:
- 123:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 321              		.loc 1 123 9 is_stmt 1 discriminator 3 view .LVU57
- 322 0006 0A4D     		ldr	r5, .L28
- 323 0008 0122     		movs	r2, #1
- 324 000a 0821     		movs	r1, #8
- 325 000c 2846     		mov	r0, r5
- 326 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
- 327              	.LVL26:
- 124:Src/packet_handler.c ****         HAL_Delay(50);
- 328              		.loc 1 124 9 discriminator 3 view .LVU58
- 329 0012 3220     		movs	r0, #50
- 330 0014 FFF7FEFF 		bl	HAL_Delay
- 331              	.LVL27:
- 125:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, LOW);
- 332              		.loc 1 125 9 discriminator 3 view .LVU59
- 333 0018 0022     		movs	r2, #0
- 334 001a 0821     		movs	r1, #8
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 9
+ 293              		.loc 1 27 13 is_stmt 0 view .LVU64
+ 294 0002 0026     		movs	r6, #0
+  25:Src/packet_handler.c ****     uint32_t header_block=0;
+ 295              		.loc 1 25 13 view .LVU65
+ 296 0004 3446     		mov	r4, r6
+  24:Src/packet_handler.c ****     uint8_t h3 = 0;
+ 297              		.loc 1 24 13 view .LVU66
+ 298 0006 3546     		mov	r5, r6
+  29:Src/packet_handler.c **** 
+ 299              		.loc 1 29 11 view .LVU67
+ 300 0008 01E0     		b	.L22
+ 301              	.LVL23:
+ 302              	.L23:
+  37:Src/packet_handler.c ****         }
+ 303              		.loc 1 37 32 view .LVU68
+ 304 000a 2546     		mov	r5, r4
+ 305              	.LVL24:
+  37:Src/packet_handler.c ****         }
+ 306              		.loc 1 37 32 view .LVU69
+ 307 000c 0446     		mov	r4, r0
+ 308              	.LVL25:
+ 309              	.L22:
+  29:Src/packet_handler.c **** 
+ 310              		.loc 1 29 11 is_stmt 1 view .LVU70
+ 311 000e 8EB9     		cbnz	r6, .L24
+  29:Src/packet_handler.c **** 
+ 312              		.loc 1 29 36 is_stmt 0 discriminator 1 view .LVU71
+ 313 0010 0B4B     		ldr	r3, .L30
+ 314 0012 1868     		ldr	r0, [r3]
+ 315 0014 FFF7FEFF 		bl	isEmpty
+ 316              	.LVL26:
+  29:Src/packet_handler.c **** 
+ 317              		.loc 1 29 32 discriminator 1 view .LVU72
+ 318 0018 60B9     		cbnz	r0, .L24
+  32:Src/packet_handler.c ****         h2 = h3;
+ 319              		.loc 1 32 9 is_stmt 1 view .LVU73
+ 320              	.LVL27:
+  33:Src/packet_handler.c ****         h3 = deQueue(message);
+ 321              		.loc 1 33 9 view .LVU74
+  34:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
+ 322              		.loc 1 34 9 view .LVU75
+  34:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
+ 323              		.loc 1 34 14 is_stmt 0 view .LVU76
+ 324 001a 094B     		ldr	r3, .L30
+ 325 001c 1868     		ldr	r0, [r3]
+ 326 001e FFF7FEFF 		bl	deQueue
+ 327              	.LVL28:
+  35:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
+ 328              		.loc 1 35 9 is_stmt 1 view .LVU77
+  35:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
+ 329              		.loc 1 35 38 is_stmt 0 view .LVU78
+ 330 0022 2302     		lsls	r3, r4, #8
+  35:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
+ 331              		.loc 1 35 33 view .LVU79
+ 332 0024 03EB0543 		add	r3, r3, r5, lsl #16
+  35:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
+ 333              		.loc 1 35 43 view .LVU80
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 10
 
 
- 335 001c 2846     		mov	r0, r5
- 336 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
- 337              	.LVL28:
- 126:Src/packet_handler.c ****         HAL_Delay(50);
- 338              		.loc 1 126 9 discriminator 3 view .LVU60
- 339 0022 3220     		movs	r0, #50
- 340 0024 FFF7FEFF 		bl	HAL_Delay
- 341              	.LVL29:
- 122:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 342              		.loc 1 122 23 discriminator 3 view .LVU61
- 122:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 343              		.loc 1 122 24 is_stmt 0 discriminator 3 view .LVU62
- 344 0028 0134     		adds	r4, r4, #1
- 345              	.LVL30:
- 346              	.L25:
- 122:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 347              		.loc 1 122 14 is_stmt 1 discriminator 1 view .LVU63
- 122:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 348              		.loc 1 122 5 is_stmt 0 discriminator 1 view .LVU64
- 349 002a 072C     		cmp	r4, #7
- 350 002c EBDD     		ble	.L26
- 127:Src/packet_handler.c ****     }
- 128:Src/packet_handler.c **** }
- 351              		.loc 1 128 1 view .LVU65
- 352 002e 38BD     		pop	{r3, r4, r5, pc}
- 353              	.LVL31:
- 354              	.L29:
- 355              		.loc 1 128 1 view .LVU66
- 356              		.align	2
- 357              	.L28:
- 358 0030 00080140 		.word	1073809408
- 359              		.cfi_endproc
- 360              	.LFE535:
- 362              		.section	.text.clear,"ax",%progbits
- 363              		.align	1
- 364              		.global	clear
- 365              		.syntax unified
- 366              		.thumb
- 367              		.thumb_func
- 368              		.fpu softvfp
- 370              	clear:
- 371              	.LFB536:
- 129:Src/packet_handler.c **** 
- 130:Src/packet_handler.c **** void clear(void){
- 372              		.loc 1 130 17 is_stmt 1 view -0
- 373              		.cfi_startproc
- 374              		@ args = 0, pretend = 0, frame = 0
- 375              		@ frame_needed = 0, uses_anonymous_args = 0
- 376 0000 38B5     		push	{r3, r4, r5, lr}
- 377              	.LCFI4:
- 378              		.cfi_def_cfa_offset 16
- 379              		.cfi_offset 3, -16
- 380              		.cfi_offset 4, -12
- 381              		.cfi_offset 5, -8
- 382              		.cfi_offset 14, -4
- 131:Src/packet_handler.c ****     int i;
- 383              		.loc 1 131 5 view .LVU68
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 10
+ 334 0028 0344     		add	r3, r3, r0
+ 335              	.LVL29:
+  36:Src/packet_handler.c ****             header_block_found = 1;
+ 336              		.loc 1 36 9 is_stmt 1 view .LVU81
+  36:Src/packet_handler.c ****             header_block_found = 1;
+ 337              		.loc 1 36 11 is_stmt 0 view .LVU82
+ 338 002a 064A     		ldr	r2, .L30+4
+ 339 002c 9342     		cmp	r3, r2
+ 340 002e ECD1     		bne	.L23
+  37:Src/packet_handler.c ****         }
+ 341              		.loc 1 37 32 view .LVU83
+ 342 0030 0126     		movs	r6, #1
+ 343              	.LVL30:
+  37:Src/packet_handler.c ****         }
+ 344              		.loc 1 37 32 view .LVU84
+ 345 0032 EAE7     		b	.L23
+ 346              	.LVL31:
+ 347              	.L24:
+  41:Src/packet_handler.c ****         extract_message();
+ 348              		.loc 1 41 5 is_stmt 1 view .LVU85
+  41:Src/packet_handler.c ****         extract_message();
+ 349              		.loc 1 41 8 is_stmt 0 view .LVU86
+ 350 0034 06B9     		cbnz	r6, .L29
+ 351              	.L21:
+  45:Src/packet_handler.c **** 
+ 352              		.loc 1 45 1 view .LVU87
+ 353 0036 70BD     		pop	{r4, r5, r6, pc}
+ 354              	.LVL32:
+ 355              	.L29:
+ 356              	.LBB2:
+  42:Src/packet_handler.c ****     }
+ 357              		.loc 1 42 9 is_stmt 1 view .LVU88
+ 358 0038 FFF7FEFF 		bl	extract_message
+ 359              	.LVL33:
+ 360              	.LBE2:
+  45:Src/packet_handler.c **** 
+ 361              		.loc 1 45 1 is_stmt 0 view .LVU89
+ 362 003c FBE7     		b	.L21
+ 363              	.L31:
+ 364 003e 00BF     		.align	2
+ 365              	.L30:
+ 366 0040 00000000 		.word	message
+ 367 0044 FDFFFF00 		.word	16777213
+ 368              		.cfi_endproc
+ 369              	.LFE527:
+ 371              		.section	.text.read,"ax",%progbits
+ 372              		.align	1
+ 373              		.global	read
+ 374              		.syntax unified
+ 375              		.thumb
+ 376              		.thumb_func
+ 377              		.fpu softvfp
+ 379              	read:
+ 380              	.LFB531:
+ 112:Src/packet_handler.c **** 
+ 113:Src/packet_handler.c **** // TODO: finish instruction
+ 114:Src/packet_handler.c **** void read(void){
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 11
 
 
- 132:Src/packet_handler.c ****     for (i=0;i<CLEAR;i++){
- 384              		.loc 1 132 5 view .LVU69
- 385              	.LVL32:
- 386              		.loc 1 132 11 is_stmt 0 view .LVU70
- 387 0002 0024     		movs	r4, #0
- 388              	.LVL33:
- 389              	.L31:
- 390              		.loc 1 132 14 is_stmt 1 discriminator 1 view .LVU71
- 391              		.loc 1 132 5 is_stmt 0 discriminator 1 view .LVU72
- 392 0004 092C     		cmp	r4, #9
- 393 0006 12DC     		bgt	.L34
- 133:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 394              		.loc 1 133 9 is_stmt 1 discriminator 3 view .LVU73
- 395 0008 094D     		ldr	r5, .L35
- 396 000a 0122     		movs	r2, #1
- 397 000c 0821     		movs	r1, #8
- 398 000e 2846     		mov	r0, r5
- 399 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 400              	.LVL34:
- 134:Src/packet_handler.c ****         HAL_Delay(50);
- 401              		.loc 1 134 9 discriminator 3 view .LVU74
- 402 0014 3220     		movs	r0, #50
- 403 0016 FFF7FEFF 		bl	HAL_Delay
- 404              	.LVL35:
- 135:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, LOW);
- 405              		.loc 1 135 9 discriminator 3 view .LVU75
- 406 001a 0022     		movs	r2, #0
- 407 001c 0821     		movs	r1, #8
- 408 001e 2846     		mov	r0, r5
- 409 0020 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 410              	.LVL36:
- 136:Src/packet_handler.c ****         HAL_Delay(50);
- 411              		.loc 1 136 9 discriminator 3 view .LVU76
- 412 0024 3220     		movs	r0, #50
- 413 0026 FFF7FEFF 		bl	HAL_Delay
- 414              	.LVL37:
- 132:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 415              		.loc 1 132 22 discriminator 3 view .LVU77
- 132:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 416              		.loc 1 132 23 is_stmt 0 discriminator 3 view .LVU78
- 417 002a 0134     		adds	r4, r4, #1
- 418              	.LVL38:
- 132:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 419              		.loc 1 132 23 discriminator 3 view .LVU79
- 420 002c EAE7     		b	.L31
- 421              	.L34:
- 137:Src/packet_handler.c ****     }
- 138:Src/packet_handler.c **** }
- 422              		.loc 1 138 1 view .LVU80
- 423 002e 38BD     		pop	{r3, r4, r5, pc}
- 424              	.LVL39:
- 425              	.L36:
- 426              		.loc 1 138 1 view .LVU81
- 427              		.align	2
- 428              	.L35:
- 429 0030 00080140 		.word	1073809408
- 430              		.cfi_endproc
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 11
+ 381              		.loc 1 114 16 is_stmt 1 view -0
+ 382              		.cfi_startproc
+ 383              		@ args = 0, pretend = 0, frame = 0
+ 384              		@ frame_needed = 0, uses_anonymous_args = 0
+ 385              		@ link register save eliminated.
+ 115:Src/packet_handler.c **** 
+ 116:Src/packet_handler.c **** }
+ 386              		.loc 1 116 1 view .LVU91
+ 387 0000 7047     		bx	lr
+ 388              		.cfi_endproc
+ 389              	.LFE531:
+ 391              		.section	.text.write,"ax",%progbits
+ 392              		.align	1
+ 393              		.global	write
+ 394              		.syntax unified
+ 395              		.thumb
+ 396              		.thumb_func
+ 397              		.fpu softvfp
+ 399              	write:
+ 400              	.LFB532:
+ 117:Src/packet_handler.c **** 
+ 118:Src/packet_handler.c **** // TODO: finish instruction
+ 119:Src/packet_handler.c **** void write(void){
+ 401              		.loc 1 119 17 view -0
+ 402              		.cfi_startproc
+ 403              		@ args = 0, pretend = 0, frame = 0
+ 404              		@ frame_needed = 0, uses_anonymous_args = 0
+ 405              		@ link register save eliminated.
+ 120:Src/packet_handler.c **** 
+ 121:Src/packet_handler.c **** }
+ 406              		.loc 1 121 1 view .LVU93
+ 407 0000 7047     		bx	lr
+ 408              		.cfi_endproc
+ 409              	.LFE532:
+ 411              		.section	.text.reg_write,"ax",%progbits
+ 412              		.align	1
+ 413              		.global	reg_write
+ 414              		.syntax unified
+ 415              		.thumb
+ 416              		.thumb_func
+ 417              		.fpu softvfp
+ 419              	reg_write:
+ 420              	.LFB533:
+ 122:Src/packet_handler.c **** 
+ 123:Src/packet_handler.c **** // TODO: finish instruction
+ 124:Src/packet_handler.c **** void reg_write(void){
+ 421              		.loc 1 124 21 view -0
+ 422              		.cfi_startproc
+ 423              		@ args = 0, pretend = 0, frame = 0
+ 424              		@ frame_needed = 0, uses_anonymous_args = 0
+ 425              		@ link register save eliminated.
+ 125:Src/packet_handler.c ****     
+ 126:Src/packet_handler.c **** }
+ 426              		.loc 1 126 1 view .LVU95
+ 427 0000 7047     		bx	lr
+ 428              		.cfi_endproc
+ 429              	.LFE533:
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 12
 
 
- 431              	.LFE536:
- 433              		.section	.text.status,"ax",%progbits
- 434              		.align	1
- 435              		.global	status
- 436              		.syntax unified
- 437              		.thumb
- 438              		.thumb_func
- 439              		.fpu softvfp
- 441              	status:
- 442              	.LFB537:
- 139:Src/packet_handler.c **** 
- 140:Src/packet_handler.c **** void status(void){
- 443              		.loc 1 140 18 is_stmt 1 view -0
- 444              		.cfi_startproc
- 445              		@ args = 0, pretend = 0, frame = 0
- 446              		@ frame_needed = 0, uses_anonymous_args = 0
- 447 0000 38B5     		push	{r3, r4, r5, lr}
- 448              	.LCFI5:
- 449              		.cfi_def_cfa_offset 16
- 450              		.cfi_offset 3, -16
- 451              		.cfi_offset 4, -12
- 452              		.cfi_offset 5, -8
- 453              		.cfi_offset 14, -4
- 141:Src/packet_handler.c ****     int i;
- 454              		.loc 1 141 5 view .LVU83
- 142:Src/packet_handler.c ****     for (i=0;i<STATUS;i++){
- 455              		.loc 1 142 5 view .LVU84
- 456              	.LVL40:
- 457              		.loc 1 142 11 is_stmt 0 view .LVU85
- 458 0002 0024     		movs	r4, #0
- 459              	.LVL41:
- 460              	.L38:
- 461              		.loc 1 142 14 is_stmt 1 discriminator 1 view .LVU86
- 462              		.loc 1 142 5 is_stmt 0 discriminator 1 view .LVU87
- 463 0004 362C     		cmp	r4, #54
- 464 0006 12DC     		bgt	.L41
- 143:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 465              		.loc 1 143 9 is_stmt 1 discriminator 3 view .LVU88
- 466 0008 094D     		ldr	r5, .L42
- 467 000a 0122     		movs	r2, #1
- 468 000c 0821     		movs	r1, #8
- 469 000e 2846     		mov	r0, r5
- 470 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 471              	.LVL42:
- 144:Src/packet_handler.c ****         HAL_Delay(50);
- 472              		.loc 1 144 9 discriminator 3 view .LVU89
- 473 0014 3220     		movs	r0, #50
- 474 0016 FFF7FEFF 		bl	HAL_Delay
- 475              	.LVL43:
- 145:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, LOW);
- 476              		.loc 1 145 9 discriminator 3 view .LVU90
- 477 001a 0022     		movs	r2, #0
- 478 001c 0821     		movs	r1, #8
- 479 001e 2846     		mov	r0, r5
- 480 0020 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 481              	.LVL44:
- 146:Src/packet_handler.c ****         HAL_Delay(50);
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 12
+ 431              		.section	.text.action,"ax",%progbits
+ 432              		.align	1
+ 433              		.global	action
+ 434              		.syntax unified
+ 435              		.thumb
+ 436              		.thumb_func
+ 437              		.fpu softvfp
+ 439              	action:
+ 440              	.LFB534:
+ 127:Src/packet_handler.c **** 
+ 128:Src/packet_handler.c **** // TODO: finish instruction
+ 129:Src/packet_handler.c **** void action(void){
+ 441              		.loc 1 129 18 view -0
+ 442              		.cfi_startproc
+ 443              		@ args = 0, pretend = 0, frame = 0
+ 444              		@ frame_needed = 0, uses_anonymous_args = 0
+ 445              		@ link register save eliminated.
+ 130:Src/packet_handler.c ****     
+ 131:Src/packet_handler.c **** }
+ 446              		.loc 1 131 1 view .LVU97
+ 447 0000 7047     		bx	lr
+ 448              		.cfi_endproc
+ 449              	.LFE534:
+ 451              		.section	.text.factory_reset,"ax",%progbits
+ 452              		.align	1
+ 453              		.global	factory_reset
+ 454              		.syntax unified
+ 455              		.thumb
+ 456              		.thumb_func
+ 457              		.fpu softvfp
+ 459              	factory_reset:
+ 460              	.LFB535:
+ 132:Src/packet_handler.c **** 
+ 133:Src/packet_handler.c **** // TODO: finish instruction
+ 134:Src/packet_handler.c **** void factory_reset(void){
+ 461              		.loc 1 134 25 view -0
+ 462              		.cfi_startproc
+ 463              		@ args = 0, pretend = 0, frame = 0
+ 464              		@ frame_needed = 0, uses_anonymous_args = 0
+ 465              		@ link register save eliminated.
+ 135:Src/packet_handler.c ****     
+ 136:Src/packet_handler.c **** }
+ 466              		.loc 1 136 1 view .LVU99
+ 467 0000 7047     		bx	lr
+ 468              		.cfi_endproc
+ 469              	.LFE535:
+ 471              		.section	.text.reboot,"ax",%progbits
+ 472              		.align	1
+ 473              		.global	reboot
+ 474              		.syntax unified
+ 475              		.thumb
+ 476              		.thumb_func
+ 477              		.fpu softvfp
+ 479              	reboot:
+ 480              	.LFB536:
+ 137:Src/packet_handler.c **** 
+ 138:Src/packet_handler.c **** // TODO: finish instruction
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 13
 
 
- 482              		.loc 1 146 9 discriminator 3 view .LVU91
- 483 0024 3220     		movs	r0, #50
- 484 0026 FFF7FEFF 		bl	HAL_Delay
- 485              	.LVL45:
- 142:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 486              		.loc 1 142 23 discriminator 3 view .LVU92
- 142:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 487              		.loc 1 142 24 is_stmt 0 discriminator 3 view .LVU93
- 488 002a 0134     		adds	r4, r4, #1
- 489              	.LVL46:
- 142:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 490              		.loc 1 142 24 discriminator 3 view .LVU94
- 491 002c EAE7     		b	.L38
- 492              	.L41:
- 147:Src/packet_handler.c ****     }
- 148:Src/packet_handler.c **** }
- 493              		.loc 1 148 1 view .LVU95
- 494 002e 38BD     		pop	{r3, r4, r5, pc}
- 495              	.LVL47:
- 496              	.L43:
- 497              		.loc 1 148 1 view .LVU96
- 498              		.align	2
- 499              	.L42:
- 500 0030 00080140 		.word	1073809408
- 501              		.cfi_endproc
- 502              	.LFE537:
- 504              		.section	.text.sync_read,"ax",%progbits
- 505              		.align	1
- 506              		.global	sync_read
- 507              		.syntax unified
- 508              		.thumb
- 509              		.thumb_func
- 510              		.fpu softvfp
- 512              	sync_read:
- 513              	.LFB538:
- 149:Src/packet_handler.c **** 
- 150:Src/packet_handler.c **** void sync_read(void){
- 514              		.loc 1 150 21 is_stmt 1 view -0
- 515              		.cfi_startproc
- 516              		@ args = 0, pretend = 0, frame = 0
- 517              		@ frame_needed = 0, uses_anonymous_args = 0
- 518 0000 38B5     		push	{r3, r4, r5, lr}
- 519              	.LCFI6:
- 520              		.cfi_def_cfa_offset 16
- 521              		.cfi_offset 3, -16
- 522              		.cfi_offset 4, -12
- 523              		.cfi_offset 5, -8
- 524              		.cfi_offset 14, -4
- 151:Src/packet_handler.c ****     int i;
- 525              		.loc 1 151 5 view .LVU98
- 152:Src/packet_handler.c ****     for (i=0;i<SYNC_READ;i++){
- 526              		.loc 1 152 5 view .LVU99
- 527              	.LVL48:
- 528              		.loc 1 152 11 is_stmt 0 view .LVU100
- 529 0002 0024     		movs	r4, #0
- 530              		.loc 1 152 5 view .LVU101
- 531 0004 11E0     		b	.L45
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 13
+ 139:Src/packet_handler.c **** void reboot(void){
+ 481              		.loc 1 139 18 view -0
+ 482              		.cfi_startproc
+ 483              		@ args = 0, pretend = 0, frame = 0
+ 484              		@ frame_needed = 0, uses_anonymous_args = 0
+ 485              		@ link register save eliminated.
+ 140:Src/packet_handler.c ****     
+ 141:Src/packet_handler.c **** }
+ 486              		.loc 1 141 1 view .LVU101
+ 487 0000 7047     		bx	lr
+ 488              		.cfi_endproc
+ 489              	.LFE536:
+ 491              		.section	.text.clear,"ax",%progbits
+ 492              		.align	1
+ 493              		.global	clear
+ 494              		.syntax unified
+ 495              		.thumb
+ 496              		.thumb_func
+ 497              		.fpu softvfp
+ 499              	clear:
+ 500              	.LFB537:
+ 142:Src/packet_handler.c **** 
+ 143:Src/packet_handler.c **** // TODO: finish instruction
+ 144:Src/packet_handler.c **** void clear(void){
+ 501              		.loc 1 144 17 view -0
+ 502              		.cfi_startproc
+ 503              		@ args = 0, pretend = 0, frame = 0
+ 504              		@ frame_needed = 0, uses_anonymous_args = 0
+ 505              		@ link register save eliminated.
+ 145:Src/packet_handler.c ****     
+ 146:Src/packet_handler.c **** }
+ 506              		.loc 1 146 1 view .LVU103
+ 507 0000 7047     		bx	lr
+ 508              		.cfi_endproc
+ 509              	.LFE537:
+ 511              		.section	.text.status,"ax",%progbits
+ 512              		.align	1
+ 513              		.global	status
+ 514              		.syntax unified
+ 515              		.thumb
+ 516              		.thumb_func
+ 517              		.fpu softvfp
+ 519              	status:
+ 520              	.LFB538:
+ 147:Src/packet_handler.c **** 
+ 148:Src/packet_handler.c **** // TODO: finish instruction
+ 149:Src/packet_handler.c **** void status(void){
+ 521              		.loc 1 149 18 view -0
+ 522              		.cfi_startproc
+ 523              		@ args = 0, pretend = 0, frame = 0
+ 524              		@ frame_needed = 0, uses_anonymous_args = 0
+ 525              		@ link register save eliminated.
+ 150:Src/packet_handler.c ****     
+ 151:Src/packet_handler.c **** }
+ 526              		.loc 1 151 1 view .LVU105
+ 527 0000 7047     		bx	lr
+ 528              		.cfi_endproc
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 14
 
 
- 532              	.LVL49:
- 533              	.L46:
- 153:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 534              		.loc 1 153 9 is_stmt 1 discriminator 3 view .LVU102
- 535 0006 0A4D     		ldr	r5, .L48
- 536 0008 0122     		movs	r2, #1
- 537 000a 0821     		movs	r1, #8
- 538 000c 2846     		mov	r0, r5
- 539 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
- 540              	.LVL50:
- 154:Src/packet_handler.c ****         HAL_Delay(50);
- 541              		.loc 1 154 9 discriminator 3 view .LVU103
- 542 0012 3220     		movs	r0, #50
- 543 0014 FFF7FEFF 		bl	HAL_Delay
- 544              	.LVL51:
- 155:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, LOW);
- 545              		.loc 1 155 9 discriminator 3 view .LVU104
- 546 0018 0022     		movs	r2, #0
- 547 001a 0821     		movs	r1, #8
- 548 001c 2846     		mov	r0, r5
- 549 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
- 550              	.LVL52:
- 156:Src/packet_handler.c ****         HAL_Delay(50);
- 551              		.loc 1 156 9 discriminator 3 view .LVU105
- 552 0022 3220     		movs	r0, #50
- 553 0024 FFF7FEFF 		bl	HAL_Delay
- 554              	.LVL53:
- 152:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 555              		.loc 1 152 26 discriminator 3 view .LVU106
- 152:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 556              		.loc 1 152 27 is_stmt 0 discriminator 3 view .LVU107
- 557 0028 0134     		adds	r4, r4, #1
- 558              	.LVL54:
- 559              	.L45:
- 152:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 560              		.loc 1 152 14 is_stmt 1 discriminator 1 view .LVU108
- 152:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 561              		.loc 1 152 5 is_stmt 0 discriminator 1 view .LVU109
- 562 002a 512C     		cmp	r4, #81
- 563 002c EBDD     		ble	.L46
- 157:Src/packet_handler.c ****     }
- 158:Src/packet_handler.c **** }
- 564              		.loc 1 158 1 view .LVU110
- 565 002e 38BD     		pop	{r3, r4, r5, pc}
- 566              	.LVL55:
- 567              	.L49:
- 568              		.loc 1 158 1 view .LVU111
- 569              		.align	2
- 570              	.L48:
- 571 0030 00080140 		.word	1073809408
- 572              		.cfi_endproc
- 573              	.LFE538:
- 575              		.section	.text.sync_write,"ax",%progbits
- 576              		.align	1
- 577              		.global	sync_write
- 578              		.syntax unified
- 579              		.thumb
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 14
+ 529              	.LFE538:
+ 531              		.section	.text.sync_read,"ax",%progbits
+ 532              		.align	1
+ 533              		.global	sync_read
+ 534              		.syntax unified
+ 535              		.thumb
+ 536              		.thumb_func
+ 537              		.fpu softvfp
+ 539              	sync_read:
+ 540              	.LFB539:
+ 152:Src/packet_handler.c **** 
+ 153:Src/packet_handler.c **** // TODO: finish instruction
+ 154:Src/packet_handler.c **** void sync_read(void){
+ 541              		.loc 1 154 21 view -0
+ 542              		.cfi_startproc
+ 543              		@ args = 0, pretend = 0, frame = 0
+ 544              		@ frame_needed = 0, uses_anonymous_args = 0
+ 545              		@ link register save eliminated.
+ 155:Src/packet_handler.c ****     
+ 156:Src/packet_handler.c **** }
+ 546              		.loc 1 156 1 view .LVU107
+ 547 0000 7047     		bx	lr
+ 548              		.cfi_endproc
+ 549              	.LFE539:
+ 551              		.section	.text.sync_write,"ax",%progbits
+ 552              		.align	1
+ 553              		.global	sync_write
+ 554              		.syntax unified
+ 555              		.thumb
+ 556              		.thumb_func
+ 557              		.fpu softvfp
+ 559              	sync_write:
+ 560              	.LFB540:
+ 157:Src/packet_handler.c **** 
+ 158:Src/packet_handler.c **** // TODO: finish instruction
+ 159:Src/packet_handler.c **** void sync_write(void){
+ 561              		.loc 1 159 22 view -0
+ 562              		.cfi_startproc
+ 563              		@ args = 0, pretend = 0, frame = 0
+ 564              		@ frame_needed = 0, uses_anonymous_args = 0
+ 565              		@ link register save eliminated.
+ 160:Src/packet_handler.c ****     
+ 161:Src/packet_handler.c **** }
+ 566              		.loc 1 161 1 view .LVU109
+ 567 0000 7047     		bx	lr
+ 568              		.cfi_endproc
+ 569              	.LFE540:
+ 571              		.section	.text.bulk_read,"ax",%progbits
+ 572              		.align	1
+ 573              		.global	bulk_read
+ 574              		.syntax unified
+ 575              		.thumb
+ 576              		.thumb_func
+ 577              		.fpu softvfp
+ 579              	bulk_read:
+ 580              	.LFB541:
+ 162:Src/packet_handler.c **** 
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 15
 
 
- 580              		.thumb_func
- 581              		.fpu softvfp
- 583              	sync_write:
- 584              	.LFB539:
- 159:Src/packet_handler.c **** 
- 160:Src/packet_handler.c **** void sync_write(void){
- 585              		.loc 1 160 22 is_stmt 1 view -0
- 586              		.cfi_startproc
- 587              		@ args = 0, pretend = 0, frame = 0
- 588              		@ frame_needed = 0, uses_anonymous_args = 0
- 589 0000 38B5     		push	{r3, r4, r5, lr}
- 590              	.LCFI7:
- 591              		.cfi_def_cfa_offset 16
- 592              		.cfi_offset 3, -16
- 593              		.cfi_offset 4, -12
- 594              		.cfi_offset 5, -8
- 595              		.cfi_offset 14, -4
- 161:Src/packet_handler.c ****     int i;
- 596              		.loc 1 161 5 view .LVU113
- 162:Src/packet_handler.c ****     for (i=0;i<SYNC_WRITE;i++){
- 597              		.loc 1 162 5 view .LVU114
- 598              	.LVL56:
- 599              		.loc 1 162 11 is_stmt 0 view .LVU115
- 600 0002 0024     		movs	r4, #0
- 601              		.loc 1 162 5 view .LVU116
- 602 0004 11E0     		b	.L51
- 603              	.LVL57:
- 604              	.L52:
- 163:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 605              		.loc 1 163 9 is_stmt 1 discriminator 3 view .LVU117
- 606 0006 0A4D     		ldr	r5, .L54
- 607 0008 0122     		movs	r2, #1
- 608 000a 0821     		movs	r1, #8
- 609 000c 2846     		mov	r0, r5
- 610 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
- 611              	.LVL58:
- 164:Src/packet_handler.c ****         HAL_Delay(50);
- 612              		.loc 1 164 9 discriminator 3 view .LVU118
- 613 0012 3220     		movs	r0, #50
- 614 0014 FFF7FEFF 		bl	HAL_Delay
- 615              	.LVL59:
- 165:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, LOW);
- 616              		.loc 1 165 9 discriminator 3 view .LVU119
- 617 0018 0022     		movs	r2, #0
- 618 001a 0821     		movs	r1, #8
- 619 001c 2846     		mov	r0, r5
- 620 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
- 621              	.LVL60:
- 166:Src/packet_handler.c ****         HAL_Delay(50);
- 622              		.loc 1 166 9 discriminator 3 view .LVU120
- 623 0022 3220     		movs	r0, #50
- 624 0024 FFF7FEFF 		bl	HAL_Delay
- 625              	.LVL61:
- 162:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 626              		.loc 1 162 27 discriminator 3 view .LVU121
- 162:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 627              		.loc 1 162 28 is_stmt 0 discriminator 3 view .LVU122
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 15
+ 163:Src/packet_handler.c **** // TODO: finish instruction
+ 164:Src/packet_handler.c **** void bulk_read(void){
+ 581              		.loc 1 164 21 view -0
+ 582              		.cfi_startproc
+ 583              		@ args = 0, pretend = 0, frame = 0
+ 584              		@ frame_needed = 0, uses_anonymous_args = 0
+ 585              		@ link register save eliminated.
+ 165:Src/packet_handler.c ****     
+ 166:Src/packet_handler.c **** }
+ 586              		.loc 1 166 1 view .LVU111
+ 587 0000 7047     		bx	lr
+ 588              		.cfi_endproc
+ 589              	.LFE541:
+ 591              		.section	.text.bulk_write,"ax",%progbits
+ 592              		.align	1
+ 593              		.global	bulk_write
+ 594              		.syntax unified
+ 595              		.thumb
+ 596              		.thumb_func
+ 597              		.fpu softvfp
+ 599              	bulk_write:
+ 600              	.LFB542:
+ 167:Src/packet_handler.c **** 
+ 168:Src/packet_handler.c **** // TODO: finish instruction
+ 169:Src/packet_handler.c **** void bulk_write(void){
+ 601              		.loc 1 169 22 view -0
+ 602              		.cfi_startproc
+ 603              		@ args = 0, pretend = 0, frame = 0
+ 604              		@ frame_needed = 0, uses_anonymous_args = 0
+ 605              		@ link register save eliminated.
+ 170:Src/packet_handler.c ****     
+ 171:Src/packet_handler.c **** }
+ 606              		.loc 1 171 1 view .LVU113
+ 607 0000 7047     		bx	lr
+ 608              		.cfi_endproc
+ 609              	.LFE542:
+ 611              		.global	delay_transmit_uS
+ 612              		.comm	crc,2,4
+ 613              		.comm	param,20,4
+ 614              		.comm	instruction,1,1
+ 615              		.comm	rd_ptr,1,1
+ 616              		.comm	txBuffer,32,4
+ 617              		.comm	rxBuffer,64,4
+ 618              		.section	.rodata
+ 619              		.align	2
+ 620              		.set	.LANCHOR0,. + 0
+ 621              	.LC0:
+ 622 0000 FFFFFD00 		.ascii	"\377\377\375\000\001\007\000U\000\006\004&e]"
+ 622      01070055 
+ 622      00060426 
+ 622      655D
+ 623              		.section	.data.delay_transmit_uS,"aw"
+ 624              		.align	2
+ 625              		.set	.LANCHOR1,. + 0
+ 628              	delay_transmit_uS:
+ 629 0000 32000000 		.word	50
+ 630              		.text
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 16
 
 
- 628 0028 0134     		adds	r4, r4, #1
- 629              	.LVL62:
- 630              	.L51:
- 162:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 631              		.loc 1 162 14 is_stmt 1 discriminator 1 view .LVU123
- 162:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 632              		.loc 1 162 5 is_stmt 0 discriminator 1 view .LVU124
- 633 002a 522C     		cmp	r4, #82
- 634 002c EBDD     		ble	.L52
- 167:Src/packet_handler.c ****     }
- 168:Src/packet_handler.c **** }
- 635              		.loc 1 168 1 view .LVU125
- 636 002e 38BD     		pop	{r3, r4, r5, pc}
- 637              	.LVL63:
- 638              	.L55:
- 639              		.loc 1 168 1 view .LVU126
- 640              		.align	2
- 641              	.L54:
- 642 0030 00080140 		.word	1073809408
- 643              		.cfi_endproc
- 644              	.LFE539:
- 646              		.section	.text.bulk_read,"ax",%progbits
- 647              		.align	1
- 648              		.global	bulk_read
- 649              		.syntax unified
- 650              		.thumb
- 651              		.thumb_func
- 652              		.fpu softvfp
- 654              	bulk_read:
- 655              	.LFB540:
- 169:Src/packet_handler.c **** 
- 170:Src/packet_handler.c **** void bulk_read(void){
- 656              		.loc 1 170 21 is_stmt 1 view -0
- 657              		.cfi_startproc
- 658              		@ args = 0, pretend = 0, frame = 0
- 659              		@ frame_needed = 0, uses_anonymous_args = 0
- 660 0000 38B5     		push	{r3, r4, r5, lr}
- 661              	.LCFI8:
- 662              		.cfi_def_cfa_offset 16
- 663              		.cfi_offset 3, -16
- 664              		.cfi_offset 4, -12
- 665              		.cfi_offset 5, -8
- 666              		.cfi_offset 14, -4
- 171:Src/packet_handler.c ****     int i;
- 667              		.loc 1 171 5 view .LVU128
- 172:Src/packet_handler.c ****     for (i=0;i<BULK_READ;i++){
- 668              		.loc 1 172 5 view .LVU129
- 669              	.LVL64:
- 670              		.loc 1 172 11 is_stmt 0 view .LVU130
- 671 0002 0024     		movs	r4, #0
- 672              	.LVL65:
- 673              	.L57:
- 674              		.loc 1 172 14 is_stmt 1 discriminator 1 view .LVU131
- 675              		.loc 1 172 5 is_stmt 0 discriminator 1 view .LVU132
- 676 0004 5B2C     		cmp	r4, #91
- 677 0006 12DC     		bgt	.L60
- 173:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 16
-
-
- 678              		.loc 1 173 9 is_stmt 1 discriminator 3 view .LVU133
- 679 0008 094D     		ldr	r5, .L61
- 680 000a 0122     		movs	r2, #1
- 681 000c 0821     		movs	r1, #8
- 682 000e 2846     		mov	r0, r5
- 683 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 684              	.LVL66:
- 174:Src/packet_handler.c ****         HAL_Delay(50);
- 685              		.loc 1 174 9 discriminator 3 view .LVU134
- 686 0014 3220     		movs	r0, #50
- 687 0016 FFF7FEFF 		bl	HAL_Delay
- 688              	.LVL67:
- 175:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, LOW);
- 689              		.loc 1 175 9 discriminator 3 view .LVU135
- 690 001a 0022     		movs	r2, #0
- 691 001c 0821     		movs	r1, #8
- 692 001e 2846     		mov	r0, r5
- 693 0020 FFF7FEFF 		bl	HAL_GPIO_WritePin
- 694              	.LVL68:
- 176:Src/packet_handler.c ****         HAL_Delay(50);
- 695              		.loc 1 176 9 discriminator 3 view .LVU136
- 696 0024 3220     		movs	r0, #50
- 697 0026 FFF7FEFF 		bl	HAL_Delay
- 698              	.LVL69:
- 172:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 699              		.loc 1 172 26 discriminator 3 view .LVU137
- 172:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 700              		.loc 1 172 27 is_stmt 0 discriminator 3 view .LVU138
- 701 002a 0134     		adds	r4, r4, #1
- 702              	.LVL70:
- 172:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 703              		.loc 1 172 27 discriminator 3 view .LVU139
- 704 002c EAE7     		b	.L57
- 705              	.L60:
- 177:Src/packet_handler.c ****     }
- 178:Src/packet_handler.c **** }
- 706              		.loc 1 178 1 view .LVU140
- 707 002e 38BD     		pop	{r3, r4, r5, pc}
- 708              	.LVL71:
- 709              	.L62:
- 710              		.loc 1 178 1 view .LVU141
- 711              		.align	2
- 712              	.L61:
- 713 0030 00080140 		.word	1073809408
- 714              		.cfi_endproc
- 715              	.LFE540:
- 717              		.section	.text.bulk_write,"ax",%progbits
- 718              		.align	1
- 719              		.global	bulk_write
- 720              		.syntax unified
- 721              		.thumb
- 722              		.thumb_func
- 723              		.fpu softvfp
- 725              	bulk_write:
- 726              	.LFB541:
- 179:Src/packet_handler.c **** 
- 180:Src/packet_handler.c **** void bulk_write(void){
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 17
-
-
- 727              		.loc 1 180 22 is_stmt 1 view -0
- 728              		.cfi_startproc
- 729              		@ args = 0, pretend = 0, frame = 0
- 730              		@ frame_needed = 0, uses_anonymous_args = 0
- 731 0000 38B5     		push	{r3, r4, r5, lr}
- 732              	.LCFI9:
- 733              		.cfi_def_cfa_offset 16
- 734              		.cfi_offset 3, -16
- 735              		.cfi_offset 4, -12
- 736              		.cfi_offset 5, -8
- 737              		.cfi_offset 14, -4
- 181:Src/packet_handler.c ****     int i;
- 738              		.loc 1 181 5 view .LVU143
- 182:Src/packet_handler.c ****     for (i=0;i<BULK_WRITE;i++){
- 739              		.loc 1 182 5 view .LVU144
- 740              	.LVL72:
- 741              		.loc 1 182 11 is_stmt 0 view .LVU145
- 742 0002 0024     		movs	r4, #0
- 743              		.loc 1 182 5 view .LVU146
- 744 0004 11E0     		b	.L64
- 745              	.LVL73:
- 746              	.L65:
- 183:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 747              		.loc 1 183 9 is_stmt 1 discriminator 3 view .LVU147
- 748 0006 0A4D     		ldr	r5, .L67
- 749 0008 0122     		movs	r2, #1
- 750 000a 0821     		movs	r1, #8
- 751 000c 2846     		mov	r0, r5
- 752 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
- 753              	.LVL74:
- 184:Src/packet_handler.c ****         HAL_Delay(50);
- 754              		.loc 1 184 9 discriminator 3 view .LVU148
- 755 0012 3220     		movs	r0, #50
- 756 0014 FFF7FEFF 		bl	HAL_Delay
- 757              	.LVL75:
- 185:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, LOW);
- 758              		.loc 1 185 9 discriminator 3 view .LVU149
- 759 0018 0022     		movs	r2, #0
- 760 001a 0821     		movs	r1, #8
- 761 001c 2846     		mov	r0, r5
- 762 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
- 763              	.LVL76:
- 186:Src/packet_handler.c ****         HAL_Delay(50);
- 764              		.loc 1 186 9 discriminator 3 view .LVU150
- 765 0022 3220     		movs	r0, #50
- 766 0024 FFF7FEFF 		bl	HAL_Delay
- 767              	.LVL77:
- 182:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 768              		.loc 1 182 27 discriminator 3 view .LVU151
- 182:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 769              		.loc 1 182 28 is_stmt 0 discriminator 3 view .LVU152
- 770 0028 0134     		adds	r4, r4, #1
- 771              	.LVL78:
- 772              	.L64:
- 182:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
- 773              		.loc 1 182 14 is_stmt 1 discriminator 1 view .LVU153
- 182:Src/packet_handler.c ****         HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 18
-
-
- 774              		.loc 1 182 5 is_stmt 0 discriminator 1 view .LVU154
- 775 002a 5C2C     		cmp	r4, #92
- 776 002c EBDD     		ble	.L65
- 187:Src/packet_handler.c ****     }
- 188:Src/packet_handler.c **** }
- 777              		.loc 1 188 1 view .LVU155
- 778 002e 38BD     		pop	{r3, r4, r5, pc}
- 779              	.LVL79:
- 780              	.L68:
- 781              		.loc 1 188 1 view .LVU156
- 782              		.align	2
- 783              	.L67:
- 784 0030 00080140 		.word	1073809408
- 785              		.cfi_endproc
- 786              	.LFE541:
- 788              		.section	.text.process_message,"ax",%progbits
- 789              		.align	1
- 790              		.global	process_message
- 791              		.syntax unified
- 792              		.thumb
- 793              		.thumb_func
- 794              		.fpu softvfp
- 796              	process_message:
- 797              	.LVL80:
- 798              	.LFB528:
-  57:Src/packet_handler.c **** 
- 799              		.loc 1 57 38 is_stmt 1 view -0
- 800              		.cfi_startproc
- 801              		@ args = 0, pretend = 0, frame = 0
- 802              		@ frame_needed = 0, uses_anonymous_args = 0
-  57:Src/packet_handler.c **** 
- 803              		.loc 1 57 38 is_stmt 0 view .LVU158
- 804 0000 08B5     		push	{r3, lr}
- 805              	.LCFI10:
- 806              		.cfi_def_cfa_offset 8
- 807              		.cfi_offset 3, -8
- 808              		.cfi_offset 14, -4
-  59:Src/packet_handler.c ****         case PING: ping(); break;
- 809              		.loc 1 59 5 is_stmt 1 view .LVU159
- 810 0002 2B4B     		ldr	r3, .L89
- 811 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 812 0006 0A2B     		cmp	r3, #10
- 813 0008 1CD9     		bls	.L87
- 814 000a 5D2B     		cmp	r3, #93
- 815 000c 1CD8     		bhi	.L69
- 816 000e 372B     		cmp	r3, #55
- 817 0010 1AD3     		bcc	.L69
- 818 0012 373B     		subs	r3, r3, #55
- 819 0014 262B     		cmp	r3, #38
- 820 0016 17D8     		bhi	.L69
- 821 0018 DFE803F0 		tbb	[pc, r3]
- 822              	.L74:
- 823 001c 3B       		.byte	(.L78-.L74)/2
- 824 001d 16       		.byte	(.L69-.L74)/2
- 825 001e 16       		.byte	(.L69-.L74)/2
- 826 001f 16       		.byte	(.L69-.L74)/2
- 827 0020 16       		.byte	(.L69-.L74)/2
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 19
-
-
- 828 0021 16       		.byte	(.L69-.L74)/2
- 829 0022 16       		.byte	(.L69-.L74)/2
- 830 0023 16       		.byte	(.L69-.L74)/2
- 831 0024 16       		.byte	(.L69-.L74)/2
- 832 0025 16       		.byte	(.L69-.L74)/2
- 833 0026 16       		.byte	(.L69-.L74)/2
- 834 0027 16       		.byte	(.L69-.L74)/2
- 835 0028 16       		.byte	(.L69-.L74)/2
- 836 0029 16       		.byte	(.L69-.L74)/2
- 837 002a 16       		.byte	(.L69-.L74)/2
- 838 002b 16       		.byte	(.L69-.L74)/2
- 839 002c 16       		.byte	(.L69-.L74)/2
- 840 002d 16       		.byte	(.L69-.L74)/2
- 841 002e 16       		.byte	(.L69-.L74)/2
- 842 002f 16       		.byte	(.L69-.L74)/2
- 843 0030 16       		.byte	(.L69-.L74)/2
- 844 0031 16       		.byte	(.L69-.L74)/2
- 845 0032 16       		.byte	(.L69-.L74)/2
- 846 0033 16       		.byte	(.L69-.L74)/2
- 847 0034 16       		.byte	(.L69-.L74)/2
- 848 0035 16       		.byte	(.L69-.L74)/2
- 849 0036 16       		.byte	(.L69-.L74)/2
- 850 0037 3E       		.byte	(.L77-.L74)/2
- 851 0038 41       		.byte	(.L76-.L74)/2
- 852 0039 16       		.byte	(.L69-.L74)/2
- 853 003a 16       		.byte	(.L69-.L74)/2
- 854 003b 16       		.byte	(.L69-.L74)/2
- 855 003c 16       		.byte	(.L69-.L74)/2
- 856 003d 16       		.byte	(.L69-.L74)/2
- 857 003e 16       		.byte	(.L69-.L74)/2
- 858 003f 16       		.byte	(.L69-.L74)/2
- 859 0040 16       		.byte	(.L69-.L74)/2
- 860 0041 44       		.byte	(.L75-.L74)/2
- 861 0042 47       		.byte	(.L73-.L74)/2
- 862 0043 00       		.p2align 1
- 863              	.L87:
- 864 0044 042B     		cmp	r3, #4
- 865 0046 00D2     		bcs	.L88
- 866              	.LVL81:
- 867              	.L69:
-  75:Src/packet_handler.c **** 
- 868              		.loc 1 75 1 is_stmt 0 view .LVU160
- 869 0048 08BD     		pop	{r3, pc}
- 870              	.LVL82:
- 871              	.L88:
-  75:Src/packet_handler.c **** 
- 872              		.loc 1 75 1 view .LVU161
- 873 004a 043B     		subs	r3, r3, #4
- 874 004c 062B     		cmp	r3, #6
- 875 004e FBD8     		bhi	.L69
- 876 0050 01A2     		adr	r2, .L80
- 877 0052 52F823F0 		ldr	pc, [r2, r3, lsl #2]
- 878 0056 00BF     		.p2align 2
- 879              	.L80:
- 880 0058 75000000 		.word	.L84+1
- 881 005c 7B000000 		.word	.L83+1
- 882 0060 81000000 		.word	.L82+1
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 20
-
-
- 883 0064 49000000 		.word	.L69+1
- 884 0068 87000000 		.word	.L81+1
- 885 006c 49000000 		.word	.L69+1
- 886 0070 8D000000 		.word	.L79+1
- 887              		.p2align 1
- 888              	.L84:
-  63:Src/packet_handler.c ****         case ACTION : action(); break;
- 889              		.loc 1 63 26 is_stmt 1 view .LVU162
- 890 0074 FFF7FEFF 		bl	reg_write
- 891              	.LVL83:
-  63:Src/packet_handler.c ****         case ACTION : action(); break;
- 892              		.loc 1 63 39 view .LVU163
-  63:Src/packet_handler.c ****         case ACTION : action(); break;
- 893              		.loc 1 63 9 is_stmt 0 view .LVU164
- 894 0078 E6E7     		b	.L69
- 895              	.LVL84:
- 896              	.L83:
-  64:Src/packet_handler.c ****         case FACTORY_RESET : factory_reset(); break;        
- 897              		.loc 1 64 23 is_stmt 1 view .LVU165
- 898 007a FFF7FEFF 		bl	action
- 899              	.LVL85:
-  64:Src/packet_handler.c ****         case FACTORY_RESET : factory_reset(); break;        
- 900              		.loc 1 64 33 view .LVU166
-  64:Src/packet_handler.c ****         case FACTORY_RESET : factory_reset(); break;        
- 901              		.loc 1 64 9 is_stmt 0 view .LVU167
- 902 007e E3E7     		b	.L69
- 903              	.LVL86:
- 904              	.L82:
-  65:Src/packet_handler.c ****         case REBOOT : reboot(); break;
- 905              		.loc 1 65 30 is_stmt 1 view .LVU168
- 906 0080 FFF7FEFF 		bl	factory_reset
- 907              	.LVL87:
-  65:Src/packet_handler.c ****         case REBOOT : reboot(); break;
- 908              		.loc 1 65 47 view .LVU169
-  65:Src/packet_handler.c ****         case REBOOT : reboot(); break;
- 909              		.loc 1 65 9 is_stmt 0 view .LVU170
- 910 0084 E0E7     		b	.L69
- 911              	.LVL88:
- 912              	.L81:
-  66:Src/packet_handler.c ****         case CLEAR  : clear(); break;
- 913              		.loc 1 66 23 is_stmt 1 view .LVU171
- 914 0086 FFF7FEFF 		bl	reboot
- 915              	.LVL89:
-  66:Src/packet_handler.c ****         case CLEAR  : clear(); break;
- 916              		.loc 1 66 33 view .LVU172
-  66:Src/packet_handler.c ****         case CLEAR  : clear(); break;
- 917              		.loc 1 66 9 is_stmt 0 view .LVU173
- 918 008a DDE7     		b	.L69
- 919              	.LVL90:
- 920              	.L79:
-  67:Src/packet_handler.c ****         case STATUS  : status(); break;
- 921              		.loc 1 67 23 is_stmt 1 view .LVU174
- 922 008c FFF7FEFF 		bl	clear
- 923              	.LVL91:
-  67:Src/packet_handler.c ****         case STATUS  : status(); break;
- 924              		.loc 1 67 32 view .LVU175
-  67:Src/packet_handler.c ****         case STATUS  : status(); break;
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 21
-
-
- 925              		.loc 1 67 9 is_stmt 0 view .LVU176
- 926 0090 DAE7     		b	.L69
- 927              	.LVL92:
- 928              	.L78:
-  68:Src/packet_handler.c ****         case SYNC_READ  : sync_read(); break;
- 929              		.loc 1 68 24 is_stmt 1 view .LVU177
- 930 0092 FFF7FEFF 		bl	status
- 931              	.LVL93:
-  68:Src/packet_handler.c ****         case SYNC_READ  : sync_read(); break;
- 932              		.loc 1 68 34 view .LVU178
-  68:Src/packet_handler.c ****         case SYNC_READ  : sync_read(); break;
- 933              		.loc 1 68 9 is_stmt 0 view .LVU179
- 934 0096 D7E7     		b	.L69
- 935              	.LVL94:
- 936              	.L77:
-  69:Src/packet_handler.c ****         case SYNC_WRITE  : sync_write(); break;
- 937              		.loc 1 69 27 is_stmt 1 view .LVU180
- 938 0098 FFF7FEFF 		bl	sync_read
- 939              	.LVL95:
-  69:Src/packet_handler.c ****         case SYNC_WRITE  : sync_write(); break;
- 940              		.loc 1 69 40 view .LVU181
-  69:Src/packet_handler.c ****         case SYNC_WRITE  : sync_write(); break;
- 941              		.loc 1 69 9 is_stmt 0 view .LVU182
- 942 009c D4E7     		b	.L69
- 943              	.LVL96:
- 944              	.L76:
-  70:Src/packet_handler.c ****         case BULK_READ  : bulk_read(); break;
- 945              		.loc 1 70 28 is_stmt 1 view .LVU183
- 946 009e FFF7FEFF 		bl	sync_write
- 947              	.LVL97:
-  70:Src/packet_handler.c ****         case BULK_READ  : bulk_read(); break;
- 948              		.loc 1 70 42 view .LVU184
-  70:Src/packet_handler.c ****         case BULK_READ  : bulk_read(); break;
- 949              		.loc 1 70 9 is_stmt 0 view .LVU185
- 950 00a2 D1E7     		b	.L69
- 951              	.LVL98:
- 952              	.L75:
-  71:Src/packet_handler.c ****         case BULK_WRITE  : bulk_write(); break;
- 953              		.loc 1 71 27 is_stmt 1 view .LVU186
- 954 00a4 FFF7FEFF 		bl	bulk_read
- 955              	.LVL99:
-  71:Src/packet_handler.c ****         case BULK_WRITE  : bulk_write(); break;
- 956              		.loc 1 71 40 view .LVU187
-  71:Src/packet_handler.c ****         case BULK_WRITE  : bulk_write(); break;
- 957              		.loc 1 71 9 is_stmt 0 view .LVU188
- 958 00a8 CEE7     		b	.L69
- 959              	.LVL100:
- 960              	.L73:
-  72:Src/packet_handler.c ****     }
- 961              		.loc 1 72 28 is_stmt 1 view .LVU189
- 962 00aa FFF7FEFF 		bl	bulk_write
- 963              	.LVL101:
-  72:Src/packet_handler.c ****     }
- 964              		.loc 1 72 42 view .LVU190
-  75:Src/packet_handler.c **** 
- 965              		.loc 1 75 1 is_stmt 0 view .LVU191
- 966 00ae CBE7     		b	.L69
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 22
-
-
- 967              	.L90:
- 968              		.align	2
- 969              	.L89:
- 970 00b0 00000000 		.word	instruction
- 971              		.cfi_endproc
- 972              	.LFE528:
- 974              		.section	.text.process_queue,"ax",%progbits
- 975              		.align	1
- 976              		.global	process_queue
- 977              		.syntax unified
- 978              		.thumb
- 979              		.thumb_func
- 980              		.fpu softvfp
- 982              	process_queue:
- 983              	.LFB527:
-   8:Src/packet_handler.c **** 
- 984              		.loc 1 8 21 is_stmt 1 view -0
- 985              		.cfi_startproc
- 986              		@ args = 0, pretend = 0, frame = 0
- 987              		@ frame_needed = 0, uses_anonymous_args = 0
- 988 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
- 989              	.LCFI11:
- 990              		.cfi_def_cfa_offset 24
- 991              		.cfi_offset 3, -24
- 992              		.cfi_offset 4, -20
- 993              		.cfi_offset 5, -16
- 994              		.cfi_offset 6, -12
- 995              		.cfi_offset 7, -8
- 996              		.cfi_offset 14, -4
-  11:Src/packet_handler.c ****     uint8_t h2 = 0;
- 997              		.loc 1 11 5 view .LVU193
- 998              	.LVL102:
-  12:Src/packet_handler.c ****     uint8_t h3 = 0;
- 999              		.loc 1 12 5 view .LVU194
-  13:Src/packet_handler.c ****     uint32_t header_block=0;
- 1000              		.loc 1 13 5 view .LVU195
-  14:Src/packet_handler.c ****     uint8_t found = 0;
- 1001              		.loc 1 14 5 view .LVU196
-  15:Src/packet_handler.c **** 
- 1002              		.loc 1 15 5 view .LVU197
-  19:Src/packet_handler.c **** 
- 1003              		.loc 1 19 5 view .LVU198
-  15:Src/packet_handler.c **** 
- 1004              		.loc 1 15 13 is_stmt 0 view .LVU199
- 1005 0002 0026     		movs	r6, #0
-  13:Src/packet_handler.c ****     uint32_t header_block=0;
- 1006              		.loc 1 13 13 view .LVU200
- 1007 0004 3446     		mov	r4, r6
-  12:Src/packet_handler.c ****     uint8_t h3 = 0;
- 1008              		.loc 1 12 13 view .LVU201
- 1009 0006 3546     		mov	r5, r6
-  19:Src/packet_handler.c **** 
- 1010              		.loc 1 19 11 view .LVU202
- 1011 0008 01E0     		b	.L92
- 1012              	.LVL103:
- 1013              	.L93:
-  27:Src/packet_handler.c ****         }
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 23
-
-
- 1014              		.loc 1 27 19 view .LVU203
- 1015 000a 2546     		mov	r5, r4
- 1016              	.LVL104:
-  27:Src/packet_handler.c ****         }
- 1017              		.loc 1 27 19 view .LVU204
- 1018 000c 0446     		mov	r4, r0
- 1019              	.LVL105:
- 1020              	.L92:
-  19:Src/packet_handler.c **** 
- 1021              		.loc 1 19 11 is_stmt 1 view .LVU205
- 1022 000e 8EB9     		cbnz	r6, .L94
-  19:Src/packet_handler.c **** 
- 1023              		.loc 1 19 23 is_stmt 0 discriminator 1 view .LVU206
- 1024 0010 274B     		ldr	r3, .L104
- 1025 0012 1868     		ldr	r0, [r3]
- 1026 0014 FFF7FEFF 		bl	isEmpty
- 1027              	.LVL106:
-  19:Src/packet_handler.c **** 
- 1028              		.loc 1 19 19 discriminator 1 view .LVU207
- 1029 0018 60B9     		cbnz	r0, .L94
-  22:Src/packet_handler.c ****         h2 = h3;
- 1030              		.loc 1 22 9 is_stmt 1 view .LVU208
- 1031              	.LVL107:
-  23:Src/packet_handler.c ****         h3 = deQueue(message);
- 1032              		.loc 1 23 9 view .LVU209
-  24:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
- 1033              		.loc 1 24 9 view .LVU210
-  24:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
- 1034              		.loc 1 24 14 is_stmt 0 view .LVU211
- 1035 001a 254B     		ldr	r3, .L104
- 1036 001c 1868     		ldr	r0, [r3]
- 1037 001e FFF7FEFF 		bl	deQueue
- 1038              	.LVL108:
-  25:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
- 1039              		.loc 1 25 9 is_stmt 1 view .LVU212
-  25:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
- 1040              		.loc 1 25 38 is_stmt 0 view .LVU213
- 1041 0022 2302     		lsls	r3, r4, #8
-  25:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
- 1042              		.loc 1 25 33 view .LVU214
- 1043 0024 03EB0543 		add	r3, r3, r5, lsl #16
-  25:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
- 1044              		.loc 1 25 43 view .LVU215
- 1045 0028 0344     		add	r3, r3, r0
- 1046              	.LVL109:
-  26:Src/packet_handler.c ****             found = 1;
- 1047              		.loc 1 26 9 is_stmt 1 view .LVU216
-  26:Src/packet_handler.c ****             found = 1;
- 1048              		.loc 1 26 11 is_stmt 0 view .LVU217
- 1049 002a 224A     		ldr	r2, .L104+4
- 1050 002c 9342     		cmp	r3, r2
- 1051 002e ECD1     		bne	.L93
-  27:Src/packet_handler.c ****         }
- 1052              		.loc 1 27 19 view .LVU218
- 1053 0030 0126     		movs	r6, #1
- 1054              	.LVL110:
-  27:Src/packet_handler.c ****         }
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 24
-
-
- 1055              		.loc 1 27 19 view .LVU219
- 1056 0032 EAE7     		b	.L93
- 1057              	.LVL111:
- 1058              	.L94:
-  31:Src/packet_handler.c ****         
- 1059              		.loc 1 31 5 is_stmt 1 view .LVU220
-  31:Src/packet_handler.c ****         
- 1060              		.loc 1 31 8 is_stmt 0 view .LVU221
- 1061 0034 06B9     		cbnz	r6, .L103
- 1062              	.LVL112:
- 1063              	.L91:
-  55:Src/packet_handler.c **** 
- 1064              		.loc 1 55 1 view .LVU222
- 1065 0036 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
- 1066              	.LVL113:
- 1067              	.L103:
- 1068              	.LBB2:
-  33:Src/packet_handler.c ****         uint8_t id = deQueue(message);
- 1069              		.loc 1 33 9 is_stmt 1 view .LVU223
-  33:Src/packet_handler.c ****         uint8_t id = deQueue(message);
- 1070              		.loc 1 33 28 is_stmt 0 view .LVU224
- 1071 0038 1D4C     		ldr	r4, .L104
- 1072              	.LVL114:
-  33:Src/packet_handler.c ****         uint8_t id = deQueue(message);
- 1073              		.loc 1 33 28 view .LVU225
- 1074 003a 2068     		ldr	r0, [r4]
- 1075 003c FFF7FEFF 		bl	deQueue
- 1076              	.LVL115:
-  34:Src/packet_handler.c ****         uint8_t length1 = deQueue(message);
- 1077              		.loc 1 34 9 is_stmt 1 view .LVU226
-  34:Src/packet_handler.c ****         uint8_t length1 = deQueue(message);
- 1078              		.loc 1 34 22 is_stmt 0 view .LVU227
- 1079 0040 2068     		ldr	r0, [r4]
- 1080 0042 FFF7FEFF 		bl	deQueue
- 1081              	.LVL116:
- 1082 0046 0646     		mov	r6, r0
- 1083              	.LVL117:
-  35:Src/packet_handler.c ****         uint8_t length2 = deQueue(message);
- 1084              		.loc 1 35 9 is_stmt 1 view .LVU228
-  35:Src/packet_handler.c ****         uint8_t length2 = deQueue(message);
- 1085              		.loc 1 35 27 is_stmt 0 view .LVU229
- 1086 0048 2068     		ldr	r0, [r4]
- 1087 004a FFF7FEFF 		bl	deQueue
- 1088              	.LVL118:
- 1089 004e 0746     		mov	r7, r0
- 1090              	.LVL119:
-  36:Src/packet_handler.c ****         uint16_t length = (length2 << 8) + (length1);
- 1091              		.loc 1 36 9 is_stmt 1 view .LVU230
-  36:Src/packet_handler.c ****         uint16_t length = (length2 << 8) + (length1);
- 1092              		.loc 1 36 27 is_stmt 0 view .LVU231
- 1093 0050 2068     		ldr	r0, [r4]
- 1094 0052 FFF7FEFF 		bl	deQueue
- 1095              	.LVL120:
-  37:Src/packet_handler.c ****         instruction = deQueue(message);
- 1096              		.loc 1 37 9 is_stmt 1 view .LVU232
-  37:Src/packet_handler.c ****         instruction = deQueue(message);
- 1097              		.loc 1 37 36 is_stmt 0 view .LVU233
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 25
-
-
- 1098 0056 0502     		lsls	r5, r0, #8
- 1099              	.LVL121:
-  37:Src/packet_handler.c ****         instruction = deQueue(message);
- 1100              		.loc 1 37 36 view .LVU234
- 1101 0058 ADB2     		uxth	r5, r5
-  37:Src/packet_handler.c ****         instruction = deQueue(message);
- 1102              		.loc 1 37 42 view .LVU235
- 1103 005a BFB2     		uxth	r7, r7
- 1104              	.LVL122:
-  37:Src/packet_handler.c ****         instruction = deQueue(message);
- 1105              		.loc 1 37 18 view .LVU236
- 1106 005c 3D44     		add	r5, r5, r7
- 1107 005e ADB2     		uxth	r5, r5
- 1108              	.LVL123:
-  38:Src/packet_handler.c ****         int i;
- 1109              		.loc 1 38 9 is_stmt 1 view .LVU237
-  38:Src/packet_handler.c ****         int i;
- 1110              		.loc 1 38 23 is_stmt 0 view .LVU238
- 1111 0060 2068     		ldr	r0, [r4]
- 1112              	.LVL124:
-  38:Src/packet_handler.c ****         int i;
- 1113              		.loc 1 38 23 view .LVU239
- 1114 0062 FFF7FEFF 		bl	deQueue
- 1115              	.LVL125:
-  38:Src/packet_handler.c ****         int i;
- 1116              		.loc 1 38 21 view .LVU240
- 1117 0066 144B     		ldr	r3, .L104+8
- 1118 0068 1870     		strb	r0, [r3]
-  39:Src/packet_handler.c ****         if(length<10){
- 1119              		.loc 1 39 9 is_stmt 1 view .LVU241
-  40:Src/packet_handler.c ****             // grab the parameters
- 1120              		.loc 1 40 9 view .LVU242
-  40:Src/packet_handler.c ****             // grab the parameters
- 1121              		.loc 1 40 11 is_stmt 0 view .LVU243
- 1122 006a 092D     		cmp	r5, #9
- 1123 006c 1DD9     		bls	.L101
- 1124              	.L98:
-  47:Src/packet_handler.c ****         crc[1] = deQueue(message);
- 1125              		.loc 1 47 9 is_stmt 1 view .LVU244
-  47:Src/packet_handler.c ****         crc[1] = deQueue(message);
- 1126              		.loc 1 47 18 is_stmt 0 view .LVU245
- 1127 006e 104F     		ldr	r7, .L104
- 1128 0070 3868     		ldr	r0, [r7]
- 1129 0072 FFF7FEFF 		bl	deQueue
- 1130              	.LVL126:
-  47:Src/packet_handler.c ****         crc[1] = deQueue(message);
- 1131              		.loc 1 47 16 view .LVU246
- 1132 0076 114C     		ldr	r4, .L104+12
- 1133 0078 2070     		strb	r0, [r4]
-  48:Src/packet_handler.c **** 
- 1134              		.loc 1 48 9 is_stmt 1 view .LVU247
-  48:Src/packet_handler.c **** 
- 1135              		.loc 1 48 18 is_stmt 0 view .LVU248
- 1136 007a 3868     		ldr	r0, [r7]
- 1137 007c FFF7FEFF 		bl	deQueue
- 1138              	.LVL127:
-  48:Src/packet_handler.c **** 
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 26
-
-
- 1139              		.loc 1 48 16 view .LVU249
- 1140 0080 6070     		strb	r0, [r4, #1]
-  51:Src/packet_handler.c ****             process_message(length);
- 1141              		.loc 1 51 9 is_stmt 1 view .LVU250
-  51:Src/packet_handler.c ****             process_message(length);
- 1142              		.loc 1 51 22 is_stmt 0 view .LVU251
- 1143 0082 0F4B     		ldr	r3, .L104+16
- 1144 0084 1B68     		ldr	r3, [r3]
- 1145 0086 1B68     		ldr	r3, [r3]
-  51:Src/packet_handler.c ****             process_message(length);
- 1146              		.loc 1 51 12 view .LVU252
- 1147 0088 9E42     		cmp	r6, r3
- 1148 008a D4D1     		bne	.L91
-  52:Src/packet_handler.c ****         }
- 1149              		.loc 1 52 13 is_stmt 1 view .LVU253
- 1150 008c 2846     		mov	r0, r5
- 1151 008e FFF7FEFF 		bl	process_message
- 1152              	.LVL128:
- 1153              	.LBE2:
-  55:Src/packet_handler.c **** 
- 1154              		.loc 1 55 1 is_stmt 0 view .LVU254
- 1155 0092 D0E7     		b	.L91
- 1156              	.LVL129:
- 1157              	.L99:
- 1158              	.LBB3:
-  43:Src/packet_handler.c ****             }
- 1159              		.loc 1 43 17 is_stmt 1 discriminator 3 view .LVU255
-  43:Src/packet_handler.c ****             }
- 1160              		.loc 1 43 28 is_stmt 0 discriminator 3 view .LVU256
- 1161 0094 064B     		ldr	r3, .L104
- 1162 0096 1868     		ldr	r0, [r3]
- 1163 0098 FFF7FEFF 		bl	deQueue
- 1164              	.LVL130:
-  43:Src/packet_handler.c ****             }
- 1165              		.loc 1 43 26 discriminator 3 view .LVU257
- 1166 009c 094B     		ldr	r3, .L104+20
- 1167 009e 1855     		strb	r0, [r3, r4]
-  42:Src/packet_handler.c ****                 param[i] = deQueue(message);
- 1168              		.loc 1 42 38 is_stmt 1 discriminator 3 view .LVU258
-  42:Src/packet_handler.c ****                 param[i] = deQueue(message);
- 1169              		.loc 1 42 39 is_stmt 0 discriminator 3 view .LVU259
- 1170 00a0 0134     		adds	r4, r4, #1
- 1171              	.LVL131:
- 1172              	.L97:
-  42:Src/packet_handler.c ****                 param[i] = deQueue(message);
- 1173              		.loc 1 42 23 is_stmt 1 discriminator 1 view .LVU260
-  42:Src/packet_handler.c ****                 param[i] = deQueue(message);
- 1174              		.loc 1 42 33 is_stmt 0 discriminator 1 view .LVU261
- 1175 00a2 EB1E     		subs	r3, r5, #3
-  42:Src/packet_handler.c ****                 param[i] = deQueue(message);
- 1176              		.loc 1 42 13 discriminator 1 view .LVU262
- 1177 00a4 A342     		cmp	r3, r4
- 1178 00a6 F5DC     		bgt	.L99
- 1179 00a8 E1E7     		b	.L98
- 1180              	.LVL132:
- 1181              	.L101:
-  42:Src/packet_handler.c ****                 param[i] = deQueue(message);
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 27
-
-
- 1182              		.loc 1 42 19 view .LVU263
- 1183 00aa 0024     		movs	r4, #0
- 1184 00ac F9E7     		b	.L97
- 1185              	.L105:
- 1186 00ae 00BF     		.align	2
- 1187              	.L104:
- 1188 00b0 00000000 		.word	message
- 1189 00b4 FDFFFF00 		.word	16777213
- 1190 00b8 00000000 		.word	instruction
- 1191 00bc 00000000 		.word	crc
- 1192 00c0 00000000 		.word	PARAM
- 1193 00c4 00000000 		.word	param
- 1194              	.LBE3:
- 1195              		.cfi_endproc
- 1196              	.LFE527:
- 1198              		.comm	rd_ptr,1,1
- 1199              		.comm	txBuffer,64,4
- 1200              		.comm	rxBuffer,64,4
- 1201              		.comm	crc,2,4
- 1202              		.comm	param,20,4
- 1203              		.comm	instruction,1,1
- 1204              		.text
- 1205              	.Letext0:
- 1206              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 1207              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 1208              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 1209              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 1210              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
- 1211              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 1212              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 1213              		.file 9 "Inc/queue.h"
- 1214              		.file 10 "Inc/packet_handler.h"
- 1215              		.file 11 "Drivers/CMSIS/Include/core_cm3.h"
- 1216              		.file 12 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
- 1217              		.file 13 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
- 1218              		.file 14 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
- 1219              		.file 15 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
- 1220              		.file 16 "Inc/port_handler.h"
- 1221              		.file 17 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 28
+ 631              	.Letext0:
+ 632              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 633              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 634              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 635              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 636              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
+ 637              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 638              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 639              		.file 9 "Inc/queue.h"
+ 640              		.file 10 "Drivers/CMSIS/Include/core_cm3.h"
+ 641              		.file 11 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
+ 642              		.file 12 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 643              		.file 13 "Inc/port_handler.h"
+ 644              		.file 14 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s 			page 17
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 packet_handler.c
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:16     .text.ping:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:24     .text.ping:00000000 ping
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:39     .text.read:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:46     .text.read:00000000 read
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:59     .text.write:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:66     .text.write:00000000 write
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:79     .text.reg_write:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:86     .text.reg_write:00000000 reg_write
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:145    .text.reg_write:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:150    .text.action:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:157    .text.action:00000000 action
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:216    .text.action:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:221    .text.factory_reset:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:228    .text.factory_reset:00000000 factory_reset
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:287    .text.factory_reset:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:292    .text.reboot:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:299    .text.reboot:00000000 reboot
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:358    .text.reboot:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:363    .text.clear:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:370    .text.clear:00000000 clear
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:429    .text.clear:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:434    .text.status:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:441    .text.status:00000000 status
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:500    .text.status:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:505    .text.sync_read:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:512    .text.sync_read:00000000 sync_read
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:571    .text.sync_read:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:576    .text.sync_write:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:583    .text.sync_write:00000000 sync_write
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:642    .text.sync_write:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:647    .text.bulk_read:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:654    .text.bulk_read:00000000 bulk_read
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:713    .text.bulk_read:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:718    .text.bulk_write:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:725    .text.bulk_write:00000000 bulk_write
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:784    .text.bulk_write:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:789    .text.process_message:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:796    .text.process_message:00000000 process_message
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:823    .text.process_message:0000001c $d
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:880    .text.process_message:00000058 $d
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:887    .text.process_message:00000074 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:970    .text.process_message:000000b0 $d
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:16     .text.ping:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:24     .text.ping:00000000 ping
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:60     .text.ping:0000001c $d
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:65     .text.process_message:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:72     .text.process_message:00000000 process_message
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:111    .text.process_message:00000020 $d
                             *COM*:00000001 instruction
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:975    .text.process_queue:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:982    .text.process_queue:00000000 process_queue
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:1188   .text.process_queue:000000b0 $d
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:117    .text.extract_message:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:124    .text.extract_message:00000000 extract_message
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:257    .text.extract_message:00000078 $d
                             *COM*:00000002 crc
                             *COM*:00000014 param
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:266    .text.process_queue:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:273    .text.process_queue:00000000 process_queue
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:366    .text.process_queue:00000040 $d
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:372    .text.read:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:379    .text.read:00000000 read
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:392    .text.write:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:399    .text.write:00000000 write
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:412    .text.reg_write:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:419    .text.reg_write:00000000 reg_write
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:432    .text.action:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:439    .text.action:00000000 action
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:452    .text.factory_reset:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:459    .text.factory_reset:00000000 factory_reset
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:472    .text.reboot:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:479    .text.reboot:00000000 reboot
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:492    .text.clear:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:499    .text.clear:00000000 clear
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:512    .text.status:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:519    .text.status:00000000 status
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:532    .text.sync_read:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:539    .text.sync_read:00000000 sync_read
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:552    .text.sync_write:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:559    .text.sync_write:00000000 sync_write
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:572    .text.bulk_read:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:579    .text.bulk_read:00000000 bulk_read
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:592    .text.bulk_write:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:599    .text.bulk_write:00000000 bulk_write
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:628    .data.delay_transmit_uS:00000000 delay_transmit_uS
                             *COM*:00000001 rd_ptr
-                            *COM*:00000040 txBuffer
+                            *COM*:00000020 txBuffer
                             *COM*:00000040 rxBuffer
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:862    .text.process_message:00000043 $d
-C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s:862    .text.process_message:00000044 $t
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:619    .rodata:00000000 $d
+C:\Users\Brandon\AppData\Local\Temp\ccospBEM.s:624    .data.delay_transmit_uS:00000000 $d
 
 UNDEFINED SYMBOLS
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmijbCg.s 			page 29
-
-
-HAL_GPIO_WritePin
-HAL_Delay
-isEmpty
+transmit_buffer
+DWT_Delay
 deQueue
 message
 PARAM
+isEmpty

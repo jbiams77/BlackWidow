@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s 			page 1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -29,16 +29,25 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s 			page 1
    1:Src/port_handler.c **** #include "port_handler.h"
    2:Src/port_handler.c **** #include "main.h"
    3:Src/port_handler.c **** 
-   4:Src/port_handler.c **** extern DMA_HandleTypeDef hdma_usart1_rx;
-   5:Src/port_handler.c **** extern UART_HandleTypeDef huart1;
-   6:Src/port_handler.c **** extern MessageQueue *message;
-   7:Src/port_handler.c **** uint8_t temp_length;
-   8:Src/port_handler.c **** 
-   9:Src/port_handler.c **** /* UART Managemnt ------------------------------------------------------------*/
-  10:Src/port_handler.c **** 
+   4:Src/port_handler.c **** /* Fields -------------------------------------------------------------------*/
+   5:Src/port_handler.c **** extern DMA_HandleTypeDef hdma_usart1_rx;
+   6:Src/port_handler.c **** extern DMA_HandleTypeDef hdma_usart1_tx;
+   7:Src/port_handler.c **** extern UART_HandleTypeDef huart1;
+   8:Src/port_handler.c **** extern MessageQueue *message;
+   9:Src/port_handler.c **** uint8_t temp_length;
+  10:Src/port_handler.c **** uint8_t message_transferred;
   11:Src/port_handler.c **** 
-  12:Src/port_handler.c **** void UART_DMA_Init(void) {
-  27              		.loc 1 12 26 view -0
+  12:Src/port_handler.c **** /* Methods ------------------------------------------------------------------*/
+  13:Src/port_handler.c **** 
+  14:Src/port_handler.c **** /* @brief Initializes UART and DMA port with handle allowing for UART receive to have direct
+  15:Src/port_handler.c ****  * memory access. Recevie uses idle line to trigger received event for variable message
+  16:Src/port_handler.c ****  * lenght.
+  17:Src/port_handler.c ****  * 
+  18:Src/port_handler.c ****  * @param void
+  19:Src/port_handler.c ****  * @return void
+  20:Src/port_handler.c ****  */
+  21:Src/port_handler.c **** void UART_DMA_Init(void) {
+  27              		.loc 1 21 26 view -0
   28              		.cfi_startproc
   29              		@ args = 0, pretend = 0, frame = 0
   30              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -47,380 +56,566 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s 			page 1
   33              		.cfi_def_cfa_offset 8
   34              		.cfi_offset 3, -8
   35              		.cfi_offset 14, -4
-  13:Src/port_handler.c ****   rd_ptr = 0;
-  36              		.loc 1 13 3 view .LVU1
-  37              		.loc 1 13 10 is_stmt 0 view .LVU2
-  38 0002 074B     		ldr	r3, .L3
+  22:Src/port_handler.c ****   rd_ptr = 0;
+  36              		.loc 1 22 3 view .LVU1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s 			page 2
+
+
+  37              		.loc 1 22 10 is_stmt 0 view .LVU2
+  38 0002 0A4B     		ldr	r3, .L3
   39 0004 0022     		movs	r2, #0
   40 0006 1A70     		strb	r2, [r3]
-  14:Src/port_handler.c ****   __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // enable idle line interrupt  
-  41              		.loc 1 14 3 is_stmt 1 view .LVU3
-  42 0008 0648     		ldr	r0, .L3+4
+  23:Src/port_handler.c ****   __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // enable idle line interrupt  
+  41              		.loc 1 23 3 is_stmt 1 view .LVU3
+  42 0008 0948     		ldr	r0, .L3+4
   43 000a 0268     		ldr	r2, [r0]
   44 000c D368     		ldr	r3, [r2, #12]
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s 			page 2
-
-
   45 000e 43F01003 		orr	r3, r3, #16
   46 0012 D360     		str	r3, [r2, #12]
-  15:Src/port_handler.c ****   HAL_UART_Receive_DMA(&huart1, rxBuffer, UART_RX__SZ);
-  47              		.loc 1 15 3 view .LVU4
-  48 0014 4022     		movs	r2, #64
-  49 0016 0449     		ldr	r1, .L3+8
-  50 0018 FFF7FEFF 		bl	HAL_UART_Receive_DMA
-  51              	.LVL0:
-  16:Src/port_handler.c **** }
-  52              		.loc 1 16 1 is_stmt 0 view .LVU5
-  53 001c 08BD     		pop	{r3, pc}
-  54              	.L4:
-  55 001e 00BF     		.align	2
-  56              	.L3:
-  57 0020 00000000 		.word	rd_ptr
-  58 0024 00000000 		.word	huart1
-  59 0028 00000000 		.word	rxBuffer
-  60              		.cfi_endproc
-  61              	.LFE527:
-  63              		.section	.text.transmit_buffer,"ax",%progbits
-  64              		.align	1
-  65              		.global	transmit_buffer
-  66              		.syntax unified
-  67              		.thumb
-  68              		.thumb_func
-  69              		.fpu softvfp
-  71              	transmit_buffer:
-  72              	.LVL1:
-  73              	.LFB528:
-  17:Src/port_handler.c **** 
-  18:Src/port_handler.c **** 
-  19:Src/port_handler.c **** void transmit_buffer(uint8_t response[], uint16_t length){
-  74              		.loc 1 19 58 is_stmt 1 view -0
-  75              		.cfi_startproc
-  76              		@ args = 0, pretend = 0, frame = 0
-  77              		@ frame_needed = 0, uses_anonymous_args = 0
-  78              		@ link register save eliminated.
-  20:Src/port_handler.c ****   // transmit reply here
-  21:Src/port_handler.c **** }
-  79              		.loc 1 21 1 view .LVU7
-  80 0000 7047     		bx	lr
-  81              		.cfi_endproc
-  82              	.LFE528:
-  84              		.section	.text.rxBuffer_is_empty,"ax",%progbits
-  85              		.align	1
-  86              		.global	rxBuffer_is_empty
-  87              		.syntax unified
-  88              		.thumb
-  89              		.thumb_func
-  90              		.fpu softvfp
-  92              	rxBuffer_is_empty:
-  93              	.LFB530:
-  22:Src/port_handler.c **** 
-  23:Src/port_handler.c **** void UART_RxComplete(void) {
-  24:Src/port_handler.c ****   while(!rxBuffer_is_empty() && !isFull(message)){
-  25:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
-  26:Src/port_handler.c ****   }
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s 			page 3
-
-
-  27:Src/port_handler.c ****   volatile int x = 1;
-  28:Src/port_handler.c **** }
-  29:Src/port_handler.c **** 
-  30:Src/port_handler.c **** uint8_t rxBuffer_is_empty(void) {
-  94              		.loc 1 30 33 view -0
-  95              		.cfi_startproc
-  96              		@ args = 0, pretend = 0, frame = 0
-  97              		@ frame_needed = 0, uses_anonymous_args = 0
-  98              		@ link register save eliminated.
-  31:Src/port_handler.c ****   uint16_t dma_ptr = UART_DMA_WRITE_PTR;
-  99              		.loc 1 31 3 view .LVU9
- 100              		.loc 1 31 22 is_stmt 0 view .LVU10
- 101 0000 074B     		ldr	r3, .L9
- 102 0002 5B6B     		ldr	r3, [r3, #52]
- 103 0004 1B68     		ldr	r3, [r3]
- 104 0006 5B68     		ldr	r3, [r3, #4]
- 105 0008 9BB2     		uxth	r3, r3
- 106              	.LVL2:
-  32:Src/port_handler.c **** 	if(rd_ptr == dma_ptr) {
- 107              		.loc 1 32 2 is_stmt 1 view .LVU11
- 108              		.loc 1 32 12 is_stmt 0 view .LVU12
- 109 000a 064A     		ldr	r2, .L9+4
- 110 000c 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
- 111              		.loc 1 32 4 view .LVU13
- 112 000e 5B42     		rsbs	r3, r3, #0
- 113              	.LVL3:
- 114              		.loc 1 32 4 view .LVU14
- 115 0010 03F03F03 		and	r3, r3, #63
- 116              	.LVL4:
- 117              		.loc 1 32 4 view .LVU15
- 118 0014 9A42     		cmp	r2, r3
- 119 0016 01D0     		beq	.L8
-  33:Src/port_handler.c **** 		return 1;
-  34:Src/port_handler.c **** 	}
-  35:Src/port_handler.c **** 	return 0;
- 120              		.loc 1 35 9 view .LVU16
- 121 0018 0020     		movs	r0, #0
- 122 001a 7047     		bx	lr
- 123              	.L8:
-  33:Src/port_handler.c **** 		return 1;
- 124              		.loc 1 33 10 view .LVU17
- 125 001c 0120     		movs	r0, #1
-  36:Src/port_handler.c **** }
- 126              		.loc 1 36 1 view .LVU18
- 127 001e 7047     		bx	lr
- 128              	.L10:
- 129              		.align	2
- 130              	.L9:
- 131 0020 00000000 		.word	huart1
- 132 0024 00000000 		.word	rd_ptr
- 133              		.cfi_endproc
- 134              	.LFE530:
- 136              		.section	.text.rxBuffer_Get,"ax",%progbits
- 137              		.align	1
- 138              		.global	rxBuffer_Get
- 139              		.syntax unified
- 140              		.thumb
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s 			page 4
-
-
- 141              		.thumb_func
- 142              		.fpu softvfp
- 144              	rxBuffer_Get:
- 145              	.LFB531:
-  37:Src/port_handler.c **** 
-  38:Src/port_handler.c **** uint8_t rxBuffer_Get(void) {
- 146              		.loc 1 38 28 is_stmt 1 view -0
- 147              		.cfi_startproc
- 148              		@ args = 0, pretend = 0, frame = 0
- 149              		@ frame_needed = 0, uses_anonymous_args = 0
- 150              		@ link register save eliminated.
-  39:Src/port_handler.c **** 	uint8_t c = 0;
- 151              		.loc 1 39 2 view .LVU20
- 152              	.LVL5:
-  40:Src/port_handler.c ****   uint16_t dma_ptr = UART_DMA_WRITE_PTR;
- 153              		.loc 1 40 3 view .LVU21
- 154              		.loc 1 40 22 is_stmt 0 view .LVU22
- 155 0000 0B4B     		ldr	r3, .L14
- 156 0002 5B6B     		ldr	r3, [r3, #52]
- 157 0004 1B68     		ldr	r3, [r3]
- 158 0006 5B68     		ldr	r3, [r3, #4]
- 159 0008 9BB2     		uxth	r3, r3
- 160              	.LVL6:
-  41:Src/port_handler.c **** 	if(rd_ptr != dma_ptr) {
- 161              		.loc 1 41 2 is_stmt 1 view .LVU23
- 162              		.loc 1 41 12 is_stmt 0 view .LVU24
- 163 000a 0A4A     		ldr	r2, .L14+4
- 164 000c 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
- 165 000e 91B2     		uxth	r1, r2
- 166              		.loc 1 41 4 view .LVU25
- 167 0010 5B42     		rsbs	r3, r3, #0
- 168              	.LVL7:
- 169              		.loc 1 41 4 view .LVU26
- 170 0012 03F03F03 		and	r3, r3, #63
- 171              	.LVL8:
- 172              		.loc 1 41 4 view .LVU27
- 173 0016 9942     		cmp	r1, r3
- 174 0018 07D0     		beq	.L13
-  42:Src/port_handler.c **** 		c = rxBuffer[rd_ptr++];
- 175              		.loc 1 42 3 is_stmt 1 view .LVU28
- 176              		.loc 1 42 22 is_stmt 0 view .LVU29
- 177 001a 531C     		adds	r3, r2, #1
- 178              		.loc 1 42 5 view .LVU30
- 179 001c 0649     		ldr	r1, .L14+8
- 180 001e 885C     		ldrb	r0, [r1, r2]	@ zero_extendqisi2
- 181              	.LVL9:
-  43:Src/port_handler.c **** 		rd_ptr &= (UART_RX__SZ - 1);
- 182              		.loc 1 43 3 is_stmt 1 view .LVU31
- 183              		.loc 1 43 10 is_stmt 0 view .LVU32
- 184 0020 03F03F03 		and	r3, r3, #63
- 185 0024 034A     		ldr	r2, .L14+4
- 186 0026 1370     		strb	r3, [r2]
- 187 0028 7047     		bx	lr
- 188              	.LVL10:
- 189              	.L13:
-  39:Src/port_handler.c ****   uint16_t dma_ptr = UART_DMA_WRITE_PTR;
- 190              		.loc 1 39 10 view .LVU33
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s 			page 5
-
-
- 191 002a 0020     		movs	r0, #0
- 192              	.LVL11:
-  44:Src/port_handler.c **** 	}
-  45:Src/port_handler.c **** 	return c;
- 193              		.loc 1 45 2 is_stmt 1 view .LVU34
-  46:Src/port_handler.c **** }
- 194              		.loc 1 46 1 is_stmt 0 view .LVU35
- 195 002c 7047     		bx	lr
- 196              	.L15:
- 197 002e 00BF     		.align	2
- 198              	.L14:
- 199 0030 00000000 		.word	huart1
- 200 0034 00000000 		.word	rd_ptr
- 201 0038 00000000 		.word	rxBuffer
- 202              		.cfi_endproc
- 203              	.LFE531:
- 205              		.section	.text.UART_RxComplete,"ax",%progbits
- 206              		.align	1
- 207              		.global	UART_RxComplete
- 208              		.syntax unified
- 209              		.thumb
- 210              		.thumb_func
- 211              		.fpu softvfp
- 213              	UART_RxComplete:
- 214              	.LFB529:
-  23:Src/port_handler.c ****   while(!rxBuffer_is_empty() && !isFull(message)){
- 215              		.loc 1 23 28 is_stmt 1 view -0
- 216              		.cfi_startproc
- 217              		@ args = 0, pretend = 0, frame = 8
- 218              		@ frame_needed = 0, uses_anonymous_args = 0
- 219 0000 10B5     		push	{r4, lr}
- 220              	.LCFI1:
- 221              		.cfi_def_cfa_offset 8
- 222              		.cfi_offset 4, -8
- 223              		.cfi_offset 14, -4
- 224 0002 82B0     		sub	sp, sp, #8
- 225              	.LCFI2:
- 226              		.cfi_def_cfa_offset 16
-  24:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
- 227              		.loc 1 24 3 view .LVU37
- 228              	.L17:
-  24:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
- 229              		.loc 1 24 8 view .LVU38
-  24:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
- 230              		.loc 1 24 10 is_stmt 0 view .LVU39
- 231 0004 FFF7FEFF 		bl	rxBuffer_is_empty
- 232              	.LVL12:
-  24:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
- 233              		.loc 1 24 8 view .LVU40
- 234 0008 68B9     		cbnz	r0, .L18
-  24:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
- 235              		.loc 1 24 34 discriminator 1 view .LVU41
- 236 000a 094B     		ldr	r3, .L21
- 237 000c 1868     		ldr	r0, [r3]
- 238 000e FFF7FEFF 		bl	isFull
- 239              	.LVL13:
-  24:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s 			page 6
-
-
- 240              		.loc 1 24 30 discriminator 1 view .LVU42
- 241 0012 40B9     		cbnz	r0, .L18
-  25:Src/port_handler.c ****   }
- 242              		.loc 1 25 5 is_stmt 1 view .LVU43
- 243 0014 064B     		ldr	r3, .L21
- 244 0016 1C68     		ldr	r4, [r3]
- 245 0018 FFF7FEFF 		bl	rxBuffer_Get
- 246              	.LVL14:
- 247 001c 0146     		mov	r1, r0
- 248 001e 2046     		mov	r0, r4
- 249 0020 FFF7FEFF 		bl	enQueue
- 250              	.LVL15:
- 251 0024 EEE7     		b	.L17
- 252              	.L18:
+  24:Src/port_handler.c ****   __HAL_DMA_ENABLE_IT (&hdma_usart1_rx, DMA_IT_TC);  // enable DMA Tx cplt interrupt
+  47              		.loc 1 24 3 view .LVU4
+  48 0014 074B     		ldr	r3, .L3+8
+  49 0016 1A68     		ldr	r2, [r3]
+  50 0018 1368     		ldr	r3, [r2]
+  51 001a 43F00203 		orr	r3, r3, #2
+  52 001e 1360     		str	r3, [r2]
+  25:Src/port_handler.c ****   HAL_UART_Receive_DMA(&huart1, rxBuffer, UART_RX__SZ);
+  53              		.loc 1 25 3 view .LVU5
+  54 0020 4022     		movs	r2, #64
+  55 0022 0549     		ldr	r1, .L3+12
+  56 0024 FFF7FEFF 		bl	HAL_UART_Receive_DMA
+  57              	.LVL0:
+  26:Src/port_handler.c ****   
   27:Src/port_handler.c **** }
- 253              		.loc 1 27 3 view .LVU44
-  27:Src/port_handler.c **** }
- 254              		.loc 1 27 16 is_stmt 0 view .LVU45
- 255 0026 0123     		movs	r3, #1
- 256 0028 0193     		str	r3, [sp, #4]
+  58              		.loc 1 27 1 is_stmt 0 view .LVU6
+  59 0028 08BD     		pop	{r3, pc}
+  60              	.L4:
+  61 002a 00BF     		.align	2
+  62              	.L3:
+  63 002c 00000000 		.word	rd_ptr
+  64 0030 00000000 		.word	huart1
+  65 0034 00000000 		.word	hdma_usart1_rx
+  66 0038 00000000 		.word	rxBuffer
+  67              		.cfi_endproc
+  68              	.LFE527:
+  70              		.section	.text.rxBuffer_is_empty,"ax",%progbits
+  71              		.align	1
+  72              		.global	rxBuffer_is_empty
+  73              		.syntax unified
+  74              		.thumb
+  75              		.thumb_func
+  76              		.fpu softvfp
+  78              	rxBuffer_is_empty:
+  79              	.LFB530:
   28:Src/port_handler.c **** 
- 257              		.loc 1 28 1 view .LVU46
- 258 002a 02B0     		add	sp, sp, #8
- 259              	.LCFI3:
- 260              		.cfi_def_cfa_offset 8
- 261              		@ sp needed
- 262 002c 10BD     		pop	{r4, pc}
- 263              	.L22:
- 264 002e 00BF     		.align	2
- 265              	.L21:
- 266 0030 00000000 		.word	message
- 267              		.cfi_endproc
- 268              	.LFE529:
- 270              		.section	.text.HAL_UART_RxCpltCallback,"ax",%progbits
- 271              		.align	1
- 272              		.global	HAL_UART_RxCpltCallback
- 273              		.syntax unified
- 274              		.thumb
- 275              		.thumb_func
- 276              		.fpu softvfp
- 278              	HAL_UART_RxCpltCallback:
- 279              	.LVL16:
- 280              	.LFB532:
+  29:Src/port_handler.c **** /* @brief Callback for UART RX idle line interrupt.
+  30:Src/port_handler.c ****  * 
+  31:Src/port_handler.c ****  * @param huart pointer to uart handle 
+  32:Src/port_handler.c ****  * @return void
+  33:Src/port_handler.c ****  */
+  34:Src/port_handler.c **** void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+  35:Src/port_handler.c **** {
+  36:Src/port_handler.c ****   message_transferred = 0;
+  37:Src/port_handler.c ****   UART_rx_transfer_to_queue();  
+  38:Src/port_handler.c **** }
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s 			page 3
+
+
+  39:Src/port_handler.c **** 
+  40:Src/port_handler.c **** /* @brief Transfers UART receive buffer to queue to enable prompt 
+  41:Src/port_handler.c ****  * rx_buffer readines for next message. Throws error if receive
+  42:Src/port_handler.c ****  * idle event is thrown but buffer is empty.
+  43:Src/port_handler.c ****  * 
+  44:Src/port_handler.c ****  * @param void 
+  45:Src/port_handler.c ****  * @return void
+  46:Src/port_handler.c ****  */
+  47:Src/port_handler.c **** void UART_rx_transfer_to_queue(void) {
+  48:Src/port_handler.c **** 
+  49:Src/port_handler.c ****   while(!rxBuffer_is_empty() && !isFull(message)){
+  50:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
+  51:Src/port_handler.c ****     message_transferred = 1;
+  52:Src/port_handler.c ****   }
+  53:Src/port_handler.c **** 
+  54:Src/port_handler.c ****   if(!message_transferred){
+  55:Src/port_handler.c ****     Error_Handler();
+  56:Src/port_handler.c ****   }
+  57:Src/port_handler.c **** 
+  58:Src/port_handler.c **** }
+  59:Src/port_handler.c **** 
+  60:Src/port_handler.c **** /* @brief Determines receive buffer is empty.
+  61:Src/port_handler.c ****  * 
+  62:Src/port_handler.c ****  * @param void
+  63:Src/port_handler.c ****  * @return 1 if buffer is empty
+  64:Src/port_handler.c ****  */
+  65:Src/port_handler.c **** uint8_t rxBuffer_is_empty(void) {
+  80              		.loc 1 65 33 is_stmt 1 view -0
+  81              		.cfi_startproc
+  82              		@ args = 0, pretend = 0, frame = 0
+  83              		@ frame_needed = 0, uses_anonymous_args = 0
+  84              		@ link register save eliminated.
+  66:Src/port_handler.c ****   uint16_t dma_ptr = UART_DMA_WRITE_PTR;
+  85              		.loc 1 66 3 view .LVU8
+  86              		.loc 1 66 22 is_stmt 0 view .LVU9
+  87 0000 074B     		ldr	r3, .L8
+  88 0002 5B6B     		ldr	r3, [r3, #52]
+  89 0004 1B68     		ldr	r3, [r3]
+  90 0006 5B68     		ldr	r3, [r3, #4]
+  91 0008 9BB2     		uxth	r3, r3
+  92              	.LVL1:
+  67:Src/port_handler.c **** 	if(rd_ptr == dma_ptr) {
+  93              		.loc 1 67 2 is_stmt 1 view .LVU10
+  94              		.loc 1 67 12 is_stmt 0 view .LVU11
+  95 000a 064A     		ldr	r2, .L8+4
+  96 000c 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+  97              		.loc 1 67 4 view .LVU12
+  98 000e 5B42     		rsbs	r3, r3, #0
+  99              	.LVL2:
+ 100              		.loc 1 67 4 view .LVU13
+ 101 0010 03F03F03 		and	r3, r3, #63
+ 102              	.LVL3:
+ 103              		.loc 1 67 4 view .LVU14
+ 104 0014 9A42     		cmp	r2, r3
+ 105 0016 01D0     		beq	.L7
+  68:Src/port_handler.c **** 		return 1;
+  69:Src/port_handler.c **** 	}
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s 			page 4
+
+
+  70:Src/port_handler.c **** 	return 0;
+ 106              		.loc 1 70 9 view .LVU15
+ 107 0018 0020     		movs	r0, #0
+ 108 001a 7047     		bx	lr
+ 109              	.L7:
+  68:Src/port_handler.c **** 		return 1;
+ 110              		.loc 1 68 10 view .LVU16
+ 111 001c 0120     		movs	r0, #1
+  71:Src/port_handler.c **** }
+ 112              		.loc 1 71 1 view .LVU17
+ 113 001e 7047     		bx	lr
+ 114              	.L9:
+ 115              		.align	2
+ 116              	.L8:
+ 117 0020 00000000 		.word	huart1
+ 118 0024 00000000 		.word	rd_ptr
+ 119              		.cfi_endproc
+ 120              	.LFE530:
+ 122              		.section	.text.rxBuffer_Get,"ax",%progbits
+ 123              		.align	1
+ 124              		.global	rxBuffer_Get
+ 125              		.syntax unified
+ 126              		.thumb
+ 127              		.thumb_func
+ 128              		.fpu softvfp
+ 130              	rxBuffer_Get:
+ 131              	.LFB531:
+  72:Src/port_handler.c **** 
+  73:Src/port_handler.c **** /* @brief Grabs 1 byte of receive buffer.
+  74:Src/port_handler.c ****  * 
+  75:Src/port_handler.c ****  * @param void
+  76:Src/port_handler.c ****  * @return 1 byte from receive buffer
+  77:Src/port_handler.c ****  */
+  78:Src/port_handler.c **** uint8_t rxBuffer_Get(void) {
+ 132              		.loc 1 78 28 is_stmt 1 view -0
+ 133              		.cfi_startproc
+ 134              		@ args = 0, pretend = 0, frame = 0
+ 135              		@ frame_needed = 0, uses_anonymous_args = 0
+ 136              		@ link register save eliminated.
+  79:Src/port_handler.c **** 	uint8_t message_byte = 0;
+ 137              		.loc 1 79 2 view .LVU19
+ 138              	.LVL4:
+  80:Src/port_handler.c ****   uint16_t dma_ptr = UART_DMA_WRITE_PTR;
+ 139              		.loc 1 80 3 view .LVU20
+ 140              		.loc 1 80 22 is_stmt 0 view .LVU21
+ 141 0000 0B4B     		ldr	r3, .L13
+ 142 0002 5B6B     		ldr	r3, [r3, #52]
+ 143 0004 1B68     		ldr	r3, [r3]
+ 144 0006 5B68     		ldr	r3, [r3, #4]
+ 145 0008 9BB2     		uxth	r3, r3
+ 146              	.LVL5:
+  81:Src/port_handler.c **** 	if(rd_ptr != dma_ptr) {
+ 147              		.loc 1 81 2 is_stmt 1 view .LVU22
+ 148              		.loc 1 81 12 is_stmt 0 view .LVU23
+ 149 000a 0A4A     		ldr	r2, .L13+4
+ 150 000c 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 151 000e 91B2     		uxth	r1, r2
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s 			page 5
+
+
+ 152              		.loc 1 81 4 view .LVU24
+ 153 0010 5B42     		rsbs	r3, r3, #0
+ 154              	.LVL6:
+ 155              		.loc 1 81 4 view .LVU25
+ 156 0012 03F03F03 		and	r3, r3, #63
+ 157              	.LVL7:
+ 158              		.loc 1 81 4 view .LVU26
+ 159 0016 9942     		cmp	r1, r3
+ 160 0018 07D0     		beq	.L12
+  82:Src/port_handler.c **** 		message_byte = rxBuffer[rd_ptr++];
+ 161              		.loc 1 82 3 is_stmt 1 view .LVU27
+ 162              		.loc 1 82 33 is_stmt 0 view .LVU28
+ 163 001a 531C     		adds	r3, r2, #1
+ 164              		.loc 1 82 16 view .LVU29
+ 165 001c 0649     		ldr	r1, .L13+8
+ 166 001e 885C     		ldrb	r0, [r1, r2]	@ zero_extendqisi2
+ 167              	.LVL8:
+  83:Src/port_handler.c **** 		rd_ptr &= (UART_RX__SZ - 1);
+ 168              		.loc 1 83 3 is_stmt 1 view .LVU30
+ 169              		.loc 1 83 10 is_stmt 0 view .LVU31
+ 170 0020 03F03F03 		and	r3, r3, #63
+ 171 0024 034A     		ldr	r2, .L13+4
+ 172 0026 1370     		strb	r3, [r2]
+ 173 0028 7047     		bx	lr
+ 174              	.LVL9:
+ 175              	.L12:
+  79:Src/port_handler.c ****   uint16_t dma_ptr = UART_DMA_WRITE_PTR;
+ 176              		.loc 1 79 10 view .LVU32
+ 177 002a 0020     		movs	r0, #0
+ 178              	.LVL10:
+  84:Src/port_handler.c **** 	}
+  85:Src/port_handler.c **** 	return message_byte;
+ 179              		.loc 1 85 2 is_stmt 1 view .LVU33
+  86:Src/port_handler.c **** }
+ 180              		.loc 1 86 1 is_stmt 0 view .LVU34
+ 181 002c 7047     		bx	lr
+ 182              	.L14:
+ 183 002e 00BF     		.align	2
+ 184              	.L13:
+ 185 0030 00000000 		.word	huart1
+ 186 0034 00000000 		.word	rd_ptr
+ 187 0038 00000000 		.word	rxBuffer
+ 188              		.cfi_endproc
+ 189              	.LFE531:
+ 191              		.section	.text.UART_rx_transfer_to_queue,"ax",%progbits
+ 192              		.align	1
+ 193              		.global	UART_rx_transfer_to_queue
+ 194              		.syntax unified
+ 195              		.thumb
+ 196              		.thumb_func
+ 197              		.fpu softvfp
+ 199              	UART_rx_transfer_to_queue:
+ 200              	.LFB529:
   47:Src/port_handler.c **** 
-  48:Src/port_handler.c **** void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-  49:Src/port_handler.c **** {
- 281              		.loc 1 49 1 is_stmt 1 view -0
- 282              		.cfi_startproc
- 283              		@ args = 0, pretend = 0, frame = 0
- 284              		@ frame_needed = 0, uses_anonymous_args = 0
- 285              		.loc 1 49 1 is_stmt 0 view .LVU48
- 286 0000 08B5     		push	{r3, lr}
- 287              	.LCFI4:
- 288              		.cfi_def_cfa_offset 8
- 289              		.cfi_offset 3, -8
- 290              		.cfi_offset 14, -4
-  50:Src/port_handler.c ****   UART_RxComplete();
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s 			page 7
+ 201              		.loc 1 47 38 is_stmt 1 view -0
+ 202              		.cfi_startproc
+ 203              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s 			page 6
 
 
- 291              		.loc 1 50 3 is_stmt 1 view .LVU49
- 292 0002 FFF7FEFF 		bl	UART_RxComplete
- 293              	.LVL17:
-  51:Src/port_handler.c **** }
- 294              		.loc 1 51 1 is_stmt 0 view .LVU50
- 295 0006 08BD     		pop	{r3, pc}
- 296              		.cfi_endproc
- 297              	.LFE532:
- 299              		.comm	temp_length,1,1
- 300              		.comm	rd_ptr,1,1
- 301              		.comm	txBuffer,64,4
- 302              		.comm	rxBuffer,64,4
- 303              		.text
- 304              	.Letext0:
- 305              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 306              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 307              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 308              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 309              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
- 310              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 311              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 312              		.file 9 "Inc/queue.h"
- 313              		.file 10 "Inc/port_handler.h"
- 314              		.file 11 "Drivers/CMSIS/Include/core_cm3.h"
- 315              		.file 12 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
- 316              		.file 13 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
- 317              		.file 14 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
- 318              		.file 15 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
- 319              		.file 16 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h"
- 320              		.file 17 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
- 321              		.file 18 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s 			page 8
+ 204              		@ frame_needed = 0, uses_anonymous_args = 0
+ 205 0000 10B5     		push	{r4, lr}
+ 206              	.LCFI1:
+ 207              		.cfi_def_cfa_offset 8
+ 208              		.cfi_offset 4, -8
+ 209              		.cfi_offset 14, -4
+  49:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
+ 210              		.loc 1 49 3 view .LVU36
+ 211              	.L16:
+  49:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
+ 212              		.loc 1 49 8 view .LVU37
+  49:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
+ 213              		.loc 1 49 10 is_stmt 0 view .LVU38
+ 214 0002 FFF7FEFF 		bl	rxBuffer_is_empty
+ 215              	.LVL11:
+  49:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
+ 216              		.loc 1 49 8 view .LVU39
+ 217 0006 80B9     		cbnz	r0, .L17
+  49:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
+ 218              		.loc 1 49 34 discriminator 1 view .LVU40
+ 219 0008 0B4B     		ldr	r3, .L22
+ 220 000a 1868     		ldr	r0, [r3]
+ 221 000c FFF7FEFF 		bl	isFull
+ 222              	.LVL12:
+  49:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
+ 223              		.loc 1 49 30 discriminator 1 view .LVU41
+ 224 0010 58B9     		cbnz	r0, .L17
+  50:Src/port_handler.c ****     message_transferred = 1;
+ 225              		.loc 1 50 5 is_stmt 1 view .LVU42
+ 226 0012 094B     		ldr	r3, .L22
+ 227 0014 1C68     		ldr	r4, [r3]
+ 228 0016 FFF7FEFF 		bl	rxBuffer_Get
+ 229              	.LVL13:
+ 230 001a 0146     		mov	r1, r0
+ 231 001c 2046     		mov	r0, r4
+ 232 001e FFF7FEFF 		bl	enQueue
+ 233              	.LVL14:
+  51:Src/port_handler.c ****   }
+ 234              		.loc 1 51 5 view .LVU43
+  51:Src/port_handler.c ****   }
+ 235              		.loc 1 51 25 is_stmt 0 view .LVU44
+ 236 0022 064B     		ldr	r3, .L22+4
+ 237 0024 0122     		movs	r2, #1
+ 238 0026 1A70     		strb	r2, [r3]
+ 239 0028 EBE7     		b	.L16
+ 240              	.L17:
+  54:Src/port_handler.c ****     Error_Handler();
+ 241              		.loc 1 54 3 is_stmt 1 view .LVU45
+  54:Src/port_handler.c ****     Error_Handler();
+ 242              		.loc 1 54 6 is_stmt 0 view .LVU46
+ 243 002a 044B     		ldr	r3, .L22+4
+ 244 002c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  54:Src/port_handler.c ****     Error_Handler();
+ 245              		.loc 1 54 5 view .LVU47
+ 246 002e 03B1     		cbz	r3, .L21
+ 247              	.L15:
+  58:Src/port_handler.c **** 
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s 			page 7
+
+
+ 248              		.loc 1 58 1 view .LVU48
+ 249 0030 10BD     		pop	{r4, pc}
+ 250              	.L21:
+  55:Src/port_handler.c ****   }
+ 251              		.loc 1 55 5 is_stmt 1 view .LVU49
+ 252 0032 FFF7FEFF 		bl	Error_Handler
+ 253              	.LVL15:
+  58:Src/port_handler.c **** 
+ 254              		.loc 1 58 1 is_stmt 0 view .LVU50
+ 255 0036 FBE7     		b	.L15
+ 256              	.L23:
+ 257              		.align	2
+ 258              	.L22:
+ 259 0038 00000000 		.word	message
+ 260 003c 00000000 		.word	message_transferred
+ 261              		.cfi_endproc
+ 262              	.LFE529:
+ 264              		.section	.text.HAL_UART_RxCpltCallback,"ax",%progbits
+ 265              		.align	1
+ 266              		.global	HAL_UART_RxCpltCallback
+ 267              		.syntax unified
+ 268              		.thumb
+ 269              		.thumb_func
+ 270              		.fpu softvfp
+ 272              	HAL_UART_RxCpltCallback:
+ 273              	.LVL16:
+ 274              	.LFB528:
+  35:Src/port_handler.c ****   message_transferred = 0;
+ 275              		.loc 1 35 1 is_stmt 1 view -0
+ 276              		.cfi_startproc
+ 277              		@ args = 0, pretend = 0, frame = 0
+ 278              		@ frame_needed = 0, uses_anonymous_args = 0
+  35:Src/port_handler.c ****   message_transferred = 0;
+ 279              		.loc 1 35 1 is_stmt 0 view .LVU52
+ 280 0000 08B5     		push	{r3, lr}
+ 281              	.LCFI2:
+ 282              		.cfi_def_cfa_offset 8
+ 283              		.cfi_offset 3, -8
+ 284              		.cfi_offset 14, -4
+  36:Src/port_handler.c ****   UART_rx_transfer_to_queue();  
+ 285              		.loc 1 36 3 is_stmt 1 view .LVU53
+  36:Src/port_handler.c ****   UART_rx_transfer_to_queue();  
+ 286              		.loc 1 36 23 is_stmt 0 view .LVU54
+ 287 0002 034B     		ldr	r3, .L26
+ 288 0004 0022     		movs	r2, #0
+ 289 0006 1A70     		strb	r2, [r3]
+  37:Src/port_handler.c **** }
+ 290              		.loc 1 37 3 is_stmt 1 view .LVU55
+ 291 0008 FFF7FEFF 		bl	UART_rx_transfer_to_queue
+ 292              	.LVL17:
+  38:Src/port_handler.c **** 
+ 293              		.loc 1 38 1 is_stmt 0 view .LVU56
+ 294 000c 08BD     		pop	{r3, pc}
+ 295              	.L27:
+ 296 000e 00BF     		.align	2
+ 297              	.L26:
+ 298 0010 00000000 		.word	message_transferred
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s 			page 8
+
+
+ 299              		.cfi_endproc
+ 300              	.LFE528:
+ 302              		.section	.text.transmit_buffer,"ax",%progbits
+ 303              		.align	1
+ 304              		.global	transmit_buffer
+ 305              		.syntax unified
+ 306              		.thumb
+ 307              		.thumb_func
+ 308              		.fpu softvfp
+ 310              	transmit_buffer:
+ 311              	.LVL18:
+ 312              	.LFB532:
+  87:Src/port_handler.c **** 
+  88:Src/port_handler.c **** /* @brief Transmits message response with 2 millisecond timeout.
+  89:Src/port_handler.c ****  * 
+  90:Src/port_handler.c ****  * @param1 response[] message to send back to master
+  91:Src/port_handler.c ****  * @param2 length message length
+  92:Src/port_handler.c ****  * @return void *
+  93:Src/port_handler.c ****  */
+  94:Src/port_handler.c **** void transmit_buffer(uint8_t response[], uint16_t length){
+ 313              		.loc 1 94 58 is_stmt 1 view -0
+ 314              		.cfi_startproc
+ 315              		@ args = 0, pretend = 0, frame = 0
+ 316              		@ frame_needed = 0, uses_anonymous_args = 0
+ 317              		.loc 1 94 58 is_stmt 0 view .LVU58
+ 318 0000 70B5     		push	{r4, r5, r6, lr}
+ 319              	.LCFI3:
+ 320              		.cfi_def_cfa_offset 16
+ 321              		.cfi_offset 4, -16
+ 322              		.cfi_offset 5, -12
+ 323              		.cfi_offset 6, -8
+ 324              		.cfi_offset 14, -4
+ 325 0002 0646     		mov	r6, r0
+ 326 0004 0D46     		mov	r5, r1
+  95:Src/port_handler.c ****   int i;
+ 327              		.loc 1 95 3 is_stmt 1 view .LVU59
+  96:Src/port_handler.c ****   HAL_GPIO_WritePin(DATA_DIR_GPIO_Port, DATA_DIR_Pin, HIGH);
+ 328              		.loc 1 96 3 view .LVU60
+ 329 0006 0122     		movs	r2, #1
+ 330 0008 2021     		movs	r1, #32
+ 331              	.LVL19:
+ 332              		.loc 1 96 3 is_stmt 0 view .LVU61
+ 333 000a 0E48     		ldr	r0, .L34
+ 334              	.LVL20:
+ 335              		.loc 1 96 3 view .LVU62
+ 336 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 337              	.LVL21:
+  97:Src/port_handler.c ****   for (i=0; i<length; i++){
+ 338              		.loc 1 97 3 is_stmt 1 view .LVU63
+ 339              		.loc 1 97 9 is_stmt 0 view .LVU64
+ 340 0010 0023     		movs	r3, #0
+ 341              	.LVL22:
+ 342              	.L29:
+ 343              		.loc 1 97 13 is_stmt 1 discriminator 1 view .LVU65
+ 344              		.loc 1 97 3 is_stmt 0 discriminator 1 view .LVU66
+ 345 0012 9D42     		cmp	r5, r3
+ 346 0014 08DD     		ble	.L31
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s 			page 9
+
+
+  98:Src/port_handler.c ****     txBuffer[i] = response[i];
+ 347              		.loc 1 98 5 is_stmt 1 discriminator 3 view .LVU67
+ 348              		.loc 1 98 27 is_stmt 0 discriminator 3 view .LVU68
+ 349 0016 F45C     		ldrb	r4, [r6, r3]	@ zero_extendqisi2
+ 350              		.loc 1 98 17 discriminator 3 view .LVU69
+ 351 0018 0B4A     		ldr	r2, .L34+4
+ 352 001a D454     		strb	r4, [r2, r3]
+  97:Src/port_handler.c ****   for (i=0; i<length; i++){
+ 353              		.loc 1 97 23 is_stmt 1 discriminator 3 view .LVU70
+  97:Src/port_handler.c ****   for (i=0; i<length; i++){
+ 354              		.loc 1 97 24 is_stmt 0 discriminator 3 view .LVU71
+ 355 001c 0133     		adds	r3, r3, #1
+ 356              	.LVL23:
+  97:Src/port_handler.c ****   for (i=0; i<length; i++){
+ 357              		.loc 1 97 24 discriminator 3 view .LVU72
+ 358 001e F8E7     		b	.L29
+ 359              	.L32:
+  99:Src/port_handler.c ****   }
+ 100:Src/port_handler.c ****   /*  Fill rest of buffer with 0's*/
+ 101:Src/port_handler.c ****   for (i; i<UART_TX__SZ; i++){
+ 102:Src/port_handler.c ****     txBuffer[i] = 0;
+ 360              		.loc 1 102 5 is_stmt 1 discriminator 2 view .LVU73
+ 361              		.loc 1 102 17 is_stmt 0 discriminator 2 view .LVU74
+ 362 0020 094A     		ldr	r2, .L34+4
+ 363 0022 0021     		movs	r1, #0
+ 364 0024 D154     		strb	r1, [r2, r3]
+ 101:Src/port_handler.c ****     txBuffer[i] = 0;
+ 365              		.loc 1 101 26 is_stmt 1 discriminator 2 view .LVU75
+ 101:Src/port_handler.c ****     txBuffer[i] = 0;
+ 366              		.loc 1 101 27 is_stmt 0 discriminator 2 view .LVU76
+ 367 0026 0133     		adds	r3, r3, #1
+ 368              	.LVL24:
+ 369              	.L31:
+ 101:Src/port_handler.c ****     txBuffer[i] = 0;
+ 370              		.loc 1 101 11 is_stmt 1 discriminator 1 view .LVU77
+ 101:Src/port_handler.c ****     txBuffer[i] = 0;
+ 371              		.loc 1 101 3 is_stmt 0 discriminator 1 view .LVU78
+ 372 0028 1F2B     		cmp	r3, #31
+ 373 002a F9DD     		ble	.L32
+ 103:Src/port_handler.c ****   }
+ 104:Src/port_handler.c ****   HAL_UART_Transmit(&huart1, txBuffer, UART_TX__SZ, 2);
+ 374              		.loc 1 104 3 is_stmt 1 view .LVU79
+ 375 002c 0223     		movs	r3, #2
+ 376              	.LVL25:
+ 377              		.loc 1 104 3 is_stmt 0 view .LVU80
+ 378 002e 2022     		movs	r2, #32
+ 379 0030 0549     		ldr	r1, .L34+4
+ 380 0032 0648     		ldr	r0, .L34+8
+ 381 0034 FFF7FEFF 		bl	HAL_UART_Transmit
+ 382              	.LVL26:
+ 105:Src/port_handler.c ****   HAL_GPIO_WritePin(DATA_DIR_GPIO_Port, DATA_DIR_Pin, LOW);
+ 383              		.loc 1 105 3 is_stmt 1 view .LVU81
+ 384 0038 0022     		movs	r2, #0
+ 385 003a 2021     		movs	r1, #32
+ 386 003c 0148     		ldr	r0, .L34
+ 387 003e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 388              	.LVL27:
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s 			page 10
+
+
+ 106:Src/port_handler.c **** }
+ 389              		.loc 1 106 1 is_stmt 0 view .LVU82
+ 390 0042 70BD     		pop	{r4, r5, r6, pc}
+ 391              	.LVL28:
+ 392              	.L35:
+ 393              		.loc 1 106 1 view .LVU83
+ 394              		.align	2
+ 395              	.L34:
+ 396 0044 000C0140 		.word	1073810432
+ 397 0048 00000000 		.word	txBuffer
+ 398 004c 00000000 		.word	huart1
+ 399              		.cfi_endproc
+ 400              	.LFE532:
+ 402              		.comm	message_transferred,1,1
+ 403              		.comm	temp_length,1,1
+ 404              		.comm	rd_ptr,1,1
+ 405              		.comm	txBuffer,32,4
+ 406              		.comm	rxBuffer,64,4
+ 407              		.text
+ 408              	.Letext0:
+ 409              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 410              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 411              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 412              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 413              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
+ 414              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 415              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 416              		.file 9 "Inc/queue.h"
+ 417              		.file 10 "Inc/port_handler.h"
+ 418              		.file 11 "Drivers/CMSIS/Include/core_cm3.h"
+ 419              		.file 12 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
+ 420              		.file 13 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h"
+ 421              		.file 14 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h"
+ 422              		.file 15 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
+ 423              		.file 16 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma.h"
+ 424              		.file 17 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h"
+ 425              		.file 18 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 426              		.file 19 "Inc/main.h"
+ 427              		.file 20 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s 			page 11
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 port_handler.c
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:16     .text.UART_DMA_Init:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:24     .text.UART_DMA_Init:00000000 UART_DMA_Init
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:57     .text.UART_DMA_Init:00000020 $d
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:16     .text.UART_DMA_Init:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:24     .text.UART_DMA_Init:00000000 UART_DMA_Init
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:63     .text.UART_DMA_Init:0000002c $d
                             *COM*:00000001 rd_ptr
                             *COM*:00000040 rxBuffer
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:64     .text.transmit_buffer:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:71     .text.transmit_buffer:00000000 transmit_buffer
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:85     .text.rxBuffer_is_empty:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:92     .text.rxBuffer_is_empty:00000000 rxBuffer_is_empty
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:131    .text.rxBuffer_is_empty:00000020 $d
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:137    .text.rxBuffer_Get:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:144    .text.rxBuffer_Get:00000000 rxBuffer_Get
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:199    .text.rxBuffer_Get:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:206    .text.UART_RxComplete:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:213    .text.UART_RxComplete:00000000 UART_RxComplete
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:266    .text.UART_RxComplete:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:271    .text.HAL_UART_RxCpltCallback:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc1LGuOc.s:278    .text.HAL_UART_RxCpltCallback:00000000 HAL_UART_RxCpltCallback
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:71     .text.rxBuffer_is_empty:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:78     .text.rxBuffer_is_empty:00000000 rxBuffer_is_empty
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:117    .text.rxBuffer_is_empty:00000020 $d
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:123    .text.rxBuffer_Get:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:130    .text.rxBuffer_Get:00000000 rxBuffer_Get
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:185    .text.rxBuffer_Get:00000030 $d
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:192    .text.UART_rx_transfer_to_queue:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:199    .text.UART_rx_transfer_to_queue:00000000 UART_rx_transfer_to_queue
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:259    .text.UART_rx_transfer_to_queue:00000038 $d
+                            *COM*:00000001 message_transferred
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:265    .text.HAL_UART_RxCpltCallback:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:272    .text.HAL_UART_RxCpltCallback:00000000 HAL_UART_RxCpltCallback
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:298    .text.HAL_UART_RxCpltCallback:00000010 $d
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:303    .text.transmit_buffer:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:310    .text.transmit_buffer:00000000 transmit_buffer
+C:\Users\Brandon\AppData\Local\Temp\ccAWGvOb.s:396    .text.transmit_buffer:00000044 $d
+                            *COM*:00000020 txBuffer
                             *COM*:00000001 temp_length
-                            *COM*:00000040 txBuffer
 
 UNDEFINED SYMBOLS
 HAL_UART_Receive_DMA
 huart1
+hdma_usart1_rx
 isFull
 enQueue
+Error_Handler
 message
+HAL_GPIO_WritePin
+HAL_UART_Transmit

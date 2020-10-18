@@ -92,6 +92,7 @@ void HardFault_Handler(void)
   while (1)
   {
     isEmpty(message);
+    Error_Handler();
     /* USER CODE BEGIN W1_HardFault_IRQn 0 */
     /* USER CODE END W1_HardFault_IRQn 0 */
   }
@@ -202,6 +203,19 @@ void SysTick_Handler(void)
 /* please refer to the startup file (startup_stm32f1xx.s).                    */
 /******************************************************************************/
 
+/**
+  * @brief This function handles DMA1 channel4 global interrupt.
+  */
+void DMA1_Channel4_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel4_IRQn 0 */
+
+  /* USER CODE END DMA1_Channel4_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_usart1_tx);
+  /* USER CODE BEGIN DMA1_Channel4_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel4_IRQn 1 */
+}
 
 /**
   * @brief This function handles DMA1 channel5 global interrupt.
@@ -212,7 +226,6 @@ void DMA1_Channel5_IRQHandler(void)
 
   /* USER CODE END DMA1_Channel5_IRQn 0 */
   HAL_DMA_IRQHandler(&hdma_usart1_rx);
-  HAL_DMA_IRQHandler(&hdma_usart1_tx);
   /* USER CODE BEGIN DMA1_Channel5_IRQn 1 */
 
   /* USER CODE END DMA1_Channel5_IRQn 1 */
@@ -226,13 +239,15 @@ void USART1_IRQHandler(void)
   /* USER CODE BEGIN USART1_IRQn 0 */
 
   /* USER CODE END USART1_IRQn 0 */
-  HAL_UART_IRQHandler(&huart1);
+  //HAL_UART_IRQHandler(&huart1);
   /* USER CODE END USART1_IRQn 1 */   
   if (__HAL_UART_GET_FLAG (&huart1, UART_FLAG_IDLE))
   {
-    __HAL_UART_CLEAR_IDLEFLAG (&huart1); 
+    
     HAL_UART_RxCpltCallback (&huart1);   
-  }   
+    
+  }
+  __HAL_UART_CLEAR_IDLEFLAG (&huart1);    
 
 }
 

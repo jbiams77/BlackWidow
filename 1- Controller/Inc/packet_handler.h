@@ -31,17 +31,33 @@
 #define BULK_READ 92
 #define BULK_WRITE 93
 
+// Dynamixel Communication 2.0 writable settings
+#define MODEL_NUMBER 0
+#define MODEL_INFORMATION 2
+#define FIRMWARE_VERSION 6
+#define ID 7
+#define BAUD_RATE 8
+#define RETURN_DELAY_TIME 9
+#define DRIVE_MODE 10 
+#define OPERATING_MODE 11 
+#define SECONDARY_ID 12
+#define PROTOCOL_TYPE 13 
+#define HOMING_OFFSET 20 
+#define MOVING_THRESHOLD 24 
+#define TEMPERATURE_LIMIT 31 
+#define MAX_VOLTAGE_LIMIT 32
+#define MIN_VOLTAGE_LIMIT 34
+#define PWM_LIMIT 36 
+#define VELOCITY_LIMIT 44
+#define MAX_POSITION_LIMIT 48
+#define MIN_POSITION_LIMIT 52
+#define SHUTDOWN 63
 
-/*------FIELDS----------------------------------------*/
-extern MessageQueue *message;
-uint8_t instruction;
-uint8_t param[20];
-uint8_t crc[2];
-extern Parameters *PARAM;
+
 
 /*------FUNCTION PROTOTYPES---------------------------*/
 void process_queue(void);
-void process_message(uint16_t );
+void process_message(void);
 void ping(void);
 void read(void); 
 void write(void); 

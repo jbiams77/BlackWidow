@@ -1,4 +1,4 @@
-build/main.o: Src/main.c Inc/main.h \
+build/flash.o: Src/flash.c Inc/flash.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  Inc/stm32f1xx_hal_conf.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -19,20 +19,9 @@ build/main.o: Src/main.c Inc/main.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rcc.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_bus.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_system.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_exti.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_cortex.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_utils.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h Inc/port_handler.h \
- Inc/queue.h Inc/utility.h Inc/flash.h
+ Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 
-Inc/main.h:
+Inc/flash.h:
 
 Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 
@@ -79,31 +68,3 @@ Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h:
 Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h:
 
 Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:
-
-Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h:
-
-Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rcc.h:
-
-Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_bus.h:
-
-Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_system.h:
-
-Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_exti.h:
-
-Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_cortex.h:
-
-Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_utils.h:
-
-Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h:
-
-Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h:
-
-Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h:
-
-Inc/port_handler.h:
-
-Inc/queue.h:
-
-Inc/utility.h:
-
-Inc/flash.h:
