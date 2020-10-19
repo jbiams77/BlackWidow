@@ -53,6 +53,38 @@
 #define MIN_POSITION_LIMIT 52
 #define SHUTDOWN 63
 
+// Dynamixel Communication 2.0 RAM Area
+
+#define TORQUE_ENABLE 64
+#define LED 65
+#define STATUS_RETURN_LEVEL 68
+#define REGISTERED_INSTRUCTION 69
+#define HARDWARE_ERROR_STATUS 70
+#define VELOCITY_I_GAIN 76
+#define VELOCITY_P_GAIN 78
+#define POSITION_D_GAIN 80
+#define POSITION_I_GAIN 82
+#define POSITION_P_GAIN 84
+#define FEEDFORWARD_2ND_GAIN 88
+#define FEEDFORWARD_1ST_GAIN 90
+#define BUS_WATCHDOG 98
+#define GOAL_PWM 100
+#define GOAL_VELOCITY 104
+#define PROFILE_ACCELERATION 108
+#define PROFILE_VELOCITY 112
+#define GOAL_POSITION 116
+#define REALTIME_TICK 120
+#define MOVING 122
+#define MOVING_STATUS 123
+#define PRESENT_PWM 124
+#define PRESENT_LOAD 126
+#define PRESENT_VELOCITY 128
+#define PRESENT_POSITION 132
+#define VELOCITY_TRAJECTORY 136
+#define POSITION_TRAJECTORY 140
+#define PRESENT_INPUT_VOLTAGE 144
+#define PRESENT_TEMPERATURE 146
+
 #define ENABLED 1
 #define DISABLED 0
 
@@ -69,11 +101,12 @@ enum Baud {
     baud_4P5 = 7
 
 };
-
+// TODO: initialize function
 /* Unique parameters retrieved from flash. */
 typedef struct Stored_Parameters {
 
-    uint8_t model_number;
+    uint16_t model_number;
+    uint32_t model_information;
     uint8_t firmware_version;
     uint8_t motor_ID;
     uint8_t baud_rate;
@@ -82,52 +115,54 @@ typedef struct Stored_Parameters {
     uint8_t operating_mode;
     uint8_t secondary_ID;
     uint8_t protocol_type;
-    uint8_t homing_offset;
-    uint8_t moving_threshold;
+    uint32_t homing_offset;
+    uint32_t moving_threshold;
     uint8_t temperature_limit;
-    uint8_t min_voltage_limit;
-    uint8_t max_voltage_limit;
-    uint8_t PWM_limit;
-    uint8_t velocity_limit;
-    uint8_t min_position_limit;
-    uint8_t max_position_limit;
+    uint16_t min_voltage_limit;
+    uint16_t max_voltage_limit;
+    uint16_t PWM_limit;
+    uint32_t velocity_limit;
+    uint32_t min_position_limit;
+    uint32_t max_position_limit;
     uint8_t shutdown;  
 
 } Stored_Parameters;
 
-
-
-typedef struct Temp_Parameters {
+// TODO: initialize function
+/* Unique parameters for runtime only. */
+typedef struct Runtime_Parameters {
 
     uint8_t torque_enable;
-    uint8_t LED;
+    uint8_t led;
     uint8_t status_return_level;
     uint8_t registered_instruction;
     uint8_t hardware_error_status;
-    uint8_t velocity_PI_gain; 
-    uint8_t position_PID_gain;
-    uint8_t feedforward_gain;
+    uint16_t velocity_I_gain; 
+    uint16_t velocity_P_gain; 
+    uint16_t position_D_gain;
+    uint16_t position_I_gain;
+    uint16_t position_P_gain;
+    uint16_t feedforward_1st_gain;
+    uint16_t feedforward_2nd_gain;
     uint8_t BUS_watchdog;
-    uint8_t Goal_PWM;
-    uint8_t Goal_velocity;
-    uint8_t profile_accelration;
-    uint8_t profile_velocity;
-    uint8_t goal_position;
-    uint8_t realtime_tick;
+    uint16_t goal_PWM;
+    uint32_t goal_velocity;
+    uint32_t profile_accelration;
+    uint32_t profile_velocity;
+    uint32_t goal_position;
+    uint16_t realtime_tick;
     uint8_t moving;
     uint8_t moving_status;
-    uint8_t present_PWM;
-    uint8_t present_load;
-    uint8_t present_velocity;
-    uint8_t present_position;
-    uint8_t velocity_trajectory;
-    uint8_t position_trajectory;
-    uint8_t present_input_voltage;
+    uint16_t present_PWM;
+    uint16_t present_load;
+    uint32_t present_velocity;
+    uint32_t present_position;
+    uint32_t velocity_trajectory;
+    uint32_t position_trajectory;
+    uint16_t present_input_voltage;
     uint8_t present_temperature;
-    uint8_t indirect_address;
-    uint8_t indirect_data;
 
-}Temp_Parameters;
+} Runtime_Parameters;
 
 
 /*------FUNCTION PROTOTYPES---------------------------*/
@@ -146,27 +181,27 @@ void sync_read(void);
 void sync_write(void); 
 void bulk_read(void); 
 void bulk_write(void); 
+void write_to_RAM(uint16_t, uint32_t);
+void write_to_Flash(uint16_t, uint32_t);
 
 /*------Stored Parameters FUNCTION PROTOTYPES---------------------------*/
 
-void store_model_number(uint8_t);
-void store_firmware_version(uint8_t);
-void store_motor_ID(uint8_t);
-void store_baud_rate(uint8_t);
-void store_return_delay_time(uint8_t);
-void store_drive_mode(uint8_t);
-void store_operating_mode(uint8_t);
-void store_secondary_ID(uint8_t);
-void store_protocol_type(uint8_t);
-void store_homing_offset(uint8_t);
-void store_moving_threshold(uint8_t);
-void store_temperature_limit(uint8_t);
-void store_min_max_voltage_limit(uint8_t);
-void store_PWM_limit(uint8_t);
-void store_min_voltage_limit(uint8_t);
-void store_max_voltage_limit(uint8_t);
-void store_min_position_limit(uint8_t);
-void store_max_position_limit(uint8_t);
-void store_shutdown(uint8_t);
+void store_motor_ID(uint32_t);
+void store_baud_rate(uint32_t);
+void store_return_delay_time(uint32_t);
+void store_drive_mode(uint32_t);
+void store_operating_mode(uint32_t);
+void store_secondary_ID(uint32_t);
+void store_protocol_type(uint32_t);
+void store_homing_offset(uint32_t);
+void store_moving_threshold(uint32_t);
+void store_temperature_limit(uint32_t);
+void store_PWM_limit(uint32_t);
+void store_min_voltage_limit(uint32_t);
+void store_max_voltage_limit(uint32_t);
+void store_velocity_limit(uint32_t);
+void store_min_position_limit(uint32_t);
+void store_max_position_limit(uint32_t);
+void store_shutdown(uint32_t);
 
 #endif

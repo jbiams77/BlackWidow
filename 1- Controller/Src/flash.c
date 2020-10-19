@@ -4,7 +4,7 @@
 #include "stdio.h"
 
 
-void Flash_Write(uint32_t StartPageAddress, uint32_t DATA_32)
+void Flash_Write(uint32_t StartPageAddress, uint8_t DATA_32)
 {
 
 	/* Unlock the Flash to enable the flash control register access *************/
@@ -21,7 +21,7 @@ void Flash_Write(uint32_t StartPageAddress, uint32_t DATA_32)
 }
 
 
-uint32_t* Flash_Read_Data (uint32_t StartPageAddress)
+uint8_t* Flash_Read(uint32_t StartPageAddress)
 {
 
 	return *(__IO uint32_t *)StartPageAddress;
