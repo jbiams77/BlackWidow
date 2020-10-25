@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s 			page 1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -15,633 +15,579 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s 			page 1
   12              		.text
   13              	.Ltext0:
   14              		.cfi_sections	.debug_frame
-  15              		.section	.text.initializeParameters,"ax",%progbits
+  15              		.section	.text.constructMessage,"ax",%progbits
   16              		.align	1
-  17              		.global	initializeParameters
+  17              		.global	constructMessage
   18              		.arch armv7-m
   19              		.syntax unified
   20              		.thumb
   21              		.thumb_func
   22              		.fpu softvfp
-  24              	initializeParameters:
-  25              	.LVL0:
-  26              	.LFB0:
-  27              		.file 1 "Src/queue.c"
+  24              	constructMessage:
+  25              	.LFB0:
+  26              		.file 1 "Src/queue.c"
    1:Src/queue.c   **** #include "queue.h"
    2:Src/queue.c   **** 
-   3:Src/queue.c   **** Parameters* initializeParameters(int id, int baud){
-  28              		.loc 1 3 51 view -0
-  29              		.cfi_startproc
-  30              		@ args = 0, pretend = 0, frame = 0
-  31              		@ frame_needed = 0, uses_anonymous_args = 0
-  32              		.loc 1 3 51 is_stmt 0 view .LVU1
-  33 0000 38B5     		push	{r3, r4, r5, lr}
-  34              	.LCFI0:
-  35              		.cfi_def_cfa_offset 16
-  36              		.cfi_offset 3, -16
-  37              		.cfi_offset 4, -12
-  38              		.cfi_offset 5, -8
-  39              		.cfi_offset 14, -4
-  40 0002 0546     		mov	r5, r0
-  41 0004 0C46     		mov	r4, r1
-   4:Src/queue.c   ****   Parameters *param = (Parameters*) malloc(sizeof(Parameters));
-  42              		.loc 1 4 3 is_stmt 1 view .LVU2
-  43              		.loc 1 4 37 is_stmt 0 view .LVU3
-  44 0006 0820     		movs	r0, #8
-  45              	.LVL1:
-  46              		.loc 1 4 37 view .LVU4
-  47 0008 FFF7FEFF 		bl	malloc
-  48              	.LVL2:
-   5:Src/queue.c   ****   param->ID = id;
-  49              		.loc 1 5 3 is_stmt 1 view .LVU5
-  50              		.loc 1 5 13 is_stmt 0 view .LVU6
-  51 000c 0560     		str	r5, [r0]
-   6:Src/queue.c   ****   param->BAUD = baud;
-  52              		.loc 1 6 3 is_stmt 1 view .LVU7
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s 			page 2
+   3:Src/queue.c   **** 
+   4:Src/queue.c   **** 
+   5:Src/queue.c   **** MessageQueue* constructMessage(){
+  27              		.loc 1 5 33 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 0
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 08B5     		push	{r3, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 8
+  34              		.cfi_offset 3, -8
+  35              		.cfi_offset 14, -4
+   6:Src/queue.c   ****     MessageQueue *queue = (MessageQueue*) malloc(sizeof (MessageQueue)); 
+  36              		.loc 1 6 5 view .LVU1
+  37              		.loc 1 6 43 is_stmt 0 view .LVU2
+  38 0002 4FF48470 		mov	r0, #264
+  39 0006 FFF7FEFF 		bl	malloc
+  40              	.LVL0:
+   7:Src/queue.c   ****     int i;
+  41              		.loc 1 7 5 is_stmt 1 view .LVU3
+   8:Src/queue.c   ****     queue->front = -1;
+  42              		.loc 1 8 5 view .LVU4
+  43              		.loc 1 8 18 is_stmt 0 view .LVU5
+  44 000a 4FF0FF33 		mov	r3, #-1
+  45 000e C0F80031 		str	r3, [r0, #256]
+   9:Src/queue.c   ****     queue->rear = 0;
+  46              		.loc 1 9 5 is_stmt 1 view .LVU6
+  47              		.loc 1 9 17 is_stmt 0 view .LVU7
+  48 0012 0023     		movs	r3, #0
+  49 0014 C0F80431 		str	r3, [r0, #260]
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s 			page 2
 
 
-  53              		.loc 1 6 15 is_stmt 0 view .LVU8
-  54 000e 4460     		str	r4, [r0, #4]
-   7:Src/queue.c   ****   return param;
-  55              		.loc 1 7 3 is_stmt 1 view .LVU9
-   8:Src/queue.c   **** }
-  56              		.loc 1 8 1 is_stmt 0 view .LVU10
-  57 0010 38BD     		pop	{r3, r4, r5, pc}
-  58              		.loc 1 8 1 view .LVU11
-  59              		.cfi_endproc
-  60              	.LFE0:
-  62              		.section	.text.constructMessage,"ax",%progbits
-  63              		.align	1
-  64              		.global	constructMessage
-  65              		.syntax unified
-  66              		.thumb
-  67              		.thumb_func
-  68              		.fpu softvfp
-  70              	constructMessage:
-  71              	.LFB1:
-   9:Src/queue.c   **** 
-  10:Src/queue.c   **** 
-  11:Src/queue.c   **** MessageQueue* constructMessage(){
-  72              		.loc 1 11 33 is_stmt 1 view -0
-  73              		.cfi_startproc
-  74              		@ args = 0, pretend = 0, frame = 0
-  75              		@ frame_needed = 0, uses_anonymous_args = 0
-  76 0000 08B5     		push	{r3, lr}
-  77              	.LCFI1:
-  78              		.cfi_def_cfa_offset 8
-  79              		.cfi_offset 3, -8
-  80              		.cfi_offset 14, -4
-  12:Src/queue.c   ****     MessageQueue *queue = (MessageQueue*) malloc(sizeof (MessageQueue)); 
-  81              		.loc 1 12 5 view .LVU13
-  82              		.loc 1 12 43 is_stmt 0 view .LVU14
-  83 0002 4FF40270 		mov	r0, #520
-  84 0006 FFF7FEFF 		bl	malloc
-  85              	.LVL3:
-  13:Src/queue.c   ****     int i;
-  86              		.loc 1 13 5 is_stmt 1 view .LVU15
-  14:Src/queue.c   ****     queue->front = -1;
-  87              		.loc 1 14 5 view .LVU16
-  88              		.loc 1 14 18 is_stmt 0 view .LVU17
-  89 000a 4FF0FF33 		mov	r3, #-1
-  90 000e C0F80032 		str	r3, [r0, #512]
-  15:Src/queue.c   ****     queue->rear = 0;
-  91              		.loc 1 15 5 is_stmt 1 view .LVU18
-  92              		.loc 1 15 17 is_stmt 0 view .LVU19
-  93 0012 0023     		movs	r3, #0
-  94 0014 C0F80432 		str	r3, [r0, #516]
-  16:Src/queue.c   ****     for (i=0; i<SIZE; i++){
-  95              		.loc 1 16 5 is_stmt 1 view .LVU20
-  96              	.LVL4:
-  97              	.L4:
-  98              		.loc 1 16 15 discriminator 1 view .LVU21
-  99              		.loc 1 16 5 is_stmt 0 discriminator 1 view .LVU22
- 100 0018 B3F5007F 		cmp	r3, #512
- 101 001c 03DA     		bge	.L7
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s 			page 3
+  10:Src/queue.c   ****     for (i=0; i<SIZE; i++){
+  50              		.loc 1 10 5 is_stmt 1 view .LVU8
+  51              	.LVL1:
+  52              	.L2:
+  53              		.loc 1 10 15 discriminator 1 view .LVU9
+  54              		.loc 1 10 5 is_stmt 0 discriminator 1 view .LVU10
+  55 0018 FF2B     		cmp	r3, #255
+  56 001a 03DC     		bgt	.L5
+  11:Src/queue.c   ****         queue->message[i] = 0;    
+  57              		.loc 1 11 9 is_stmt 1 discriminator 3 view .LVU11
+  58              		.loc 1 11 27 is_stmt 0 discriminator 3 view .LVU12
+  59 001c 0022     		movs	r2, #0
+  60 001e C254     		strb	r2, [r0, r3]
+  10:Src/queue.c   ****     for (i=0; i<SIZE; i++){
+  61              		.loc 1 10 23 is_stmt 1 discriminator 3 view .LVU13
+  10:Src/queue.c   ****     for (i=0; i<SIZE; i++){
+  62              		.loc 1 10 24 is_stmt 0 discriminator 3 view .LVU14
+  63 0020 0133     		adds	r3, r3, #1
+  64              	.LVL2:
+  10:Src/queue.c   ****     for (i=0; i<SIZE; i++){
+  65              		.loc 1 10 24 discriminator 3 view .LVU15
+  66 0022 F9E7     		b	.L2
+  67              	.L5:
+  12:Src/queue.c   ****     }
+  13:Src/queue.c   ****     return queue;
+  14:Src/queue.c   **** }
+  68              		.loc 1 14 1 view .LVU16
+  69 0024 08BD     		pop	{r3, pc}
+  70              		.loc 1 14 1 view .LVU17
+  71              		.cfi_endproc
+  72              	.LFE0:
+  74              		.section	.text.peek,"ax",%progbits
+  75              		.align	1
+  76              		.global	peek
+  77              		.syntax unified
+  78              		.thumb
+  79              		.thumb_func
+  80              		.fpu softvfp
+  82              	peek:
+  83              	.LVL3:
+  84              	.LFB3:
+  15:Src/queue.c   **** 
+  16:Src/queue.c   **** 
+  17:Src/queue.c   **** int enQueue(MessageQueue *queue, uint8_t data){
+  18:Src/queue.c   ****     if(isFull(queue)){
+  19:Src/queue.c   ****         return FALSE;
+  20:Src/queue.c   ****     } else if(isEmpty(queue)){
+  21:Src/queue.c   ****         queue->front = queue->rear;
+  22:Src/queue.c   ****         queue->message[queue->rear] = data;
+  23:Src/queue.c   ****         return TRUE;
+  24:Src/queue.c   ****     } else {
+  25:Src/queue.c   ****         queue->rear = nextRear(queue);
+  26:Src/queue.c   ****         queue->message[queue->rear] = data;
+  27:Src/queue.c   ****         return TRUE;
+  28:Src/queue.c   ****     }
+  29:Src/queue.c   **** }
+  30:Src/queue.c   **** 
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s 			page 3
 
 
-  17:Src/queue.c   ****         queue->message[i] = 0;    
- 102              		.loc 1 17 9 is_stmt 1 discriminator 3 view .LVU23
- 103              		.loc 1 17 27 is_stmt 0 discriminator 3 view .LVU24
- 104 001e 0022     		movs	r2, #0
- 105 0020 C254     		strb	r2, [r0, r3]
-  16:Src/queue.c   ****     for (i=0; i<SIZE; i++){
- 106              		.loc 1 16 23 is_stmt 1 discriminator 3 view .LVU25
-  16:Src/queue.c   ****     for (i=0; i<SIZE; i++){
- 107              		.loc 1 16 24 is_stmt 0 discriminator 3 view .LVU26
- 108 0022 0133     		adds	r3, r3, #1
- 109              	.LVL5:
-  16:Src/queue.c   ****     for (i=0; i<SIZE; i++){
- 110              		.loc 1 16 24 discriminator 3 view .LVU27
- 111 0024 F8E7     		b	.L4
- 112              	.L7:
-  18:Src/queue.c   ****     }
-  19:Src/queue.c   ****     return queue;
-  20:Src/queue.c   **** }
- 113              		.loc 1 20 1 view .LVU28
- 114 0026 08BD     		pop	{r3, pc}
- 115              		.loc 1 20 1 view .LVU29
- 116              		.cfi_endproc
- 117              	.LFE1:
- 119              		.section	.text.peek,"ax",%progbits
- 120              		.align	1
- 121              		.global	peek
- 122              		.syntax unified
- 123              		.thumb
- 124              		.thumb_func
- 125              		.fpu softvfp
- 127              	peek:
- 128              	.LVL6:
- 129              	.LFB4:
-  21:Src/queue.c   **** 
-  22:Src/queue.c   **** 
-  23:Src/queue.c   **** int enQueue(MessageQueue *queue, uint8_t data){
-  24:Src/queue.c   ****     if(isFull(queue)){
-  25:Src/queue.c   ****         return FALSE;
-  26:Src/queue.c   ****     } else if(isEmpty(queue)){
-  27:Src/queue.c   ****         queue->front = queue->rear;
-  28:Src/queue.c   ****         queue->message[queue->rear] = data;
-  29:Src/queue.c   ****         return TRUE;
-  30:Src/queue.c   ****     } else {
-  31:Src/queue.c   ****         queue->rear = nextRear(queue);
-  32:Src/queue.c   ****         queue->message[queue->rear] = data;
-  33:Src/queue.c   ****         return TRUE;
-  34:Src/queue.c   ****     }
-  35:Src/queue.c   **** }
-  36:Src/queue.c   **** 
-  37:Src/queue.c   **** 
-  38:Src/queue.c   **** uint8_t deQueue(MessageQueue *queue){
-  39:Src/queue.c   ****     if(isEmpty(queue)){
-  40:Src/queue.c   ****         return 0;
-  41:Src/queue.c   ****     } else if (queue->front==queue->rear){
-  42:Src/queue.c   ****         uint8_t temp = queue->message[queue->front];
-  43:Src/queue.c   ****         queue->front = -1;
-  44:Src/queue.c   ****         return temp;
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s 			page 4
+  31:Src/queue.c   **** 
+  32:Src/queue.c   **** uint8_t deQueue(MessageQueue *queue){
+  33:Src/queue.c   ****     if(isEmpty(queue)){
+  34:Src/queue.c   ****         return 0;
+  35:Src/queue.c   ****     } else if (queue->front==queue->rear){
+  36:Src/queue.c   ****         uint8_t temp = queue->message[queue->front];
+  37:Src/queue.c   ****         queue->front = -1;
+  38:Src/queue.c   ****         return temp;
+  39:Src/queue.c   ****     } else {
+  40:Src/queue.c   ****         uint8_t temp = queue->message[queue->front];
+  41:Src/queue.c   ****         queue->front = nextFront(queue);
+  42:Src/queue.c   ****         return temp;
+  43:Src/queue.c   ****     }
+  44:Src/queue.c   **** }
+  45:Src/queue.c   **** 
+  46:Src/queue.c   **** uint8_t peek(MessageQueue *queue){
+  85              		.loc 1 46 34 is_stmt 1 view -0
+  86              		.cfi_startproc
+  87              		@ args = 0, pretend = 0, frame = 0
+  88              		@ frame_needed = 0, uses_anonymous_args = 0
+  89              		@ link register save eliminated.
+  47:Src/queue.c   ****     return queue->message[queue->front];
+  90              		.loc 1 47 5 view .LVU19
+  91              		.loc 1 47 32 is_stmt 0 view .LVU20
+  92 0000 D0F80031 		ldr	r3, [r0, #256]
+  48:Src/queue.c   **** }
+  93              		.loc 1 48 1 view .LVU21
+  94 0004 C05C     		ldrb	r0, [r0, r3]	@ zero_extendqisi2
+  95              	.LVL4:
+  96              		.loc 1 48 1 view .LVU22
+  97 0006 7047     		bx	lr
+  98              		.cfi_endproc
+  99              	.LFE3:
+ 101              		.section	.text.isEmpty,"ax",%progbits
+ 102              		.align	1
+ 103              		.global	isEmpty
+ 104              		.syntax unified
+ 105              		.thumb
+ 106              		.thumb_func
+ 107              		.fpu softvfp
+ 109              	isEmpty:
+ 110              	.LVL5:
+ 111              	.LFB4:
+  49:Src/queue.c   **** 
+  50:Src/queue.c   **** int isEmpty(MessageQueue *queue){
+ 112              		.loc 1 50 33 is_stmt 1 view -0
+ 113              		.cfi_startproc
+ 114              		@ args = 0, pretend = 0, frame = 0
+ 115              		@ frame_needed = 0, uses_anonymous_args = 0
+ 116              		@ link register save eliminated.
+  51:Src/queue.c   ****     if(queue->front == -1){
+ 117              		.loc 1 51 5 view .LVU24
+ 118              		.loc 1 51 13 is_stmt 0 view .LVU25
+ 119 0000 D0F80031 		ldr	r3, [r0, #256]
+ 120              		.loc 1 51 7 view .LVU26
+ 121 0004 B3F1FF3F 		cmp	r3, #-1
+ 122 0008 01D0     		beq	.L9
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s 			page 4
 
 
-  45:Src/queue.c   ****     } else {
-  46:Src/queue.c   ****         uint8_t temp = queue->message[queue->front];
-  47:Src/queue.c   ****         queue->front = nextFront(queue);
-  48:Src/queue.c   ****         return temp;
-  49:Src/queue.c   ****     }
-  50:Src/queue.c   **** }
-  51:Src/queue.c   **** 
-  52:Src/queue.c   **** uint8_t peek(MessageQueue *queue){
- 130              		.loc 1 52 34 is_stmt 1 view -0
- 131              		.cfi_startproc
- 132              		@ args = 0, pretend = 0, frame = 0
- 133              		@ frame_needed = 0, uses_anonymous_args = 0
- 134              		@ link register save eliminated.
-  53:Src/queue.c   ****     return queue->message[queue->front];
- 135              		.loc 1 53 5 view .LVU31
- 136              		.loc 1 53 32 is_stmt 0 view .LVU32
- 137 0000 D0F80032 		ldr	r3, [r0, #512]
-  54:Src/queue.c   **** }
- 138              		.loc 1 54 1 view .LVU33
- 139 0004 C05C     		ldrb	r0, [r0, r3]	@ zero_extendqisi2
- 140              	.LVL7:
- 141              		.loc 1 54 1 view .LVU34
- 142 0006 7047     		bx	lr
- 143              		.cfi_endproc
- 144              	.LFE4:
- 146              		.section	.text.isEmpty,"ax",%progbits
- 147              		.align	1
- 148              		.global	isEmpty
- 149              		.syntax unified
- 150              		.thumb
- 151              		.thumb_func
- 152              		.fpu softvfp
- 154              	isEmpty:
- 155              	.LVL8:
- 156              	.LFB5:
-  55:Src/queue.c   **** 
-  56:Src/queue.c   **** int isEmpty(MessageQueue *queue){
- 157              		.loc 1 56 33 is_stmt 1 view -0
- 158              		.cfi_startproc
- 159              		@ args = 0, pretend = 0, frame = 0
- 160              		@ frame_needed = 0, uses_anonymous_args = 0
- 161              		@ link register save eliminated.
-  57:Src/queue.c   ****     if(queue->front == -1){
- 162              		.loc 1 57 5 view .LVU36
- 163              		.loc 1 57 13 is_stmt 0 view .LVU37
- 164 0000 D0F80032 		ldr	r3, [r0, #512]
- 165              		.loc 1 57 7 view .LVU38
- 166 0004 B3F1FF3F 		cmp	r3, #-1
- 167 0008 01D0     		beq	.L11
-  58:Src/queue.c   ****         return TRUE;    
-  59:Src/queue.c   ****     }
-  60:Src/queue.c   ****     return FALSE;
- 168              		.loc 1 60 12 view .LVU39
- 169 000a 0020     		movs	r0, #0
- 170              	.LVL9:
- 171              		.loc 1 60 12 view .LVU40
- 172 000c 7047     		bx	lr
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s 			page 5
+  52:Src/queue.c   ****         return TRUE;    
+  53:Src/queue.c   ****     }
+  54:Src/queue.c   ****     return FALSE;
+ 123              		.loc 1 54 12 view .LVU27
+ 124 000a 0020     		movs	r0, #0
+ 125              	.LVL6:
+ 126              		.loc 1 54 12 view .LVU28
+ 127 000c 7047     		bx	lr
+ 128              	.LVL7:
+ 129              	.L9:
+  52:Src/queue.c   ****         return TRUE;    
+ 130              		.loc 1 52 16 view .LVU29
+ 131 000e 0120     		movs	r0, #1
+ 132              	.LVL8:
+  55:Src/queue.c   **** }
+ 133              		.loc 1 55 1 view .LVU30
+ 134 0010 7047     		bx	lr
+ 135              		.cfi_endproc
+ 136              	.LFE4:
+ 138              		.section	.text.nextRear,"ax",%progbits
+ 139              		.align	1
+ 140              		.global	nextRear
+ 141              		.syntax unified
+ 142              		.thumb
+ 143              		.thumb_func
+ 144              		.fpu softvfp
+ 146              	nextRear:
+ 147              	.LVL9:
+ 148              	.LFB6:
+  56:Src/queue.c   **** 
+  57:Src/queue.c   **** int isFull(MessageQueue *queue){
+  58:Src/queue.c   ****     if(nextRear(queue)==queue->front){
+  59:Src/queue.c   ****         return TRUE;
+  60:Src/queue.c   ****     }
+  61:Src/queue.c   ****     return FALSE;
+  62:Src/queue.c   **** }
+  63:Src/queue.c   **** 
+  64:Src/queue.c   **** int nextRear(MessageQueue *queue){
+ 149              		.loc 1 64 34 is_stmt 1 view -0
+ 150              		.cfi_startproc
+ 151              		@ args = 0, pretend = 0, frame = 0
+ 152              		@ frame_needed = 0, uses_anonymous_args = 0
+ 153              		@ link register save eliminated.
+  65:Src/queue.c   ****     return (queue->rear + 1) % SIZE;
+ 154              		.loc 1 65 5 view .LVU32
+ 155              		.loc 1 65 18 is_stmt 0 view .LVU33
+ 156 0000 D0F80401 		ldr	r0, [r0, #260]
+ 157              	.LVL10:
+ 158              		.loc 1 65 25 view .LVU34
+ 159 0004 0130     		adds	r0, r0, #1
+ 160              		.loc 1 65 30 view .LVU35
+ 161 0006 4342     		rsbs	r3, r0, #0
+ 162 0008 C0B2     		uxtb	r0, r0
+ 163 000a DBB2     		uxtb	r3, r3
+  66:Src/queue.c   **** }
+ 164              		.loc 1 66 1 view .LVU36
+ 165 000c 58BF     		it	pl
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s 			page 5
 
 
- 173              	.LVL10:
- 174              	.L11:
-  58:Src/queue.c   ****         return TRUE;    
- 175              		.loc 1 58 16 view .LVU41
- 176 000e 0120     		movs	r0, #1
- 177              	.LVL11:
+ 166 000e 5842     		rsbpl	r0, r3, #0
+ 167 0010 7047     		bx	lr
+ 168              		.cfi_endproc
+ 169              	.LFE6:
+ 171              		.section	.text.isFull,"ax",%progbits
+ 172              		.align	1
+ 173              		.global	isFull
+ 174              		.syntax unified
+ 175              		.thumb
+ 176              		.thumb_func
+ 177              		.fpu softvfp
+ 179              	isFull:
+ 180              	.LVL11:
+ 181              	.LFB5:
+  57:Src/queue.c   ****     if(nextRear(queue)==queue->front){
+ 182              		.loc 1 57 32 is_stmt 1 view -0
+ 183              		.cfi_startproc
+ 184              		@ args = 0, pretend = 0, frame = 0
+ 185              		@ frame_needed = 0, uses_anonymous_args = 0
+  57:Src/queue.c   ****     if(nextRear(queue)==queue->front){
+ 186              		.loc 1 57 32 is_stmt 0 view .LVU38
+ 187 0000 10B5     		push	{r4, lr}
+ 188              	.LCFI1:
+ 189              		.cfi_def_cfa_offset 8
+ 190              		.cfi_offset 4, -8
+ 191              		.cfi_offset 14, -4
+ 192 0002 0446     		mov	r4, r0
+  58:Src/queue.c   ****         return TRUE;
+ 193              		.loc 1 58 5 is_stmt 1 view .LVU39
+ 194              	.LBB2:
+  58:Src/queue.c   ****         return TRUE;
+ 195              		.loc 1 58 8 is_stmt 0 view .LVU40
+ 196 0004 FFF7FEFF 		bl	nextRear
+ 197              	.LVL12:
+  58:Src/queue.c   ****         return TRUE;
+ 198              		.loc 1 58 30 view .LVU41
+ 199 0008 D4F80031 		ldr	r3, [r4, #256]
+  58:Src/queue.c   ****         return TRUE;
+ 200              		.loc 1 58 7 view .LVU42
+ 201 000c 9842     		cmp	r0, r3
+ 202 000e 01D0     		beq	.L13
+ 203              	.LBE2:
   61:Src/queue.c   **** }
- 178              		.loc 1 61 1 view .LVU42
- 179 0010 7047     		bx	lr
- 180              		.cfi_endproc
- 181              	.LFE5:
- 183              		.section	.text.nextRear,"ax",%progbits
- 184              		.align	1
- 185              		.global	nextRear
- 186              		.syntax unified
- 187              		.thumb
- 188              		.thumb_func
- 189              		.fpu softvfp
- 191              	nextRear:
- 192              	.LVL12:
- 193              	.LFB7:
+ 204              		.loc 1 61 12 view .LVU43
+ 205 0010 0020     		movs	r0, #0
+ 206              	.L11:
   62:Src/queue.c   **** 
-  63:Src/queue.c   **** int isFull(MessageQueue *queue){
-  64:Src/queue.c   ****     if(nextRear(queue)==queue->front){
-  65:Src/queue.c   ****         return TRUE;
-  66:Src/queue.c   ****     }
-  67:Src/queue.c   ****     return FALSE;
-  68:Src/queue.c   **** }
-  69:Src/queue.c   **** 
-  70:Src/queue.c   **** int nextRear(MessageQueue *queue){
- 194              		.loc 1 70 34 is_stmt 1 view -0
- 195              		.cfi_startproc
- 196              		@ args = 0, pretend = 0, frame = 0
- 197              		@ frame_needed = 0, uses_anonymous_args = 0
- 198              		@ link register save eliminated.
-  71:Src/queue.c   ****     return (queue->rear + 1) % SIZE;
- 199              		.loc 1 71 5 view .LVU44
- 200              		.loc 1 71 18 is_stmt 0 view .LVU45
- 201 0000 D0F80402 		ldr	r0, [r0, #516]
- 202              	.LVL13:
- 203              		.loc 1 71 25 view .LVU46
- 204 0004 0130     		adds	r0, r0, #1
- 205              		.loc 1 71 30 view .LVU47
- 206 0006 4342     		rsbs	r3, r0, #0
- 207 0008 C0F30800 		ubfx	r0, r0, #0, #9
- 208 000c C3F30803 		ubfx	r3, r3, #0, #9
-  72:Src/queue.c   **** }
- 209              		.loc 1 72 1 view .LVU48
- 210 0010 58BF     		it	pl
- 211 0012 5842     		rsbpl	r0, r3, #0
- 212 0014 7047     		bx	lr
- 213              		.cfi_endproc
- 214              	.LFE7:
- 216              		.section	.text.isFull,"ax",%progbits
- 217              		.align	1
- 218              		.global	isFull
- 219              		.syntax unified
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s 			page 6
+ 207              		.loc 1 62 1 view .LVU44
+ 208 0012 10BD     		pop	{r4, pc}
+ 209              	.LVL13:
+ 210              	.L13:
+ 211              	.LBB3:
+  59:Src/queue.c   ****     }
+ 212              		.loc 1 59 16 view .LVU45
+ 213 0014 0120     		movs	r0, #1
+ 214 0016 FCE7     		b	.L11
+ 215              	.LBE3:
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s 			page 6
 
 
- 220              		.thumb
- 221              		.thumb_func
- 222              		.fpu softvfp
- 224              	isFull:
- 225              	.LVL14:
- 226              	.LFB6:
-  63:Src/queue.c   ****     if(nextRear(queue)==queue->front){
- 227              		.loc 1 63 32 is_stmt 1 view -0
- 228              		.cfi_startproc
- 229              		@ args = 0, pretend = 0, frame = 0
- 230              		@ frame_needed = 0, uses_anonymous_args = 0
-  63:Src/queue.c   ****     if(nextRear(queue)==queue->front){
- 231              		.loc 1 63 32 is_stmt 0 view .LVU50
- 232 0000 10B5     		push	{r4, lr}
- 233              	.LCFI2:
- 234              		.cfi_def_cfa_offset 8
- 235              		.cfi_offset 4, -8
- 236              		.cfi_offset 14, -4
- 237 0002 0446     		mov	r4, r0
-  64:Src/queue.c   ****         return TRUE;
- 238              		.loc 1 64 5 is_stmt 1 view .LVU51
- 239              	.LBB2:
-  64:Src/queue.c   ****         return TRUE;
- 240              		.loc 1 64 8 is_stmt 0 view .LVU52
- 241 0004 FFF7FEFF 		bl	nextRear
- 242              	.LVL15:
-  64:Src/queue.c   ****         return TRUE;
- 243              		.loc 1 64 30 view .LVU53
- 244 0008 D4F80032 		ldr	r3, [r4, #512]
-  64:Src/queue.c   ****         return TRUE;
- 245              		.loc 1 64 7 view .LVU54
- 246 000c 9842     		cmp	r0, r3
- 247 000e 01D0     		beq	.L15
- 248              	.LBE2:
-  67:Src/queue.c   **** }
- 249              		.loc 1 67 12 view .LVU55
- 250 0010 0020     		movs	r0, #0
- 251              	.L13:
-  68:Src/queue.c   **** 
- 252              		.loc 1 68 1 view .LVU56
- 253 0012 10BD     		pop	{r4, pc}
+ 216              		.cfi_endproc
+ 217              	.LFE5:
+ 219              		.section	.text.enQueue,"ax",%progbits
+ 220              		.align	1
+ 221              		.global	enQueue
+ 222              		.syntax unified
+ 223              		.thumb
+ 224              		.thumb_func
+ 225              		.fpu softvfp
+ 227              	enQueue:
+ 228              	.LVL14:
+ 229              	.LFB1:
+  17:Src/queue.c   ****     if(isFull(queue)){
+ 230              		.loc 1 17 47 is_stmt 1 view -0
+ 231              		.cfi_startproc
+ 232              		@ args = 0, pretend = 0, frame = 0
+ 233              		@ frame_needed = 0, uses_anonymous_args = 0
+  17:Src/queue.c   ****     if(isFull(queue)){
+ 234              		.loc 1 17 47 is_stmt 0 view .LVU47
+ 235 0000 38B5     		push	{r3, r4, r5, lr}
+ 236              	.LCFI2:
+ 237              		.cfi_def_cfa_offset 16
+ 238              		.cfi_offset 3, -16
+ 239              		.cfi_offset 4, -12
+ 240              		.cfi_offset 5, -8
+ 241              		.cfi_offset 14, -4
+ 242 0002 0446     		mov	r4, r0
+ 243 0004 0D46     		mov	r5, r1
+  18:Src/queue.c   ****         return FALSE;
+ 244              		.loc 1 18 5 is_stmt 1 view .LVU48
+  18:Src/queue.c   ****         return FALSE;
+ 245              		.loc 1 18 8 is_stmt 0 view .LVU49
+ 246 0006 FFF7FEFF 		bl	isFull
+ 247              	.LVL15:
+  18:Src/queue.c   ****         return FALSE;
+ 248              		.loc 1 18 7 view .LVU50
+ 249 000a 90B9     		cbnz	r0, .L18
+  20:Src/queue.c   ****         queue->front = queue->rear;
+ 250              		.loc 1 20 12 is_stmt 1 view .LVU51
+  20:Src/queue.c   ****         queue->front = queue->rear;
+ 251              		.loc 1 20 15 is_stmt 0 view .LVU52
+ 252 000c 2046     		mov	r0, r4
+ 253 000e FFF7FEFF 		bl	isEmpty
  254              	.LVL16:
- 255              	.L15:
- 256              	.LBB3:
-  65:Src/queue.c   ****     }
- 257              		.loc 1 65 16 view .LVU57
- 258 0014 0120     		movs	r0, #1
- 259 0016 FCE7     		b	.L13
- 260              	.LBE3:
- 261              		.cfi_endproc
- 262              	.LFE6:
- 264              		.section	.text.enQueue,"ax",%progbits
- 265              		.align	1
- 266              		.global	enQueue
- 267              		.syntax unified
- 268              		.thumb
- 269              		.thumb_func
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s 			page 7
+  20:Src/queue.c   ****         queue->front = queue->rear;
+ 255              		.loc 1 20 14 view .LVU53
+ 256 0012 30B1     		cbz	r0, .L17
+  21:Src/queue.c   ****         queue->message[queue->rear] = data;
+ 257              		.loc 1 21 9 is_stmt 1 view .LVU54
+  21:Src/queue.c   ****         queue->message[queue->rear] = data;
+ 258              		.loc 1 21 29 is_stmt 0 view .LVU55
+ 259 0014 D4F80431 		ldr	r3, [r4, #260]
+  21:Src/queue.c   ****         queue->message[queue->rear] = data;
+ 260              		.loc 1 21 22 view .LVU56
+ 261 0018 C4F80031 		str	r3, [r4, #256]
+  22:Src/queue.c   ****         return TRUE;
+ 262              		.loc 1 22 9 is_stmt 1 view .LVU57
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s 			page 7
 
 
- 270              		.fpu softvfp
- 272              	enQueue:
- 273              	.LVL17:
- 274              	.LFB2:
-  23:Src/queue.c   ****     if(isFull(queue)){
- 275              		.loc 1 23 47 is_stmt 1 view -0
- 276              		.cfi_startproc
- 277              		@ args = 0, pretend = 0, frame = 0
- 278              		@ frame_needed = 0, uses_anonymous_args = 0
-  23:Src/queue.c   ****     if(isFull(queue)){
- 279              		.loc 1 23 47 is_stmt 0 view .LVU59
- 280 0000 38B5     		push	{r3, r4, r5, lr}
- 281              	.LCFI3:
- 282              		.cfi_def_cfa_offset 16
- 283              		.cfi_offset 3, -16
- 284              		.cfi_offset 4, -12
- 285              		.cfi_offset 5, -8
- 286              		.cfi_offset 14, -4
- 287 0002 0446     		mov	r4, r0
- 288 0004 0D46     		mov	r5, r1
-  24:Src/queue.c   ****         return FALSE;
- 289              		.loc 1 24 5 is_stmt 1 view .LVU60
-  24:Src/queue.c   ****         return FALSE;
- 290              		.loc 1 24 8 is_stmt 0 view .LVU61
- 291 0006 FFF7FEFF 		bl	isFull
- 292              	.LVL18:
-  24:Src/queue.c   ****         return FALSE;
- 293              		.loc 1 24 7 view .LVU62
- 294 000a 90B9     		cbnz	r0, .L20
-  26:Src/queue.c   ****         queue->front = queue->rear;
- 295              		.loc 1 26 12 is_stmt 1 view .LVU63
-  26:Src/queue.c   ****         queue->front = queue->rear;
- 296              		.loc 1 26 15 is_stmt 0 view .LVU64
- 297 000c 2046     		mov	r0, r4
- 298 000e FFF7FEFF 		bl	isEmpty
- 299              	.LVL19:
-  26:Src/queue.c   ****         queue->front = queue->rear;
- 300              		.loc 1 26 14 view .LVU65
- 301 0012 30B1     		cbz	r0, .L19
-  27:Src/queue.c   ****         queue->message[queue->rear] = data;
- 302              		.loc 1 27 9 is_stmt 1 view .LVU66
-  27:Src/queue.c   ****         queue->message[queue->rear] = data;
- 303              		.loc 1 27 29 is_stmt 0 view .LVU67
- 304 0014 D4F80432 		ldr	r3, [r4, #516]
-  27:Src/queue.c   ****         queue->message[queue->rear] = data;
- 305              		.loc 1 27 22 view .LVU68
- 306 0018 C4F80032 		str	r3, [r4, #512]
-  28:Src/queue.c   ****         return TRUE;
- 307              		.loc 1 28 9 is_stmt 1 view .LVU69
-  28:Src/queue.c   ****         return TRUE;
- 308              		.loc 1 28 37 is_stmt 0 view .LVU70
- 309 001c E554     		strb	r5, [r4, r3]
-  29:Src/queue.c   ****     } else {
- 310              		.loc 1 29 9 is_stmt 1 view .LVU71
-  29:Src/queue.c   ****     } else {
- 311              		.loc 1 29 16 is_stmt 0 view .LVU72
- 312 001e 0120     		movs	r0, #1
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s 			page 8
+  22:Src/queue.c   ****         return TRUE;
+ 263              		.loc 1 22 37 is_stmt 0 view .LVU58
+ 264 001c E554     		strb	r5, [r4, r3]
+  23:Src/queue.c   ****     } else {
+ 265              		.loc 1 23 9 is_stmt 1 view .LVU59
+  23:Src/queue.c   ****     } else {
+ 266              		.loc 1 23 16 is_stmt 0 view .LVU60
+ 267 001e 0120     		movs	r0, #1
+ 268 0020 08E0     		b	.L15
+ 269              	.L17:
+ 270              	.LBB4:
+  25:Src/queue.c   ****         queue->message[queue->rear] = data;
+ 271              		.loc 1 25 9 is_stmt 1 view .LVU61
+  25:Src/queue.c   ****         queue->message[queue->rear] = data;
+ 272              		.loc 1 25 23 is_stmt 0 view .LVU62
+ 273 0022 2046     		mov	r0, r4
+ 274 0024 FFF7FEFF 		bl	nextRear
+ 275              	.LVL17:
+  25:Src/queue.c   ****         queue->message[queue->rear] = data;
+ 276              		.loc 1 25 21 view .LVU63
+ 277 0028 C4F80401 		str	r0, [r4, #260]
+  26:Src/queue.c   ****         return TRUE;
+ 278              		.loc 1 26 9 is_stmt 1 view .LVU64
+  26:Src/queue.c   ****         return TRUE;
+ 279              		.loc 1 26 37 is_stmt 0 view .LVU65
+ 280 002c 2554     		strb	r5, [r4, r0]
+  27:Src/queue.c   ****     }
+ 281              		.loc 1 27 9 is_stmt 1 view .LVU66
+  27:Src/queue.c   ****     }
+ 282              		.loc 1 27 16 is_stmt 0 view .LVU67
+ 283 002e 0120     		movs	r0, #1
+ 284 0030 00E0     		b	.L15
+ 285              	.L18:
+  27:Src/queue.c   ****     }
+ 286              		.loc 1 27 16 view .LVU68
+ 287              	.LBE4:
+  19:Src/queue.c   ****     } else if(isEmpty(queue)){
+ 288              		.loc 1 19 16 view .LVU69
+ 289 0032 0020     		movs	r0, #0
+ 290              	.L15:
+  29:Src/queue.c   **** 
+ 291              		.loc 1 29 1 view .LVU70
+ 292 0034 38BD     		pop	{r3, r4, r5, pc}
+  29:Src/queue.c   **** 
+ 293              		.loc 1 29 1 view .LVU71
+ 294              		.cfi_endproc
+ 295              	.LFE1:
+ 297              		.section	.text.nextFront,"ax",%progbits
+ 298              		.align	1
+ 299              		.global	nextFront
+ 300              		.syntax unified
+ 301              		.thumb
+ 302              		.thumb_func
+ 303              		.fpu softvfp
+ 305              	nextFront:
+ 306              	.LVL18:
+ 307              	.LFB7:
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s 			page 8
 
 
- 313 0020 08E0     		b	.L17
- 314              	.L19:
- 315              	.LBB4:
-  31:Src/queue.c   ****         queue->message[queue->rear] = data;
- 316              		.loc 1 31 9 is_stmt 1 view .LVU73
-  31:Src/queue.c   ****         queue->message[queue->rear] = data;
- 317              		.loc 1 31 23 is_stmt 0 view .LVU74
- 318 0022 2046     		mov	r0, r4
- 319 0024 FFF7FEFF 		bl	nextRear
- 320              	.LVL20:
-  31:Src/queue.c   ****         queue->message[queue->rear] = data;
- 321              		.loc 1 31 21 view .LVU75
- 322 0028 C4F80402 		str	r0, [r4, #516]
-  32:Src/queue.c   ****         return TRUE;
- 323              		.loc 1 32 9 is_stmt 1 view .LVU76
-  32:Src/queue.c   ****         return TRUE;
- 324              		.loc 1 32 37 is_stmt 0 view .LVU77
- 325 002c 2554     		strb	r5, [r4, r0]
-  33:Src/queue.c   ****     }
- 326              		.loc 1 33 9 is_stmt 1 view .LVU78
-  33:Src/queue.c   ****     }
- 327              		.loc 1 33 16 is_stmt 0 view .LVU79
- 328 002e 0120     		movs	r0, #1
- 329 0030 00E0     		b	.L17
- 330              	.L20:
-  33:Src/queue.c   ****     }
- 331              		.loc 1 33 16 view .LVU80
- 332              	.LBE4:
-  25:Src/queue.c   ****     } else if(isEmpty(queue)){
- 333              		.loc 1 25 16 view .LVU81
- 334 0032 0020     		movs	r0, #0
- 335              	.L17:
-  35:Src/queue.c   **** 
- 336              		.loc 1 35 1 view .LVU82
- 337 0034 38BD     		pop	{r3, r4, r5, pc}
-  35:Src/queue.c   **** 
- 338              		.loc 1 35 1 view .LVU83
- 339              		.cfi_endproc
- 340              	.LFE2:
- 342              		.section	.text.nextFront,"ax",%progbits
- 343              		.align	1
- 344              		.global	nextFront
- 345              		.syntax unified
- 346              		.thumb
- 347              		.thumb_func
- 348              		.fpu softvfp
- 350              	nextFront:
- 351              	.LVL21:
- 352              	.LFB8:
-  73:Src/queue.c   **** 
-  74:Src/queue.c   **** int nextFront(MessageQueue *queue){
- 353              		.loc 1 74 35 is_stmt 1 view -0
- 354              		.cfi_startproc
- 355              		@ args = 0, pretend = 0, frame = 0
- 356              		@ frame_needed = 0, uses_anonymous_args = 0
- 357              		@ link register save eliminated.
-  75:Src/queue.c   ****     return (queue->front + 1) % SIZE;
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s 			page 9
+  67:Src/queue.c   **** 
+  68:Src/queue.c   **** int nextFront(MessageQueue *queue){
+ 308              		.loc 1 68 35 is_stmt 1 view -0
+ 309              		.cfi_startproc
+ 310              		@ args = 0, pretend = 0, frame = 0
+ 311              		@ frame_needed = 0, uses_anonymous_args = 0
+ 312              		@ link register save eliminated.
+  69:Src/queue.c   ****     return (queue->front + 1) % SIZE;
+ 313              		.loc 1 69 5 view .LVU73
+ 314              		.loc 1 69 18 is_stmt 0 view .LVU74
+ 315 0000 D0F80001 		ldr	r0, [r0, #256]
+ 316              	.LVL19:
+ 317              		.loc 1 69 26 view .LVU75
+ 318 0004 0130     		adds	r0, r0, #1
+ 319              		.loc 1 69 31 view .LVU76
+ 320 0006 4342     		rsbs	r3, r0, #0
+ 321 0008 C0B2     		uxtb	r0, r0
+ 322 000a DBB2     		uxtb	r3, r3
+  70:Src/queue.c   **** }
+ 323              		.loc 1 70 1 view .LVU77
+ 324 000c 58BF     		it	pl
+ 325 000e 5842     		rsbpl	r0, r3, #0
+ 326 0010 7047     		bx	lr
+ 327              		.cfi_endproc
+ 328              	.LFE7:
+ 330              		.section	.text.deQueue,"ax",%progbits
+ 331              		.align	1
+ 332              		.global	deQueue
+ 333              		.syntax unified
+ 334              		.thumb
+ 335              		.thumb_func
+ 336              		.fpu softvfp
+ 338              	deQueue:
+ 339              	.LVL20:
+ 340              	.LFB2:
+  32:Src/queue.c   ****     if(isEmpty(queue)){
+ 341              		.loc 1 32 37 is_stmt 1 view -0
+ 342              		.cfi_startproc
+ 343              		@ args = 0, pretend = 0, frame = 0
+ 344              		@ frame_needed = 0, uses_anonymous_args = 0
+  32:Src/queue.c   ****     if(isEmpty(queue)){
+ 345              		.loc 1 32 37 is_stmt 0 view .LVU79
+ 346 0000 38B5     		push	{r3, r4, r5, lr}
+ 347              	.LCFI3:
+ 348              		.cfi_def_cfa_offset 16
+ 349              		.cfi_offset 3, -16
+ 350              		.cfi_offset 4, -12
+ 351              		.cfi_offset 5, -8
+ 352              		.cfi_offset 14, -4
+ 353 0002 0446     		mov	r4, r0
+  33:Src/queue.c   ****         return 0;
+ 354              		.loc 1 33 5 is_stmt 1 view .LVU80
+  33:Src/queue.c   ****         return 0;
+ 355              		.loc 1 33 8 is_stmt 0 view .LVU81
+ 356 0004 FFF7FEFF 		bl	isEmpty
+ 357              	.LVL21:
+  33:Src/queue.c   ****         return 0;
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s 			page 9
 
 
- 358              		.loc 1 75 5 view .LVU85
- 359              		.loc 1 75 18 is_stmt 0 view .LVU86
- 360 0000 D0F80002 		ldr	r0, [r0, #512]
- 361              	.LVL22:
- 362              		.loc 1 75 26 view .LVU87
- 363 0004 0130     		adds	r0, r0, #1
- 364              		.loc 1 75 31 view .LVU88
- 365 0006 4342     		rsbs	r3, r0, #0
- 366 0008 C0F30800 		ubfx	r0, r0, #0, #9
- 367 000c C3F30803 		ubfx	r3, r3, #0, #9
-  76:Src/queue.c   **** }
- 368              		.loc 1 76 1 view .LVU89
- 369 0010 58BF     		it	pl
- 370 0012 5842     		rsbpl	r0, r3, #0
- 371 0014 7047     		bx	lr
- 372              		.cfi_endproc
- 373              	.LFE8:
- 375              		.section	.text.deQueue,"ax",%progbits
- 376              		.align	1
- 377              		.global	deQueue
- 378              		.syntax unified
- 379              		.thumb
- 380              		.thumb_func
- 381              		.fpu softvfp
- 383              	deQueue:
- 384              	.LVL23:
- 385              	.LFB3:
-  38:Src/queue.c   ****     if(isEmpty(queue)){
- 386              		.loc 1 38 37 is_stmt 1 view -0
- 387              		.cfi_startproc
- 388              		@ args = 0, pretend = 0, frame = 0
- 389              		@ frame_needed = 0, uses_anonymous_args = 0
-  38:Src/queue.c   ****     if(isEmpty(queue)){
- 390              		.loc 1 38 37 is_stmt 0 view .LVU91
- 391 0000 38B5     		push	{r3, r4, r5, lr}
- 392              	.LCFI4:
- 393              		.cfi_def_cfa_offset 16
- 394              		.cfi_offset 3, -16
- 395              		.cfi_offset 4, -12
- 396              		.cfi_offset 5, -8
- 397              		.cfi_offset 14, -4
- 398 0002 0446     		mov	r4, r0
-  39:Src/queue.c   ****         return 0;
- 399              		.loc 1 39 5 is_stmt 1 view .LVU92
-  39:Src/queue.c   ****         return 0;
- 400              		.loc 1 39 8 is_stmt 0 view .LVU93
- 401 0004 FFF7FEFF 		bl	isEmpty
- 402              	.LVL24:
-  39:Src/queue.c   ****         return 0;
- 403              		.loc 1 39 7 view .LVU94
- 404 0008 98B9     		cbnz	r0, .L26
-  41:Src/queue.c   ****         uint8_t temp = queue->message[queue->front];
- 405              		.loc 1 41 12 is_stmt 1 view .LVU95
-  41:Src/queue.c   ****         uint8_t temp = queue->message[queue->front];
- 406              		.loc 1 41 21 is_stmt 0 view .LVU96
- 407 000a D4F80032 		ldr	r3, [r4, #512]
-  41:Src/queue.c   ****         uint8_t temp = queue->message[queue->front];
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s 			page 10
+ 358              		.loc 1 33 7 view .LVU82
+ 359 0008 98B9     		cbnz	r0, .L24
+  35:Src/queue.c   ****         uint8_t temp = queue->message[queue->front];
+ 360              		.loc 1 35 12 is_stmt 1 view .LVU83
+  35:Src/queue.c   ****         uint8_t temp = queue->message[queue->front];
+ 361              		.loc 1 35 21 is_stmt 0 view .LVU84
+ 362 000a D4F80031 		ldr	r3, [r4, #256]
+  35:Src/queue.c   ****         uint8_t temp = queue->message[queue->front];
+ 363              		.loc 1 35 35 view .LVU85
+ 364 000e D4F80421 		ldr	r2, [r4, #260]
+  35:Src/queue.c   ****         uint8_t temp = queue->message[queue->front];
+ 365              		.loc 1 35 15 view .LVU86
+ 366 0012 9342     		cmp	r3, r2
+ 367 0014 07D0     		beq	.L26
+ 368              	.LBB5:
+  40:Src/queue.c   ****         queue->front = nextFront(queue);
+ 369              		.loc 1 40 9 is_stmt 1 view .LVU87
+  40:Src/queue.c   ****         queue->front = nextFront(queue);
+ 370              		.loc 1 40 17 is_stmt 0 view .LVU88
+ 371 0016 E55C     		ldrb	r5, [r4, r3]	@ zero_extendqisi2
+ 372              	.LVL22:
+  41:Src/queue.c   ****         return temp;
+ 373              		.loc 1 41 9 is_stmt 1 view .LVU89
+  41:Src/queue.c   ****         return temp;
+ 374              		.loc 1 41 24 is_stmt 0 view .LVU90
+ 375 0018 2046     		mov	r0, r4
+ 376 001a FFF7FEFF 		bl	nextFront
+ 377              	.LVL23:
+  41:Src/queue.c   ****         return temp;
+ 378              		.loc 1 41 22 view .LVU91
+ 379 001e C4F80001 		str	r0, [r4, #256]
+  42:Src/queue.c   ****     }
+ 380              		.loc 1 42 9 is_stmt 1 view .LVU92
+ 381              	.LVL24:
+ 382              	.L22:
+  42:Src/queue.c   ****     }
+ 383              		.loc 1 42 9 is_stmt 0 view .LVU93
+ 384              	.LBE5:
+  44:Src/queue.c   **** 
+ 385              		.loc 1 44 1 view .LVU94
+ 386 0022 2846     		mov	r0, r5
+ 387 0024 38BD     		pop	{r3, r4, r5, pc}
+ 388              	.LVL25:
+ 389              	.L26:
+ 390              	.LBB6:
+  36:Src/queue.c   ****         queue->front = -1;
+ 391              		.loc 1 36 9 is_stmt 1 view .LVU95
+  36:Src/queue.c   ****         queue->front = -1;
+ 392              		.loc 1 36 17 is_stmt 0 view .LVU96
+ 393 0026 E55C     		ldrb	r5, [r4, r3]	@ zero_extendqisi2
+ 394              	.LVL26:
+  37:Src/queue.c   ****         return temp;
+ 395              		.loc 1 37 9 is_stmt 1 view .LVU97
+  37:Src/queue.c   ****         return temp;
+ 396              		.loc 1 37 22 is_stmt 0 view .LVU98
+ 397 0028 4FF0FF33 		mov	r3, #-1
+ 398 002c C4F80031 		str	r3, [r4, #256]
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s 			page 10
 
 
- 408              		.loc 1 41 35 view .LVU97
- 409 000e D4F80422 		ldr	r2, [r4, #516]
-  41:Src/queue.c   ****         uint8_t temp = queue->message[queue->front];
- 410              		.loc 1 41 15 view .LVU98
- 411 0012 9342     		cmp	r3, r2
- 412 0014 07D0     		beq	.L28
- 413              	.LBB5:
-  46:Src/queue.c   ****         queue->front = nextFront(queue);
- 414              		.loc 1 46 9 is_stmt 1 view .LVU99
-  46:Src/queue.c   ****         queue->front = nextFront(queue);
- 415              		.loc 1 46 17 is_stmt 0 view .LVU100
- 416 0016 E55C     		ldrb	r5, [r4, r3]	@ zero_extendqisi2
- 417              	.LVL25:
-  47:Src/queue.c   ****         return temp;
- 418              		.loc 1 47 9 is_stmt 1 view .LVU101
-  47:Src/queue.c   ****         return temp;
- 419              		.loc 1 47 24 is_stmt 0 view .LVU102
- 420 0018 2046     		mov	r0, r4
- 421 001a FFF7FEFF 		bl	nextFront
- 422              	.LVL26:
-  47:Src/queue.c   ****         return temp;
- 423              		.loc 1 47 22 view .LVU103
- 424 001e C4F80002 		str	r0, [r4, #512]
-  48:Src/queue.c   ****     }
- 425              		.loc 1 48 9 is_stmt 1 view .LVU104
- 426              	.LVL27:
- 427              	.L24:
-  48:Src/queue.c   ****     }
- 428              		.loc 1 48 9 is_stmt 0 view .LVU105
- 429              	.LBE5:
-  50:Src/queue.c   **** 
- 430              		.loc 1 50 1 view .LVU106
- 431 0022 2846     		mov	r0, r5
- 432 0024 38BD     		pop	{r3, r4, r5, pc}
- 433              	.LVL28:
- 434              	.L28:
- 435              	.LBB6:
-  42:Src/queue.c   ****         queue->front = -1;
- 436              		.loc 1 42 9 is_stmt 1 view .LVU107
-  42:Src/queue.c   ****         queue->front = -1;
- 437              		.loc 1 42 17 is_stmt 0 view .LVU108
- 438 0026 E55C     		ldrb	r5, [r4, r3]	@ zero_extendqisi2
- 439              	.LVL29:
-  43:Src/queue.c   ****         return temp;
- 440              		.loc 1 43 9 is_stmt 1 view .LVU109
-  43:Src/queue.c   ****         return temp;
- 441              		.loc 1 43 22 is_stmt 0 view .LVU110
- 442 0028 4FF0FF33 		mov	r3, #-1
- 443 002c C4F80032 		str	r3, [r4, #512]
-  44:Src/queue.c   ****     } else {
- 444              		.loc 1 44 9 is_stmt 1 view .LVU111
-  44:Src/queue.c   ****     } else {
- 445              		.loc 1 44 16 is_stmt 0 view .LVU112
- 446 0030 F7E7     		b	.L24
- 447              	.LVL30:
- 448              	.L26:
-  44:Src/queue.c   ****     } else {
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s 			page 11
-
-
- 449              		.loc 1 44 16 view .LVU113
- 450              	.LBE6:
-  40:Src/queue.c   ****     } else if (queue->front==queue->rear){
- 451              		.loc 1 40 16 view .LVU114
- 452 0032 0025     		movs	r5, #0
- 453 0034 F5E7     		b	.L24
- 454              		.cfi_endproc
- 455              	.LFE3:
- 457              		.text
- 458              	.Letext0:
- 459              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 460              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 461              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 462              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 463              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
- 464              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 465              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 466              		.file 9 "Inc/queue.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s 			page 12
+  38:Src/queue.c   ****     } else {
+ 399              		.loc 1 38 9 is_stmt 1 view .LVU99
+  38:Src/queue.c   ****     } else {
+ 400              		.loc 1 38 16 is_stmt 0 view .LVU100
+ 401 0030 F7E7     		b	.L22
+ 402              	.LVL27:
+ 403              	.L24:
+  38:Src/queue.c   ****     } else {
+ 404              		.loc 1 38 16 view .LVU101
+ 405              	.LBE6:
+  34:Src/queue.c   ****     } else if (queue->front==queue->rear){
+ 406              		.loc 1 34 16 view .LVU102
+ 407 0032 0025     		movs	r5, #0
+ 408 0034 F5E7     		b	.L22
+ 409              		.cfi_endproc
+ 410              	.LFE2:
+ 412              		.text
+ 413              	.Letext0:
+ 414              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 415              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 416              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 417              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 418              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
+ 419              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 420              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 421              		.file 9 "Inc/queue.h"
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s 			page 11
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 queue.c
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:16     .text.initializeParameters:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:24     .text.initializeParameters:00000000 initializeParameters
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:63     .text.constructMessage:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:70     .text.constructMessage:00000000 constructMessage
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:120    .text.peek:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:127    .text.peek:00000000 peek
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:147    .text.isEmpty:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:154    .text.isEmpty:00000000 isEmpty
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:184    .text.nextRear:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:191    .text.nextRear:00000000 nextRear
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:217    .text.isFull:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:224    .text.isFull:00000000 isFull
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:265    .text.enQueue:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:272    .text.enQueue:00000000 enQueue
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:343    .text.nextFront:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:350    .text.nextFront:00000000 nextFront
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:376    .text.deQueue:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cctgDsHy.s:383    .text.deQueue:00000000 deQueue
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:16     .text.constructMessage:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:24     .text.constructMessage:00000000 constructMessage
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:75     .text.peek:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:82     .text.peek:00000000 peek
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:102    .text.isEmpty:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:109    .text.isEmpty:00000000 isEmpty
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:139    .text.nextRear:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:146    .text.nextRear:00000000 nextRear
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:172    .text.isFull:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:179    .text.isFull:00000000 isFull
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:220    .text.enQueue:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:227    .text.enQueue:00000000 enQueue
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:298    .text.nextFront:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:305    .text.nextFront:00000000 nextFront
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:331    .text.deQueue:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccaAxuKQ.s:338    .text.deQueue:00000000 deQueue
 
 UNDEFINED SYMBOLS
 malloc

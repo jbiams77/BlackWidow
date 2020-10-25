@@ -49,7 +49,7 @@ void UART_rx_transfer_to_queue(void) {
   while(!rxBuffer_is_empty() && !isFull(message)){
     enQueue(message, rxBuffer_Get());
     message_transferred = 1;
-  }
+  }   
 
 // TODO: good 
   // if(!message_transferred){

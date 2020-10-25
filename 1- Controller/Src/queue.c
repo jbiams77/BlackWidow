@@ -1,11 +1,5 @@
 #include "queue.h"
 
-Parameters* initializeParameters(int id, int baud){
-  Parameters *param = (Parameters*) malloc(sizeof(Parameters));
-  param->ID = id;
-  param->BAUD = baud;
-  return param;
-}
 
 
 MessageQueue* constructMessage(){

@@ -20,18 +20,17 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "port_handler.h"
+#include "packet_handler.h"
 #include <stdint.h>
 #include "utility.h"
 #include "flash.h"
 
 
 MessageQueue *message;
-Parameters *PARAM;
+
 
 /* Private function prototypes -----------------------------------------------*/
 
-uint16_t angleToHex(uint16_t angle);
-void Packet_Handlers(uint8_t*);
 
 
 /* MAIN ------------------------------------------------------------*/
@@ -40,13 +39,6 @@ int main(void)
   
   message = constructMessage();
   /* Initialize parameters by pulling from Flash */
-  uint32_t *BAUD_RATE = 57600;
-  uint32_t temp_read;
-  Flash_Write_Data(BAUDRATE_ADDRESS, BAUD_RATE);
-  volatile uint32_t *ptr = Flash_Read_Data(BAUDRATE_ADDRESS);
-  volatile uint32_t value = ptr;
-  PARAM = initializeParameters(5, 57600);
-
   /*** Initialization ***/
   HAL_Init();
   SystemClock_Config();
@@ -54,14 +46,12 @@ int main(void)
   MX_DMA_Init();
   MX_I2C2_Init();
   MX_USART1_UART_Init();
- 	//DWT_Init();
+ 	DWT_Init();
 	DRV8825_initStepper();
   AS5600_SetZero();
   HAL_GPIO_WritePin(DATA_DIR_GPIO_Port, DATA_DIR_Pin, 0);
   UART_DMA_Init();
-
-  //DRV8825_setCurrentAngle(AS5600_GetCalAngle());
-  volatile uint16_t angle;
+  //initialize_stored_parameters();
 
   
   while(1){

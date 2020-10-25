@@ -9,7 +9,7 @@
 #define LOW GPIO_PIN_RESET
 
 #define UART_RX__SZ 64
-#define UART_TX__SZ 32
+#define UART_TX__SZ 64
 #define UART_DMA_WRITE_PTR ((UART_RX__SZ - huart1.hdmarx->Instance->CNDTR) & (UART_RX__SZ - 1)) 
 
 uint8_t rxBuffer[UART_RX__SZ];

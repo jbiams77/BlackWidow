@@ -132,11 +132,11 @@ typedef struct Stored_Parameters {
 /* Unique parameters for runtime only. */
 typedef struct Runtime_Parameters {
 
-    uint8_t torque_enable;
-    uint8_t led;
-    uint8_t status_return_level;
-    uint8_t registered_instruction;
-    uint8_t hardware_error_status;
+    uint8_t  torque_enable;
+    uint8_t  led;
+    uint8_t  status_return_level;
+    uint8_t  registered_instruction;
+    uint8_t  hardware_error_status;
     uint16_t velocity_I_gain; 
     uint16_t velocity_P_gain; 
     uint16_t position_D_gain;
@@ -144,15 +144,15 @@ typedef struct Runtime_Parameters {
     uint16_t position_P_gain;
     uint16_t feedforward_1st_gain;
     uint16_t feedforward_2nd_gain;
-    uint8_t BUS_watchdog;
+    uint8_t  BUS_watchdog;
     uint16_t goal_PWM;
     uint32_t goal_velocity;
     uint32_t profile_accelration;
     uint32_t profile_velocity;
     uint32_t goal_position;
     uint16_t realtime_tick;
-    uint8_t moving;
-    uint8_t moving_status;
+    uint8_t  moving;
+    uint8_t  moving_status;
     uint16_t present_PWM;
     uint16_t present_load;
     uint32_t present_velocity;
@@ -160,12 +160,13 @@ typedef struct Runtime_Parameters {
     uint32_t velocity_trajectory;
     uint32_t position_trajectory;
     uint16_t present_input_voltage;
-    uint8_t present_temperature;
+    uint8_t  present_temperature;
 
 } Runtime_Parameters;
 
 
 /*------FUNCTION PROTOTYPES---------------------------*/
+void initialize_stored_parameters(void);
 void process_queue(void);
 void process_message(void);
 void ping(void);
@@ -181,12 +182,14 @@ void sync_read(void);
 void sync_write(void); 
 void bulk_read(void); 
 void bulk_write(void); 
+uint32_t get_value_from_param(void);
 void write_to_RAM(uint16_t, uint32_t);
 void write_to_Flash(uint16_t, uint32_t);
+unsigned short updateCRC(uint16_t crc_accum, uint8_t *, uint16_t);
 
 /*------Stored Parameters FUNCTION PROTOTYPES---------------------------*/
 
-void store_motor_ID(uint32_t);
+void store_motor_ID(uint8_t);
 void store_baud_rate(uint32_t);
 void store_return_delay_time(uint32_t);
 void store_drive_mode(uint32_t);

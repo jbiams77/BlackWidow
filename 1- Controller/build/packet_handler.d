@@ -29,7 +29,8 @@ build/packet_handler.o: Src/packet_handler.c Inc/packet_handler.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_utils.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h \
  Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h \
- Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h Inc/port_handler.h
+ Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h Inc/port_handler.h \
+ Inc/flash.h
 
 Inc/packet_handler.h:
 
@@ -104,3 +105,5 @@ Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h:
 Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h:
 
 Inc/port_handler.h:
+
+Inc/flash.h:
