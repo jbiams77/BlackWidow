@@ -52,8 +52,7 @@ int main(void)
   HAL_GPIO_WritePin(DATA_DIR_GPIO_Port, DATA_DIR_Pin, 0);
   UART_DMA_Init();
   //initialize_stored_parameters();
-
-  
+    
   while(1) {
     //transmit_buffer(array, sizeof(array));
     //HAL_Delay(5000);

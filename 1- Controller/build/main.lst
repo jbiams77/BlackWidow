@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s 			page 1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s 			page 1
   30:Src/main.c    **** 
   31:Src/main.c    **** 
   32:Src/main.c    **** /* Private function prototypes -----------------------------------------------*/
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s 			page 2
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 2
 
 
   33:Src/main.c    **** 
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s 			page 1
   64              	.LVL7:
   50:Src/main.c    **** 	DRV8825_initStepper();
   65              		.loc 1 50 2 view .LVU11
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s 			page 3
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 3
 
 
   66 0026 FFF7FEFF 		bl	DRV8825_initStepper
@@ -140,18 +140,17 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s 			page 1
   79              	.LVL11:
   80              	.L2:
   54:Src/main.c    ****   //initialize_stored_parameters();
-  55:Src/main.c    **** 
-  56:Src/main.c    ****   
-  57:Src/main.c    ****   while(1) {
-  81              		.loc 1 57 3 discriminator 1 view .LVU15
-  58:Src/main.c    ****     //transmit_buffer(array, sizeof(array));
-  59:Src/main.c    ****     //HAL_Delay(5000);
-  60:Src/main.c    ****     process_queue();
-  82              		.loc 1 60 5 discriminator 1 view .LVU16
+  55:Src/main.c    ****     
+  56:Src/main.c    ****   while(1) {
+  81              		.loc 1 56 3 discriminator 1 view .LVU15
+  57:Src/main.c    ****     //transmit_buffer(array, sizeof(array));
+  58:Src/main.c    ****     //HAL_Delay(5000);
+  59:Src/main.c    ****     process_queue();
+  82              		.loc 1 59 5 discriminator 1 view .LVU16
   83 003c FFF7FEFF 		bl	process_queue
   84              	.LVL12:
-  57:Src/main.c    ****     //transmit_buffer(array, sizeof(array));
-  85              		.loc 1 57 8 discriminator 1 view .LVU17
+  56:Src/main.c    ****     //transmit_buffer(array, sizeof(array));
+  85              		.loc 1 56 8 discriminator 1 view .LVU17
   86 0040 FCE7     		b	.L2
   87              	.L5:
   88 0042 00BF     		.align	2
@@ -173,43 +172,43 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s 			page 1
  106              	angleToHex:
  107              	.LVL13:
  108              	.LFB528:
-  61:Src/main.c    ****   }
-  62:Src/main.c    **** }
-  63:Src/main.c    **** 
-  64:Src/main.c    **** // TODO: remove or replace function in appropriate place
-  65:Src/main.c    **** uint16_t angleToHex(uint16_t angle){
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s 			page 4
+  60:Src/main.c    ****   }
+  61:Src/main.c    **** }
+  62:Src/main.c    **** 
+  63:Src/main.c    **** // TODO: remove or replace function in appropriate place
+  64:Src/main.c    **** uint16_t angleToHex(uint16_t angle){
+ 109              		.loc 1 64 36 view -0
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 4
 
 
- 109              		.loc 1 65 36 view -0
  110              		.cfi_startproc
  111              		@ args = 0, pretend = 0, frame = 0
  112              		@ frame_needed = 0, uses_anonymous_args = 0
- 113              		.loc 1 65 36 is_stmt 0 view .LVU19
+ 113              		.loc 1 64 36 is_stmt 0 view .LVU19
  114 0000 08B5     		push	{r3, lr}
  115              	.LCFI1:
  116              		.cfi_def_cfa_offset 8
  117              		.cfi_offset 3, -8
  118              		.cfi_offset 14, -4
-  66:Src/main.c    ****   float factor = (4096.0/360.0);
- 119              		.loc 1 66 3 is_stmt 1 view .LVU20
+  65:Src/main.c    ****   float factor = (4096.0/360.0);
+ 119              		.loc 1 65 3 is_stmt 1 view .LVU20
  120              	.LVL14:
-  67:Src/main.c    ****   float conversion = (float)angle * factor; 
- 121              		.loc 1 67 3 view .LVU21
- 122              		.loc 1 67 22 is_stmt 0 view .LVU22
+  66:Src/main.c    ****   float conversion = (float)angle * factor; 
+ 121              		.loc 1 66 3 view .LVU21
+ 122              		.loc 1 66 22 is_stmt 0 view .LVU22
  123 0002 FFF7FEFF 		bl	__aeabi_ui2f
  124              	.LVL15:
- 125              		.loc 1 67 9 view .LVU23
+ 125              		.loc 1 66 9 view .LVU23
  126 0006 0349     		ldr	r1, .L8
  127 0008 FFF7FEFF 		bl	__aeabi_fmul
  128              	.LVL16:
-  68:Src/main.c    ****   return conversion;
- 129              		.loc 1 68 3 is_stmt 1 view .LVU24
- 130              		.loc 1 68 10 is_stmt 0 view .LVU25
+  67:Src/main.c    ****   return conversion;
+ 129              		.loc 1 67 3 is_stmt 1 view .LVU24
+ 130              		.loc 1 67 10 is_stmt 0 view .LVU25
  131 000c FFF7FEFF 		bl	__aeabi_f2uiz
  132              	.LVL17:
-  69:Src/main.c    **** }
- 133              		.loc 1 69 1 view .LVU26
+  68:Src/main.c    **** }
+ 133              		.loc 1 68 1 view .LVU26
  134 0010 80B2     		uxth	r0, r0
  135 0012 08BD     		pop	{r3, pc}
  136              	.L9:
@@ -238,24 +237,24 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s 			page 1
  160              		.file 13 "Inc/queue.h"
  161              		.file 14 "Inc/port_handler.h"
  162              		.file 15 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s 			page 5
-
-
  163              		.file 16 "Inc/utility.h"
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 5
+
+
  164              		.file 17 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
  165              		.file 18 "Inc/packet_handler.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s 			page 6
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 6
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s:16     .text.main:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s:24     .text.main:00000000 main
-C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s:90     .text.main:00000044 $d
+C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s:16     .text.main:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s:24     .text.main:00000000 main
+C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s:90     .text.main:00000044 $d
                             *COM*:00000004 message
-C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s:99     .text.angleToHex:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s:106    .text.angleToHex:00000000 angleToHex
-C:\Users\Brandon\AppData\Local\Temp\ccTgWxYg.s:139    .text.angleToHex:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s:99     .text.angleToHex:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s:106    .text.angleToHex:00000000 angleToHex
+C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s:139    .text.angleToHex:00000014 $d
                             *COM*:00000001 rd_ptr
                             *COM*:00000040 txBuffer
                             *COM*:00000040 rxBuffer

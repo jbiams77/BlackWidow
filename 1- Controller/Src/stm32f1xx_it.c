@@ -247,7 +247,8 @@ void USART1_IRQHandler(void)
     HAL_UART_RxCpltCallback (&huart1);   
     
   }
-  __HAL_UART_CLEAR_IDLEFLAG (&huart1);    
+  __HAL_UART_CLEAR_IDLEFLAG (&huart1);
+  
 
 }
 

@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 1
   40 0002 86B0     		sub	sp, sp, #24
   41              	.LCFI1:
   42              		.cfi_def_cfa_offset 40
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 2
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s 			page 2
 
 
   43 0004 0446     		mov	r4, r0
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 1
   21:Src/as5600.c  **** uint8_t AS5600_ReadReg(uint8_t Reg)
   22:Src/as5600.c  **** {
   95              		.loc 1 22 1 is_stmt 1 view -0
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 3
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s 			page 3
 
 
   96              		.cfi_startproc
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 1
  145              		.global	AS5600_GetAngle
  146              		.syntax unified
  147              		.thumb
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 4
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s 			page 4
 
 
  148              		.thumb_func
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 1
  189              	.LVL13:
  190              		.loc 1 42 20 view .LVU23
  191 002c 80B2     		uxth	r0, r0
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 5
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s 			page 5
 
 
  192 002e ADF80600 		strh	r0, [sp, #6]	@ movhi
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 1
  242 0014 80B2     		uxth	r0, r0
  243              		.loc 1 48 11 view .LVU32
  244 0016 2044     		add	r0, r0, r4
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 6
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s 			page 6
 
 
  245              	.LVL16:
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 1
  295              		.fpu softvfp
  297              	AS5600_GetCalAngle:
  298              	.LFB68:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 7
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s 			page 7
 
 
   31:Src/as5600.c  ****   uint16_t uncal_angle = AS5600_GetRawAngle();
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 1
  342              		.align	1
  343              		.global	AS5600_GetStatus
  344              		.syntax unified
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 8
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s 			page 8
 
 
  345              		.thumb
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 1
  393              		.loc 1 59 2 is_stmt 1 view .LVU59
  394              		.loc 1 59 22 is_stmt 0 view .LVU60
  395 0004 0820     		movs	r0, #8
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 9
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s 			page 9
 
 
  396              	.LVL24:
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 1
   67:Src/as5600.c  **** 	TmpConfHigh |= (OUT_STG_MASK & OutStage);
  445              		.loc 1 67 2 is_stmt 1 view .LVU72
  446              		.loc 1 67 14 is_stmt 0 view .LVU73
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 10
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s 			page 10
 
 
  447 000a 04F03004 		and	r4, r4, #48
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 1
  495              		.loc 1 75 2 is_stmt 1 view .LVU84
  496 0010 E1B2     		uxtb	r1, r4
  497 0012 0820     		movs	r0, #8
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 11
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s 			page 11
 
 
  498 0014 FFF7FEFF 		bl	AS5600_WriteReg
@@ -622,37 +622,37 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 1
  516              		.file 9 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h"
  517              		.file 10 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
  518              		.file 11 "Inc/as5600.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s 			page 12
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s 			page 12
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 as5600.c
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:16     .text.AS5600_WriteReg:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:24     .text.AS5600_WriteReg:00000000 AS5600_WriteReg
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:80     .text.AS5600_WriteReg:00000038 $d
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:85     .text.AS5600_ReadReg:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:92     .text.AS5600_ReadReg:00000000 AS5600_ReadReg
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:136    .text.AS5600_ReadReg:0000002c $d
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:144    .text.AS5600_GetAngle:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:151    .text.AS5600_GetAngle:00000000 AS5600_GetAngle
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:206    .text.AS5600_GetAngle:0000003c $d
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:211    .text.AS5600_GetRawAngle:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:218    .text.AS5600_GetRawAngle:00000000 AS5600_GetRawAngle
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:255    .text.AS5600_SetZero:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:262    .text.AS5600_SetZero:00000000 AS5600_SetZero
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:285    .text.AS5600_SetZero:0000000c $d
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:16     .text.AS5600_WriteReg:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:24     .text.AS5600_WriteReg:00000000 AS5600_WriteReg
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:80     .text.AS5600_WriteReg:00000038 $d
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:85     .text.AS5600_ReadReg:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:92     .text.AS5600_ReadReg:00000000 AS5600_ReadReg
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:136    .text.AS5600_ReadReg:0000002c $d
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:144    .text.AS5600_GetAngle:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:151    .text.AS5600_GetAngle:00000000 AS5600_GetAngle
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:206    .text.AS5600_GetAngle:0000003c $d
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:211    .text.AS5600_GetRawAngle:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:218    .text.AS5600_GetRawAngle:00000000 AS5600_GetRawAngle
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:255    .text.AS5600_SetZero:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:262    .text.AS5600_SetZero:00000000 AS5600_SetZero
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:285    .text.AS5600_SetZero:0000000c $d
                             *COM*:00000002 enc
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:290    .text.AS5600_GetCalAngle:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:297    .text.AS5600_GetCalAngle:00000000 AS5600_GetCalAngle
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:337    .text.AS5600_GetCalAngle:0000001c $d
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:342    .text.AS5600_GetStatus:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:349    .text.AS5600_GetStatus:00000000 AS5600_GetStatus
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:372    .text.AS5600_SetHystheresis:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:379    .text.AS5600_SetHystheresis:00000000 AS5600_SetHystheresis
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:417    .text.AS5600_SetOutputStage:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:424    .text.AS5600_SetOutputStage:00000000 AS5600_SetOutputStage
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:462    .text.AS5600_SetPWMFreq:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccIfp1fV.s:469    .text.AS5600_SetPWMFreq:00000000 AS5600_SetPWMFreq
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:290    .text.AS5600_GetCalAngle:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:297    .text.AS5600_GetCalAngle:00000000 AS5600_GetCalAngle
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:337    .text.AS5600_GetCalAngle:0000001c $d
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:342    .text.AS5600_GetStatus:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:349    .text.AS5600_GetStatus:00000000 AS5600_GetStatus
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:372    .text.AS5600_SetHystheresis:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:379    .text.AS5600_SetHystheresis:00000000 AS5600_SetHystheresis
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:417    .text.AS5600_SetOutputStage:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:424    .text.AS5600_SetOutputStage:00000000 AS5600_SetOutputStage
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:462    .text.AS5600_SetPWMFreq:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccmpdstb.s:469    .text.AS5600_SetPWMFreq:00000000 AS5600_SetPWMFreq
 
 UNDEFINED SYMBOLS
 HAL_I2C_Master_Transmit

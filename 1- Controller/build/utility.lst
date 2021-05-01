@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
   30:Src/utility.c ****     Error_Handler();
   31:Src/utility.c ****   }
   32:Src/utility.c ****   /** Initializes the CPU, AHB and APB busses clocks 
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 2
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 2
 
 
   33:Src/utility.c ****   */
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
   87:Src/utility.c **** {
   88:Src/utility.c **** 
   89:Src/utility.c ****   /* USER CODE BEGIN USART1_Init 0 */
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 3
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 3
 
 
   90:Src/utility.c **** 
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
   49 0014 0193     		str	r3, [sp, #4]
   50              		.loc 1 121 3 view .LVU5
   51 0016 019B     		ldr	r3, [sp, #4]
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 4
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 4
 
 
   52              	.LBE2:
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
  133:Src/utility.c **** 
  134:Src/utility.c **** /**
  135:Src/utility.c ****   * @brief GPIO Initialization Function
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 5
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 5
 
 
  136:Src/utility.c ****   * @param None
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
  141 0026 42F00402 		orr	r2, r2, #4
  142 002a 9A61     		str	r2, [r3, #24]
  143              		.loc 1 145 3 view .LVU24
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 6
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 6
 
 
  144 002c 9A69     		ldr	r2, [r3, #24]
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
  184              		.loc 1 159 3 is_stmt 1 view .LVU37
  185              		.loc 1 159 24 is_stmt 0 view .LVU38
  186 006c 0127     		movs	r7, #1
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 7
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 7
 
 
  187 006e 0597     		str	r7, [sp, #20]
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
  229 00a0 00080140 		.word	1073809408
  230              		.cfi_endproc
  231              	.LFE531:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 8
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 8
 
 
  233              		.section	.text.Error_Handler,"ax",%progbits
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
  274 0024 FFF7FEFF 		bl	HAL_Delay
  275              	.LVL11:
  181:Src/utility.c ****     HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 9
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 9
 
 
  276              		.loc 1 181 9 discriminator 1 view .LVU60
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
   22:Src/utility.c ****   RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
  324              		.loc 1 22 30 is_stmt 0 view .LVU69
  325 001a 4FF48032 		mov	r2, #65536
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 10
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 10
 
 
  326 001e 0792     		str	r2, [sp, #28]
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
  361 0040 0023     		movs	r3, #0
  362 0042 0393     		str	r3, [sp, #12]
   38:Src/utility.c ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 11
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 11
 
 
  363              		.loc 1 38 3 is_stmt 1 view .LVU89
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
  409              		@ args = 0, pretend = 0, frame = 0
  410              		@ frame_needed = 0, uses_anonymous_args = 0
  411 0000 08B5     		push	{r3, lr}
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 12
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 12
 
 
  412              	.LCFI11:
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
   71:Src/utility.c ****   {
  448              		.loc 1 71 3 is_stmt 1 view .LVU118
   71:Src/utility.c ****   {
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 13
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 13
 
 
  449              		.loc 1 71 7 is_stmt 0 view .LVU119
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
   98:Src/utility.c ****   huart1.Init.StopBits = UART_STOPBITS_1;
  497              		.loc 1 98 3 is_stmt 1 view .LVU128
   98:Src/utility.c ****   huart1.Init.StopBits = UART_STOPBITS_1;
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 14
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 14
 
 
  498              		.loc 1 98 26 is_stmt 0 view .LVU129
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
  538              		.comm	hdma_usart1_rx,68,4
  539              		.comm	huart1,64,4
  540              		.comm	hi2c2,84,4
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 15
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 15
 
 
  541              		.comm	rd_ptr,1,1
@@ -867,29 +867,29 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 1
  564              		.file 20 "Inc/port_handler.h"
  565              		.file 21 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
  566              		.file 22 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s 			page 16
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s 			page 16
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 utility.c
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:16     .text.MX_DMA_Init:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:24     .text.MX_DMA_Init:00000000 MX_DMA_Init
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:83     .text.MX_DMA_Init:00000040 $d
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:88     .text.MX_GPIO_Init:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:95     .text.MX_GPIO_Init:00000000 MX_GPIO_Init
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:227    .text.MX_GPIO_Init:00000098 $d
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:234    .text.Error_Handler:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:241    .text.Error_Handler:00000000 Error_Handler
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:281    .text.Error_Handler:0000002c $d
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:286    .text.SystemClock_Config:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:293    .text.SystemClock_Config:00000000 SystemClock_Config
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:398    .text.MX_I2C2_Init:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:405    .text.MX_I2C2_Init:00000000 MX_I2C2_Init
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:463    .text.MX_I2C2_Init:0000002c $d
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:16     .text.MX_DMA_Init:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:24     .text.MX_DMA_Init:00000000 MX_DMA_Init
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:83     .text.MX_DMA_Init:00000040 $d
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:88     .text.MX_GPIO_Init:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:95     .text.MX_GPIO_Init:00000000 MX_GPIO_Init
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:227    .text.MX_GPIO_Init:00000098 $d
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:234    .text.Error_Handler:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:241    .text.Error_Handler:00000000 Error_Handler
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:281    .text.Error_Handler:0000002c $d
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:286    .text.SystemClock_Config:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:293    .text.SystemClock_Config:00000000 SystemClock_Config
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:398    .text.MX_I2C2_Init:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:405    .text.MX_I2C2_Init:00000000 MX_I2C2_Init
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:463    .text.MX_I2C2_Init:0000002c $d
                             *COM*:00000054 hi2c2
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:470    .text.MX_USART1_UART_Init:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:477    .text.MX_USART1_UART_Init:00000000 MX_USART1_UART_Init
-C:\Users\Brandon\AppData\Local\Temp\cc6m0mzC.s:532    .text.MX_USART1_UART_Init:0000002c $d
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:470    .text.MX_USART1_UART_Init:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:477    .text.MX_USART1_UART_Init:00000000 MX_USART1_UART_Init
+C:\Users\Brandon\AppData\Local\Temp\ccjQk068.s:532    .text.MX_USART1_UART_Init:0000002c $d
                             *COM*:00000040 huart1
                             *COM*:00000044 hdma_usart1_tx
                             *COM*:00000044 hdma_usart1_rx

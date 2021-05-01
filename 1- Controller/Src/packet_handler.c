@@ -67,6 +67,8 @@ void process_queue(){
 void extract_message(){
     static uint8_t forensicCounter = 0;
 
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+
     uint8_t reserved = deQueue(message);
     uint8_t id = deQueue(message);
     uint8_t length1 = deQueue(message);

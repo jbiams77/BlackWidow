@@ -20,10 +20,14 @@ uint8_t message_transferred;
  */
 void UART_DMA_Init(void) {
   rd_ptr = 0;
+  
+  HAL_UART_Receive_DMA(&huart1, rxBuffer, UART_RX__SZ);
+
   __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // enable idle line interrupt  
   __HAL_DMA_ENABLE_IT (&hdma_usart1_rx, DMA_IT_TC);  // enable DMA Tx cplt interrupt
-  HAL_UART_Receive_DMA(&huart1, rxBuffer, UART_RX__SZ);
-  
+  __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT); // disable DMA half-transfer interrupt
+
+  //HAL_UART_Receive_IT(&huart1, rxBuffer, UART_RX__SZ);
 }
 
 /* @brief Callback for UART RX idle line interrupt.
@@ -45,7 +49,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
  * @return void
  */
 void UART_rx_transfer_to_queue(void) {
-
   while(!rxBuffer_is_empty() && !isFull(message)) {
     enQueue(message, rxBuffer_Get());
     message_transferred = 1;
