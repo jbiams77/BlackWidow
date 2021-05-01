@@ -46,10 +46,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
  */
 void UART_rx_transfer_to_queue(void) {
 
-  while(!rxBuffer_is_empty() && !isFull(message)){
+  while(!rxBuffer_is_empty() && !isFull(message)) {
     enQueue(message, rxBuffer_Get());
     message_transferred = 1;
-  }   
+  }
 
 // TODO: good 
   // if(!message_transferred){

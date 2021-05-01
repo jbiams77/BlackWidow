@@ -54,12 +54,11 @@ int main(void)
   //initialize_stored_parameters();
 
   
-  while(1){
+  while(1) {
     //transmit_buffer(array, sizeof(array));
     //HAL_Delay(5000);
     process_queue();
   }
-
 }
 
 // TODO: remove or replace function in appropriate place

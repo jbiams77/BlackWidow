@@ -32,7 +32,7 @@ int enQueue(MessageQueue *queue, uint8_t data){
 uint8_t deQueue(MessageQueue *queue){
     if(isEmpty(queue)){
         return 0;
-    } else if (queue->front==queue->rear){
+    } else if (queue->front == queue->rear) {
         uint8_t temp = queue->message[queue->front];
         queue->front = -1;
         return temp;

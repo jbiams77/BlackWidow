@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -34,7 +34,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
    6:Src/packet_handler.c **** /* Fields -------------------------------------------------------------------*/
    7:Src/packet_handler.c **** extern MessageQueue *message;
    8:Src/packet_handler.c **** 
-   9:Src/packet_handler.c **** uint8_t messages[20][8];
+   9:Src/packet_handler.c **** uint8_t messages[20][13];
   10:Src/packet_handler.c **** 
   11:Src/packet_handler.c **** uint8_t instruction;
   12:Src/packet_handler.c **** uint8_t param[20];
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
   35 0002 1B68     		ldr	r3, [r3]
   36              		.loc 1 21 32 view .LVU3
   37 0004 0122     		movs	r2, #1
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 2
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 2
 
 
   38 0006 1A80     		strh	r2, [r3]	@ movhi
@@ -98,73 +98,73 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
   38:Src/packet_handler.c ****     uint8_t h2 = 0;
   39:Src/packet_handler.c ****     uint8_t h3 = 0;
   40:Src/packet_handler.c ****     uint32_t header_block=0;
-  41:Src/packet_handler.c ****     uint8_t header_block_found = 0;
-  42:Src/packet_handler.c **** 
-  43:Src/packet_handler.c ****     while (!header_block_found && !isEmpty(message)){
-  44:Src/packet_handler.c **** 
-  45:Src/packet_handler.c ****         // shift one byte
-  46:Src/packet_handler.c ****         h1 = h2;
-  47:Src/packet_handler.c ****         h2 = h3;
-  48:Src/packet_handler.c ****         h3 = deQueue(message);
-  49:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
-  50:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
-  51:Src/packet_handler.c ****             header_block_found = 1;
+  41:Src/packet_handler.c **** 
+  42:Src/packet_handler.c ****     while (!isEmpty(message)){
+  43:Src/packet_handler.c **** 
+  44:Src/packet_handler.c ****         // shift one byte
+  45:Src/packet_handler.c ****         h1 = h2;
+  46:Src/packet_handler.c ****         h2 = h3;
+  47:Src/packet_handler.c ****         h3 = deQueue(message);
+  48:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
+  49:Src/packet_handler.c ****         if(header_block == 0xFFFFFD) {
+  50:Src/packet_handler.c ****             extract_message();
+  51:Src/packet_handler.c ****             break;
   52:Src/packet_handler.c ****         }
-  53:Src/packet_handler.c **** 
-  54:Src/packet_handler.c ****     }
-  55:Src/packet_handler.c ****     
-  56:Src/packet_handler.c ****     if (header_block_found) {
-  57:Src/packet_handler.c ****         extract_message();
-  58:Src/packet_handler.c ****     }
+  53:Src/packet_handler.c ****     }
+  54:Src/packet_handler.c **** }
+  55:Src/packet_handler.c **** 
+  56:Src/packet_handler.c **** 
+  57:Src/packet_handler.c **** 
+  58:Src/packet_handler.c **** 
   59:Src/packet_handler.c **** 
-  60:Src/packet_handler.c **** }
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 3
+  60:Src/packet_handler.c **** 
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 3
 
 
-  61:Src/packet_handler.c **** 
-  62:Src/packet_handler.c **** /* @brief After header block is found, extract reserved, id, length,
-  63:Src/packet_handler.c ****  * instruction, and message parameters.
-  64:Src/packet_handler.c ****  * 
-  65:Src/packet_handler.c ****  * @param void 
-  66:Src/packet_handler.c ****  * @return void
-  67:Src/packet_handler.c ****  */
-  68:Src/packet_handler.c **** void extract_message(){
-  69:Src/packet_handler.c ****     static uint8_t forensicCounter = 0;
-  70:Src/packet_handler.c **** 
-  71:Src/packet_handler.c ****     uint8_t reserved = deQueue(message);
-  72:Src/packet_handler.c ****     uint8_t id = deQueue(message);
-  73:Src/packet_handler.c ****     uint8_t length1 = deQueue(message);
-  74:Src/packet_handler.c ****     uint8_t length2 = deQueue(message);
-  75:Src/packet_handler.c ****     uint16_t length = (length2 << 8) + (length1);
-  76:Src/packet_handler.c ****     instruction = deQueue(message);
-  77:Src/packet_handler.c ****     
-  78:Src/packet_handler.c ****     if (instruction != 0x01){
-  79:Src/packet_handler.c ****         __NOP();
-  80:Src/packet_handler.c ****     }
-  81:Src/packet_handler.c ****     
-  82:Src/packet_handler.c ****     // TODO: revisit if statement, originally prevented unligned message
-  83:Src/packet_handler.c ****     if (length<30){
-  84:Src/packet_handler.c ****         int i;
-  85:Src/packet_handler.c ****         // grab the parameters
-  86:Src/packet_handler.c ****         for (i=0; i< (length-3); i++){
-  87:Src/packet_handler.c ****             param[i] = deQueue(message);
-  88:Src/packet_handler.c ****         }
-  89:Src/packet_handler.c ****     }
-  90:Src/packet_handler.c ****     
-  91:Src/packet_handler.c ****     // grab CRC used for checking data loss
-  92:Src/packet_handler.c ****     crc[0] = deQueue(message);
-  93:Src/packet_handler.c ****     crc[1] = deQueue(message);
-  94:Src/packet_handler.c **** 
-  95:Src/packet_handler.c ****     // messages[forensicCounter][0] = reserved;
-  96:Src/packet_handler.c ****     // messages[forensicCounter][1] = id;
-  97:Src/packet_handler.c ****     // messages[forensicCounter][2] = length1;
-  98:Src/packet_handler.c ****     // messages[forensicCounter][3] = length2;
-  99:Src/packet_handler.c ****     // messages[forensicCounter][4] = instruction;
- 100:Src/packet_handler.c ****     // messages[forensicCounter][5] = crc[0];
- 101:Src/packet_handler.c ****     // messages[forensicCounter][6] = crc[1];
- 102:Src/packet_handler.c ****     // messages[forensicCounter][7] = 0x00;
- 103:Src/packet_handler.c **** 
- 104:Src/packet_handler.c ****     forensicCounter++;
+  61:Src/packet_handler.c **** /* @brief After header block is found, extract reserved, id, length,
+  62:Src/packet_handler.c ****  * instruction, and message parameters.
+  63:Src/packet_handler.c ****  * 
+  64:Src/packet_handler.c ****  * @param void 
+  65:Src/packet_handler.c ****  * @return void
+  66:Src/packet_handler.c ****  */
+  67:Src/packet_handler.c **** void extract_message(){
+  68:Src/packet_handler.c ****     static uint8_t forensicCounter = 0;
+  69:Src/packet_handler.c **** 
+  70:Src/packet_handler.c ****     uint8_t reserved = deQueue(message);
+  71:Src/packet_handler.c ****     uint8_t id = deQueue(message);
+  72:Src/packet_handler.c ****     uint8_t length1 = deQueue(message);
+  73:Src/packet_handler.c ****     uint8_t length2 = deQueue(message);
+  74:Src/packet_handler.c ****     uint16_t length = (length2 << 8) + (length1);
+  75:Src/packet_handler.c ****     instruction = deQueue(message);
+  76:Src/packet_handler.c ****     
+  77:Src/packet_handler.c ****     if (instruction != 0x01){
+  78:Src/packet_handler.c ****         __NOP();
+  79:Src/packet_handler.c ****     }
+  80:Src/packet_handler.c ****     
+  81:Src/packet_handler.c ****     // TODO: revisit if statement, originally prevented unligned message
+  82:Src/packet_handler.c ****     if (length<30){
+  83:Src/packet_handler.c ****         int i;
+  84:Src/packet_handler.c ****         // grab the parameters
+  85:Src/packet_handler.c ****         for (i=0; i< (length-3); i++){
+  86:Src/packet_handler.c ****             param[i] = deQueue(message);
+  87:Src/packet_handler.c ****         }
+  88:Src/packet_handler.c ****     }
+  89:Src/packet_handler.c ****     
+  90:Src/packet_handler.c ****     // grab CRC used for checking data loss
+  91:Src/packet_handler.c ****     crc[0] = deQueue(message);
+  92:Src/packet_handler.c ****     crc[1] = deQueue(message);
+  93:Src/packet_handler.c **** 
+  94:Src/packet_handler.c ****     messages[forensicCounter][0] = reserved;
+  95:Src/packet_handler.c ****     messages[forensicCounter][1] = id;
+  96:Src/packet_handler.c ****     messages[forensicCounter][2] = length1;
+  97:Src/packet_handler.c ****     messages[forensicCounter][3] = length2;
+  98:Src/packet_handler.c ****     messages[forensicCounter][4] = instruction;
+  99:Src/packet_handler.c ****     messages[forensicCounter][5] = crc[0];
+ 100:Src/packet_handler.c ****     messages[forensicCounter][6] = crc[1];
+ 101:Src/packet_handler.c ****     messages[forensicCounter][7] = 0x00;
+ 102:Src/packet_handler.c **** 
+ 103:Src/packet_handler.c ****     forensicCounter++;
+ 104:Src/packet_handler.c ****     forensicCounter%=20;
  105:Src/packet_handler.c **** 
  106:Src/packet_handler.c ****     // TODO: fix memory ID storage
  107:Src/packet_handler.c ****     // message fully received, proccess
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  115:Src/packet_handler.c ****     // }
  116:Src/packet_handler.c **** 
  117:Src/packet_handler.c **** }
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 4
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 4
 
 
  118:Src/packet_handler.c **** 
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  165:Src/packet_handler.c ****     uint32_t read_value;
   65              		.loc 1 165 5 view .LVU7
  166:Src/packet_handler.c **** 
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 5
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 5
 
 
  167:Src/packet_handler.c ****     switch (read_address){
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
   67              		.loc 1 219 5 view .LVU9
  220:Src/packet_handler.c ****     uint8_t packet_length = 3 + sizeof(param);
   68              		.loc 1 220 5 view .LVU10
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 6
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 6
 
 
  221:Src/packet_handler.c ****     // send the read value on transmit line
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  253:Src/packet_handler.c ****     } else if (write_address < 64 && !runtime_param->torque_enable){
  254:Src/packet_handler.c **** 
  255:Src/packet_handler.c ****         write_to_Flash(write_address, value);
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 7
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 7
 
 
  256:Src/packet_handler.c **** 
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  134              		.cfi_startproc
  135              		@ args = 0, pretend = 0, frame = 0
  136              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 8
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 8
 
 
  137              		@ link register save eliminated.
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  184              		.align	1
  185              		.global	status
  186              		.syntax unified
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 9
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 9
 
 
  187              		.thumb
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  233              		.loc 1 297 22 view -0
  234              		.cfi_startproc
  235              		@ args = 0, pretend = 0, frame = 0
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 10
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 10
 
 
  236              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  283              		.section	.text.write_to_RAM,"ax",%progbits
  284              		.align	1
  285              		.global	write_to_RAM
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 11
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 11
 
 
  286              		.syntax unified
@@ -658,7 +658,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  333 0024 41       		.byte	(.L25-.L18)/2
  334 0025 60       		.byte	(.L15-.L18)/2
  335 0026 60       		.byte	(.L15-.L18)/2
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 12
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 12
 
 
  336 0027 60       		.byte	(.L15-.L18)/2
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  324:Src/packet_handler.c ****         case STATUS_RETURN_LEVEL:   
  325:Src/packet_handler.c ****             runtime_param->status_return_level = (uint8_t)value;
  384              		.loc 1 325 13 view .LVU52
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 13
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 13
 
 
  385              		.loc 1 325 26 is_stmt 0 view .LVU53
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  426              		.loc 1 338 13 is_stmt 1 view .LVU71
  427 007a 7047     		bx	lr
  428              	.L27:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 14
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 14
 
 
  339:Src/packet_handler.c ****         case POSITION_P_GAIN:
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  469              		.loc 1 352 37 view .LVU90
  470 00a0 D982     		strh	r1, [r3, #22]	@ movhi
  353:Src/packet_handler.c ****             break;
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 15
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 15
 
 
  471              		.loc 1 353 13 is_stmt 1 view .LVU91
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  511              		.loc 1 367 26 is_stmt 0 view .LVU109
  512 00c4 014B     		ldr	r3, .L35
  513 00c6 1B68     		ldr	r3, [r3]
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 16
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 16
 
 
  514              		.loc 1 367 42 view .LVU110
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  400:Src/packet_handler.c **** 
  401:Src/packet_handler.c **** // TODO: manage various data size types in flash.c and address to ensure 
  402:Src/packet_handler.c **** //       everything currently is set to unit8_t
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 17
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 17
 
 
  403:Src/packet_handler.c **** 
@@ -1018,7 +1018,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  573              		.loc 1 423 37 is_stmt 0 view .LVU119
  574 0000 08B5     		push	{r3, lr}
  575              	.LCFI0:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 18
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 18
 
 
  576              		.cfi_def_cfa_offset 8
@@ -1078,7 +1078,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  620              		.cfi_def_cfa_offset 8
  621              		.cfi_offset 3, -8
  622              		.cfi_offset 14, -4
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 19
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 19
 
 
  623 0002 0146     		mov	r1, r0
@@ -1138,7 +1138,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  667 0002 0146     		mov	r1, r0
  448:Src/packet_handler.c **** 
  449:Src/packet_handler.c ****     stored_param->drive_mode = value;
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 20
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 20
 
 
  668              		.loc 1 449 5 is_stmt 1 view .LVU136
@@ -1198,7 +1198,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  712              		.loc 1 461 5 is_stmt 1 view .LVU144
  713              		.loc 1 461 17 is_stmt 0 view .LVU145
  714 0004 034B     		ldr	r3, .L54
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 21
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 21
 
 
  715 0006 1B68     		ldr	r3, [r3]
@@ -1258,7 +1258,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  759 0006 1B68     		ldr	r3, [r3]
  760              		.loc 1 473 32 view .LVU154
  761 0008 9873     		strb	r0, [r3, #14]
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 22
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 22
 
 
  474:Src/packet_handler.c ****     Flash_Write(SECONDARY_ID_ADDRESS, value);
@@ -1318,7 +1318,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  486:Src/packet_handler.c ****     Flash_Write(PROTOCOL_TYPE_ADDRESS, value);
  806              		.loc 1 486 5 is_stmt 1 view .LVU163
  807 000a 0348     		ldr	r0, .L62+4
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 23
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 23
 
 
  808              	.LVL20:
@@ -1378,7 +1378,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  852              	.LVL23:
  853              		.loc 1 498 5 is_stmt 0 view .LVU172
  854 000c FFF7FEFF 		bl	Flash_Write
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 24
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 24
 
 
  855              	.LVL24:
@@ -1438,7 +1438,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  899              	.LVL27:
  511:Src/packet_handler.c **** 
  512:Src/packet_handler.c **** }
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 25
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 25
 
 
  900              		.loc 1 512 1 view .LVU181
@@ -1498,7 +1498,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  944              		.loc 1 524 1 view .LVU189
  945 0010 08BD     		pop	{r3, pc}
  946              	.L75:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 26
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 26
 
 
  947 0012 00BF     		.align	2
@@ -1558,7 +1558,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  991 0012 00BF     		.align	2
  992              	.L78:
  993 0014 00000000 		.word	stored_param
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 27
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 27
 
 
  994 0018 0EFC0108 		.word	134347790
@@ -1618,7 +1618,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1038 0018 0DFC0108 		.word	134347789
  1039              		.cfi_endproc
  1040              	.LFE557:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 28
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 28
 
 
  1042              		.section	.text.store_PWM_limit,"ax",%progbits
@@ -1678,7 +1678,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1086              		.align	1
  1087              		.global	store_velocity_limit
  1088              		.syntax unified
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 29
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 29
 
 
  1089              		.thumb
@@ -1738,7 +1738,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1133              		.thumb_func
  1134              		.fpu softvfp
  1136              	store_min_position_limit:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 30
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 30
 
 
  1137              	.LVL43:
@@ -1798,7 +1798,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1181              	.LFB561:
  585:Src/packet_handler.c **** 
  586:Src/packet_handler.c **** /* Stores value to memory, available after
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 31
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 31
 
 
  587:Src/packet_handler.c ****  * power cycle.
@@ -1858,7 +1858,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  600:Src/packet_handler.c ****  * @param value to store
  601:Src/packet_handler.c ****  * @return void
  602:Src/packet_handler.c ****  */
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 32
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 32
 
 
  603:Src/packet_handler.c **** void store_shutdown(uint32_t value){
@@ -1918,7 +1918,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1273 0000 08B5     		push	{r3, lr}
  1274              	.LCFI16:
  1275              		.cfi_def_cfa_offset 8
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 33
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 33
 
 
  1276              		.cfi_offset 3, -8
@@ -1978,7 +1978,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1329 003a 20       		.byte	(.L104-.L107)/2
  1330 003b 20       		.byte	(.L104-.L107)/2
  1331 003c 20       		.byte	(.L104-.L107)/2
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 34
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 34
 
 
  1332 003d 4B       		.byte	(.L108-.L107)/2
@@ -2038,7 +2038,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1375              		.loc 1 383 50 view .LVU259
  383:Src/packet_handler.c ****         case OPERATING_MODE: store_operating_mode(value); break;
  1376              		.loc 1 383 9 is_stmt 0 view .LVU260
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 35
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 35
 
 
  1377 0062 F5E7     		b	.L104
@@ -2098,7 +2098,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1416              		.loc 1 388 9 is_stmt 0 view .LVU275
  1417 0080 E6E7     		b	.L104
  1418              	.LVL71:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 36
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 36
 
 
  1419              	.L114:
@@ -2158,7 +2158,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1458              	.LVL81:
  1459              	.L109:
  394:Src/packet_handler.c ****         case MIN_POSITION_LIMIT: store_min_position_limit(value); break;
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 37
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 37
 
 
  1460              		.loc 1 394 34 is_stmt 1 view .LVU291
@@ -2218,7 +2218,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1499              		@ link register save eliminated.
  618:Src/packet_handler.c ****     uint32_t value;
  1500              		.loc 1 618 5 view .LVU301
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 38
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 38
 
 
  619:Src/packet_handler.c ****     /* Pack value */
@@ -2278,7 +2278,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1541              		.cfi_endproc
  1542              	.LFE563:
  1544              		.section	.text.write,"ax",%progbits
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 39
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 39
 
 
  1545              		.align	1
@@ -2338,7 +2338,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1588              		.loc 1 253 35 discriminator 1 view .LVU330
  1589 001e 23B1     		cbz	r3, .L135
  1590              	.LVL95:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 40
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 40
 
 
  1591              	.L130:
@@ -2398,7 +2398,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1637              		@ link register save eliminated.
  631:Src/packet_handler.c ****   uint16_t i;
  1638              		.loc 1 631 3 view .LVU339
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 41
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 41
 
 
  632:Src/packet_handler.c ****   static const uint16_t crc_table[256] = {0x0000,
@@ -2458,7 +2458,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1652 0006 30B4     		push	{r4, r5}
  1653              	.LCFI18:
  1654              		.cfi_def_cfa_offset 8
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 42
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 42
 
 
  1655              		.cfi_offset 4, -8
@@ -2518,7 +2518,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1697              	.L144:
  1698              		.loc 1 678 1 view .LVU360
  1699 0028 7047     		bx	lr
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 43
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 43
 
 
  1700              	.L146:
@@ -2578,7 +2578,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1747              		.loc 1 156 20 is_stmt 0 view .LVU369
  1748 001c C0F30720 		ubfx	r0, r0, #8, #8
  1749              	.LVL113:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 44
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 44
 
 
  156:Src/packet_handler.c ****     transmit_buffer(response, sizeof(response));
@@ -2638,7 +2638,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1800 0014 05D0     		beq	.L153
  1801 0016 012B     		cmp	r3, #1
  1802 0018 00D0     		beq	.L155
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 45
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 45
 
 
  1803              	.L151:
@@ -2681,822 +2681,871 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 1
  1834              		.fpu softvfp
  1836              	extract_message:
  1837              	.LFB529:
-  68:Src/packet_handler.c ****     static uint8_t forensicCounter = 0;
- 1838              		.loc 1 68 23 is_stmt 1 view -0
+  67:Src/packet_handler.c ****     static uint8_t forensicCounter = 0;
+ 1838              		.loc 1 67 23 is_stmt 1 view -0
  1839              		.cfi_startproc
  1840              		@ args = 0, pretend = 0, frame = 0
  1841              		@ frame_needed = 0, uses_anonymous_args = 0
- 1842 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 1842 0000 2DE9F843 		push	{r3, r4, r5, r6, r7, r8, r9, lr}
  1843              	.LCFI24:
- 1844              		.cfi_def_cfa_offset 24
- 1845              		.cfi_offset 3, -24
- 1846              		.cfi_offset 4, -20
- 1847              		.cfi_offset 5, -16
- 1848              		.cfi_offset 6, -12
- 1849              		.cfi_offset 7, -8
- 1850              		.cfi_offset 14, -4
-  69:Src/packet_handler.c **** 
- 1851              		.loc 1 69 5 view .LVU384
-  71:Src/packet_handler.c ****     uint8_t id = deQueue(message);
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 46
+ 1844              		.cfi_def_cfa_offset 32
+ 1845              		.cfi_offset 3, -32
+ 1846              		.cfi_offset 4, -28
+ 1847              		.cfi_offset 5, -24
+ 1848              		.cfi_offset 6, -20
+ 1849              		.cfi_offset 7, -16
+ 1850              		.cfi_offset 8, -12
+ 1851              		.cfi_offset 9, -8
+ 1852              		.cfi_offset 14, -4
+  68:Src/packet_handler.c **** 
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 46
 
 
- 1852              		.loc 1 71 5 view .LVU385
-  71:Src/packet_handler.c ****     uint8_t id = deQueue(message);
- 1853              		.loc 1 71 24 is_stmt 0 view .LVU386
- 1854 0002 1F4C     		ldr	r4, .L167
- 1855 0004 2068     		ldr	r0, [r4]
- 1856 0006 FFF7FEFF 		bl	deQueue
- 1857              	.LVL118:
-  72:Src/packet_handler.c ****     uint8_t length1 = deQueue(message);
- 1858              		.loc 1 72 5 is_stmt 1 view .LVU387
-  72:Src/packet_handler.c ****     uint8_t length1 = deQueue(message);
- 1859              		.loc 1 72 18 is_stmt 0 view .LVU388
- 1860 000a 2068     		ldr	r0, [r4]
- 1861 000c FFF7FEFF 		bl	deQueue
- 1862              	.LVL119:
- 1863 0010 0646     		mov	r6, r0
- 1864              	.LVL120:
-  73:Src/packet_handler.c ****     uint8_t length2 = deQueue(message);
- 1865              		.loc 1 73 5 is_stmt 1 view .LVU389
-  73:Src/packet_handler.c ****     uint8_t length2 = deQueue(message);
- 1866              		.loc 1 73 23 is_stmt 0 view .LVU390
- 1867 0012 2068     		ldr	r0, [r4]
- 1868 0014 FFF7FEFF 		bl	deQueue
- 1869              	.LVL121:
- 1870 0018 0746     		mov	r7, r0
- 1871              	.LVL122:
-  74:Src/packet_handler.c ****     uint16_t length = (length2 << 8) + (length1);
- 1872              		.loc 1 74 5 is_stmt 1 view .LVU391
-  74:Src/packet_handler.c ****     uint16_t length = (length2 << 8) + (length1);
- 1873              		.loc 1 74 23 is_stmt 0 view .LVU392
- 1874 001a 2068     		ldr	r0, [r4]
- 1875 001c FFF7FEFF 		bl	deQueue
- 1876              	.LVL123:
-  75:Src/packet_handler.c ****     instruction = deQueue(message);
- 1877              		.loc 1 75 5 is_stmt 1 view .LVU393
-  75:Src/packet_handler.c ****     instruction = deQueue(message);
- 1878              		.loc 1 75 32 is_stmt 0 view .LVU394
- 1879 0020 0502     		lsls	r5, r0, #8
- 1880 0022 ADB2     		uxth	r5, r5
-  75:Src/packet_handler.c ****     instruction = deQueue(message);
- 1881              		.loc 1 75 38 view .LVU395
- 1882 0024 BFB2     		uxth	r7, r7
- 1883              	.LVL124:
-  75:Src/packet_handler.c ****     instruction = deQueue(message);
- 1884              		.loc 1 75 14 view .LVU396
- 1885 0026 3D44     		add	r5, r5, r7
+ 1853              		.loc 1 68 5 view .LVU384
+  70:Src/packet_handler.c ****     uint8_t id = deQueue(message);
+ 1854              		.loc 1 70 5 view .LVU385
+  70:Src/packet_handler.c ****     uint8_t id = deQueue(message);
+ 1855              		.loc 1 70 24 is_stmt 0 view .LVU386
+ 1856 0004 304C     		ldr	r4, .L167
+ 1857 0006 2068     		ldr	r0, [r4]
+ 1858 0008 FFF7FEFF 		bl	deQueue
+ 1859              	.LVL118:
+ 1860 000c 8146     		mov	r9, r0
+ 1861              	.LVL119:
+  71:Src/packet_handler.c ****     uint8_t length1 = deQueue(message);
+ 1862              		.loc 1 71 5 is_stmt 1 view .LVU387
+  71:Src/packet_handler.c ****     uint8_t length1 = deQueue(message);
+ 1863              		.loc 1 71 18 is_stmt 0 view .LVU388
+ 1864 000e 2068     		ldr	r0, [r4]
+ 1865 0010 FFF7FEFF 		bl	deQueue
+ 1866              	.LVL120:
+ 1867 0014 0646     		mov	r6, r0
+ 1868              	.LVL121:
+  72:Src/packet_handler.c ****     uint8_t length2 = deQueue(message);
+ 1869              		.loc 1 72 5 is_stmt 1 view .LVU389
+  72:Src/packet_handler.c ****     uint8_t length2 = deQueue(message);
+ 1870              		.loc 1 72 23 is_stmt 0 view .LVU390
+ 1871 0016 2068     		ldr	r0, [r4]
+ 1872 0018 FFF7FEFF 		bl	deQueue
+ 1873              	.LVL122:
+ 1874 001c 8046     		mov	r8, r0
+ 1875              	.LVL123:
+  73:Src/packet_handler.c ****     uint16_t length = (length2 << 8) + (length1);
+ 1876              		.loc 1 73 5 is_stmt 1 view .LVU391
+  73:Src/packet_handler.c ****     uint16_t length = (length2 << 8) + (length1);
+ 1877              		.loc 1 73 23 is_stmt 0 view .LVU392
+ 1878 001e 2068     		ldr	r0, [r4]
+ 1879 0020 FFF7FEFF 		bl	deQueue
+ 1880              	.LVL124:
+ 1881 0024 0746     		mov	r7, r0
+ 1882              	.LVL125:
+  74:Src/packet_handler.c ****     instruction = deQueue(message);
+ 1883              		.loc 1 74 5 is_stmt 1 view .LVU393
+  74:Src/packet_handler.c ****     instruction = deQueue(message);
+ 1884              		.loc 1 74 32 is_stmt 0 view .LVU394
+ 1885 0026 0502     		lsls	r5, r0, #8
  1886 0028 ADB2     		uxth	r5, r5
- 1887              	.LVL125:
-  76:Src/packet_handler.c ****     
- 1888              		.loc 1 76 5 is_stmt 1 view .LVU397
-  76:Src/packet_handler.c ****     
- 1889              		.loc 1 76 19 is_stmt 0 view .LVU398
- 1890 002a 2068     		ldr	r0, [r4]
- 1891              	.LVL126:
-  76:Src/packet_handler.c ****     
- 1892              		.loc 1 76 19 view .LVU399
- 1893 002c FFF7FEFF 		bl	deQueue
- 1894              	.LVL127:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 47
+  74:Src/packet_handler.c ****     instruction = deQueue(message);
+ 1887              		.loc 1 74 38 view .LVU395
+ 1888 002a 1FFA88F3 		uxth	r3, r8
+  74:Src/packet_handler.c ****     instruction = deQueue(message);
+ 1889              		.loc 1 74 14 view .LVU396
+ 1890 002e 1D44     		add	r5, r5, r3
+ 1891 0030 ADB2     		uxth	r5, r5
+ 1892              	.LVL126:
+  75:Src/packet_handler.c ****     
+ 1893              		.loc 1 75 5 is_stmt 1 view .LVU397
+  75:Src/packet_handler.c ****     
+ 1894              		.loc 1 75 19 is_stmt 0 view .LVU398
+ 1895 0032 2068     		ldr	r0, [r4]
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 47
 
 
-  76:Src/packet_handler.c ****     
- 1895              		.loc 1 76 17 view .LVU400
- 1896 0030 144B     		ldr	r3, .L167+4
- 1897 0032 1870     		strb	r0, [r3]
-  78:Src/packet_handler.c ****         __NOP();
- 1898              		.loc 1 78 5 is_stmt 1 view .LVU401
-  78:Src/packet_handler.c ****         __NOP();
- 1899              		.loc 1 78 8 is_stmt 0 view .LVU402
- 1900 0034 0128     		cmp	r0, #1
- 1901 0036 00D0     		beq	.L159
-  79:Src/packet_handler.c ****     }
- 1902              		.loc 1 79 9 is_stmt 1 view .LVU403
- 1903              		.syntax unified
- 1904              	@ 79 "Src/packet_handler.c" 1
- 1905 0038 00BF     		nop
- 1906              	@ 0 "" 2
- 1907              		.thumb
+ 1896              	.LVL127:
+  75:Src/packet_handler.c ****     
+ 1897              		.loc 1 75 19 view .LVU399
+ 1898 0034 FFF7FEFF 		bl	deQueue
+ 1899              	.LVL128:
+  75:Src/packet_handler.c ****     
+ 1900              		.loc 1 75 17 view .LVU400
+ 1901 0038 244B     		ldr	r3, .L167+4
+ 1902 003a 1870     		strb	r0, [r3]
+  77:Src/packet_handler.c ****         __NOP();
+ 1903              		.loc 1 77 5 is_stmt 1 view .LVU401
+  77:Src/packet_handler.c ****         __NOP();
+ 1904              		.loc 1 77 8 is_stmt 0 view .LVU402
+ 1905 003c 0128     		cmp	r0, #1
+ 1906 003e 00D0     		beq	.L159
+  78:Src/packet_handler.c ****     }
+ 1907              		.loc 1 78 9 is_stmt 1 view .LVU403
  1908              		.syntax unified
- 1909              	.L159:
-  83:Src/packet_handler.c ****         int i;
- 1910              		.loc 1 83 5 view .LVU404
-  83:Src/packet_handler.c ****         int i;
- 1911              		.loc 1 83 8 is_stmt 0 view .LVU405
- 1912 003a 1D2D     		cmp	r5, #29
- 1913 003c 10D9     		bls	.L164
- 1914              	.L161:
-  92:Src/packet_handler.c ****     crc[1] = deQueue(message);
- 1915              		.loc 1 92 5 is_stmt 1 view .LVU406
-  92:Src/packet_handler.c ****     crc[1] = deQueue(message);
- 1916              		.loc 1 92 14 is_stmt 0 view .LVU407
- 1917 003e 104D     		ldr	r5, .L167
- 1918              	.LVL128:
-  92:Src/packet_handler.c ****     crc[1] = deQueue(message);
- 1919              		.loc 1 92 14 view .LVU408
- 1920 0040 2868     		ldr	r0, [r5]
- 1921 0042 FFF7FEFF 		bl	deQueue
- 1922              	.LVL129:
-  92:Src/packet_handler.c ****     crc[1] = deQueue(message);
- 1923              		.loc 1 92 12 view .LVU409
- 1924 0046 104C     		ldr	r4, .L167+8
- 1925 0048 2070     		strb	r0, [r4]
-  93:Src/packet_handler.c **** 
- 1926              		.loc 1 93 5 is_stmt 1 view .LVU410
-  93:Src/packet_handler.c **** 
- 1927              		.loc 1 93 14 is_stmt 0 view .LVU411
- 1928 004a 2868     		ldr	r0, [r5]
- 1929 004c FFF7FEFF 		bl	deQueue
- 1930              	.LVL130:
-  93:Src/packet_handler.c **** 
- 1931              		.loc 1 93 12 view .LVU412
- 1932 0050 6070     		strb	r0, [r4, #1]
- 104:Src/packet_handler.c **** 
- 1933              		.loc 1 104 5 is_stmt 1 view .LVU413
- 104:Src/packet_handler.c **** 
- 1934              		.loc 1 104 20 is_stmt 0 view .LVU414
- 1935 0052 0E4A     		ldr	r2, .L167+12
- 1936 0054 1378     		ldrb	r3, [r2]	@ zero_extendqisi2
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 48
+ 1909              	@ 78 "Src/packet_handler.c" 1
+ 1910 0040 00BF     		nop
+ 1911              	@ 0 "" 2
+ 1912              		.thumb
+ 1913              		.syntax unified
+ 1914              	.L159:
+  82:Src/packet_handler.c ****         int i;
+ 1915              		.loc 1 82 5 view .LVU404
+  82:Src/packet_handler.c ****         int i;
+ 1916              		.loc 1 82 8 is_stmt 0 view .LVU405
+ 1917 0042 1D2D     		cmp	r5, #29
+ 1918 0044 30D9     		bls	.L164
+ 1919              	.L161:
+  91:Src/packet_handler.c ****     crc[1] = deQueue(message);
+ 1920              		.loc 1 91 5 is_stmt 1 view .LVU406
+  91:Src/packet_handler.c ****     crc[1] = deQueue(message);
+ 1921              		.loc 1 91 14 is_stmt 0 view .LVU407
+ 1922 0046 204D     		ldr	r5, .L167
+ 1923              	.LVL129:
+  91:Src/packet_handler.c ****     crc[1] = deQueue(message);
+ 1924              		.loc 1 91 14 view .LVU408
+ 1925 0048 2868     		ldr	r0, [r5]
+ 1926 004a FFF7FEFF 		bl	deQueue
+ 1927              	.LVL130:
+  91:Src/packet_handler.c ****     crc[1] = deQueue(message);
+ 1928              		.loc 1 91 12 view .LVU409
+ 1929 004e 204C     		ldr	r4, .L167+8
+ 1930 0050 2070     		strb	r0, [r4]
+  92:Src/packet_handler.c **** 
+ 1931              		.loc 1 92 5 is_stmt 1 view .LVU410
+  92:Src/packet_handler.c **** 
+ 1932              		.loc 1 92 14 is_stmt 0 view .LVU411
+ 1933 0052 2868     		ldr	r0, [r5]
+ 1934 0054 FFF7FEFF 		bl	deQueue
+ 1935              	.LVL131:
+  92:Src/packet_handler.c **** 
+ 1936              		.loc 1 92 12 view .LVU412
+ 1937 0058 6070     		strb	r0, [r4, #1]
+  94:Src/packet_handler.c ****     messages[forensicCounter][1] = id;
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 48
 
 
- 1937 0056 0133     		adds	r3, r3, #1
- 1938 0058 1370     		strb	r3, [r2]
+ 1938              		.loc 1 94 5 is_stmt 1 view .LVU413
+  94:Src/packet_handler.c ****     messages[forensicCounter][1] = id;
+ 1939              		.loc 1 94 30 is_stmt 0 view .LVU414
+ 1940 005a 1E49     		ldr	r1, .L167+12
+ 1941 005c 0B78     		ldrb	r3, [r1]	@ zero_extendqisi2
+  94:Src/packet_handler.c ****     messages[forensicCounter][1] = id;
+ 1942              		.loc 1 94 34 view .LVU415
+ 1943 005e DFF880C0 		ldr	ip, .L167+24
+ 1944 0062 03EB4305 		add	r5, r3, r3, lsl #1
+ 1945 0066 03EB8505 		add	r5, r3, r5, lsl #2
+ 1946 006a 0CEB0502 		add	r2, ip, r5
+ 1947 006e 0CF80590 		strb	r9, [ip, r5]
+  95:Src/packet_handler.c ****     messages[forensicCounter][2] = length1;
+ 1948              		.loc 1 95 5 is_stmt 1 view .LVU416
+  95:Src/packet_handler.c ****     messages[forensicCounter][2] = length1;
+ 1949              		.loc 1 95 34 is_stmt 0 view .LVU417
+ 1950 0072 5670     		strb	r6, [r2, #1]
+  96:Src/packet_handler.c ****     messages[forensicCounter][3] = length2;
+ 1951              		.loc 1 96 5 is_stmt 1 view .LVU418
+  96:Src/packet_handler.c ****     messages[forensicCounter][3] = length2;
+ 1952              		.loc 1 96 34 is_stmt 0 view .LVU419
+ 1953 0074 82F80280 		strb	r8, [r2, #2]
+  97:Src/packet_handler.c ****     messages[forensicCounter][4] = instruction;
+ 1954              		.loc 1 97 5 is_stmt 1 view .LVU420
+  97:Src/packet_handler.c ****     messages[forensicCounter][4] = instruction;
+ 1955              		.loc 1 97 34 is_stmt 0 view .LVU421
+ 1956 0078 D770     		strb	r7, [r2, #3]
+  98:Src/packet_handler.c ****     messages[forensicCounter][5] = crc[0];
+ 1957              		.loc 1 98 5 is_stmt 1 view .LVU422
+  98:Src/packet_handler.c ****     messages[forensicCounter][5] = crc[0];
+ 1958              		.loc 1 98 34 is_stmt 0 view .LVU423
+ 1959 007a 144D     		ldr	r5, .L167+4
+ 1960 007c 2D78     		ldrb	r5, [r5]	@ zero_extendqisi2
+ 1961 007e 1571     		strb	r5, [r2, #4]
+  99:Src/packet_handler.c ****     messages[forensicCounter][6] = crc[1];
+ 1962              		.loc 1 99 5 is_stmt 1 view .LVU424
+  99:Src/packet_handler.c ****     messages[forensicCounter][6] = crc[1];
+ 1963              		.loc 1 99 39 is_stmt 0 view .LVU425
+ 1964 0080 2478     		ldrb	r4, [r4]	@ zero_extendqisi2
+  99:Src/packet_handler.c ****     messages[forensicCounter][6] = crc[1];
+ 1965              		.loc 1 99 34 view .LVU426
+ 1966 0082 5471     		strb	r4, [r2, #5]
+ 100:Src/packet_handler.c ****     messages[forensicCounter][7] = 0x00;
+ 1967              		.loc 1 100 5 is_stmt 1 view .LVU427
+ 100:Src/packet_handler.c ****     messages[forensicCounter][7] = 0x00;
+ 1968              		.loc 1 100 34 is_stmt 0 view .LVU428
+ 1969 0084 9071     		strb	r0, [r2, #6]
+ 101:Src/packet_handler.c **** 
+ 1970              		.loc 1 101 5 is_stmt 1 view .LVU429
+ 101:Src/packet_handler.c **** 
+ 1971              		.loc 1 101 34 is_stmt 0 view .LVU430
+ 1972 0086 0020     		movs	r0, #0
+ 1973 0088 D071     		strb	r0, [r2, #7]
+ 103:Src/packet_handler.c ****     forensicCounter%=20;
+ 1974              		.loc 1 103 5 is_stmt 1 view .LVU431
+ 103:Src/packet_handler.c ****     forensicCounter%=20;
+ 1975              		.loc 1 103 20 is_stmt 0 view .LVU432
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 49
+
+
+ 1976 008a 0133     		adds	r3, r3, #1
+ 1977 008c DBB2     		uxtb	r3, r3
+ 104:Src/packet_handler.c **** 
+ 1978              		.loc 1 104 5 is_stmt 1 view .LVU433
+ 104:Src/packet_handler.c **** 
+ 1979              		.loc 1 104 20 is_stmt 0 view .LVU434
+ 1980 008e 124A     		ldr	r2, .L167+16
+ 1981 0090 A2FB0302 		umull	r0, r2, r2, r3
+ 1982 0094 1209     		lsrs	r2, r2, #4
+ 1983 0096 02EB8202 		add	r2, r2, r2, lsl #2
+ 1984 009a A3EB8203 		sub	r3, r3, r2, lsl #2
+ 1985 009e 0B70     		strb	r3, [r1]
  108:Src/packet_handler.c ****         process_instruction();
- 1939              		.loc 1 108 5 is_stmt 1 view .LVU415
+ 1986              		.loc 1 108 5 is_stmt 1 view .LVU435
  108:Src/packet_handler.c ****         process_instruction();
- 1940              		.loc 1 108 8 is_stmt 0 view .LVU416
- 1941 005a 052E     		cmp	r6, #5
- 1942 005c 0CD0     		beq	.L166
- 1943              	.L158:
+ 1987              		.loc 1 108 8 is_stmt 0 view .LVU436
+ 1988 00a0 052E     		cmp	r6, #5
+ 1989 00a2 0DD0     		beq	.L166
+ 1990              	.L158:
  117:Src/packet_handler.c **** 
- 1944              		.loc 1 117 1 view .LVU417
- 1945 005e F8BD     		pop	{r3, r4, r5, r6, r7, pc}
- 1946              	.LVL131:
- 1947              	.L164:
- 1948              	.LBB4:
-  86:Src/packet_handler.c ****             param[i] = deQueue(message);
- 1949              		.loc 1 86 15 view .LVU418
- 1950 0060 0024     		movs	r4, #0
- 1951              	.L160:
- 1952              	.LVL132:
-  86:Src/packet_handler.c ****             param[i] = deQueue(message);
- 1953              		.loc 1 86 19 is_stmt 1 discriminator 1 view .LVU419
-  86:Src/packet_handler.c ****             param[i] = deQueue(message);
- 1954              		.loc 1 86 29 is_stmt 0 discriminator 1 view .LVU420
- 1955 0062 EB1E     		subs	r3, r5, #3
-  86:Src/packet_handler.c ****             param[i] = deQueue(message);
- 1956              		.loc 1 86 9 discriminator 1 view .LVU421
- 1957 0064 A342     		cmp	r3, r4
- 1958 0066 EADD     		ble	.L161
-  87:Src/packet_handler.c ****         }
- 1959              		.loc 1 87 13 is_stmt 1 discriminator 3 view .LVU422
-  87:Src/packet_handler.c ****         }
- 1960              		.loc 1 87 24 is_stmt 0 discriminator 3 view .LVU423
- 1961 0068 054B     		ldr	r3, .L167
- 1962 006a 1868     		ldr	r0, [r3]
- 1963 006c FFF7FEFF 		bl	deQueue
- 1964              	.LVL133:
-  87:Src/packet_handler.c ****         }
- 1965              		.loc 1 87 22 discriminator 3 view .LVU424
- 1966 0070 074B     		ldr	r3, .L167+16
- 1967 0072 1855     		strb	r0, [r3, r4]
-  86:Src/packet_handler.c ****             param[i] = deQueue(message);
- 1968              		.loc 1 86 34 is_stmt 1 discriminator 3 view .LVU425
-  86:Src/packet_handler.c ****             param[i] = deQueue(message);
- 1969              		.loc 1 86 35 is_stmt 0 discriminator 3 view .LVU426
- 1970 0074 0134     		adds	r4, r4, #1
- 1971              	.LVL134:
-  86:Src/packet_handler.c ****             param[i] = deQueue(message);
- 1972              		.loc 1 86 35 discriminator 3 view .LVU427
- 1973 0076 F4E7     		b	.L160
- 1974              	.LVL135:
- 1975              	.L166:
-  86:Src/packet_handler.c ****             param[i] = deQueue(message);
- 1976              		.loc 1 86 35 discriminator 3 view .LVU428
- 1977              	.LBE4:
- 1978              	.LBB5:
+ 1991              		.loc 1 117 1 view .LVU437
+ 1992 00a4 BDE8F883 		pop	{r3, r4, r5, r6, r7, r8, r9, pc}
+ 1993              	.LVL132:
+ 1994              	.L164:
+ 1995              	.LBB4:
+  85:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 1996              		.loc 1 85 15 view .LVU438
+ 1997 00a8 0024     		movs	r4, #0
+ 1998              	.L160:
+ 1999              	.LVL133:
+  85:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 2000              		.loc 1 85 19 is_stmt 1 discriminator 1 view .LVU439
+  85:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 2001              		.loc 1 85 29 is_stmt 0 discriminator 1 view .LVU440
+ 2002 00aa EB1E     		subs	r3, r5, #3
+  85:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 2003              		.loc 1 85 9 discriminator 1 view .LVU441
+ 2004 00ac A342     		cmp	r3, r4
+ 2005 00ae CADD     		ble	.L161
+  86:Src/packet_handler.c ****         }
+ 2006              		.loc 1 86 13 is_stmt 1 discriminator 3 view .LVU442
+  86:Src/packet_handler.c ****         }
+ 2007              		.loc 1 86 24 is_stmt 0 discriminator 3 view .LVU443
+ 2008 00b0 054B     		ldr	r3, .L167
+ 2009 00b2 1868     		ldr	r0, [r3]
+ 2010 00b4 FFF7FEFF 		bl	deQueue
+ 2011              	.LVL134:
+  86:Src/packet_handler.c ****         }
+ 2012              		.loc 1 86 22 discriminator 3 view .LVU444
+ 2013 00b8 084B     		ldr	r3, .L167+20
+ 2014 00ba 1855     		strb	r0, [r3, r4]
+  85:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 2015              		.loc 1 85 34 is_stmt 1 discriminator 3 view .LVU445
+  85:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 2016              		.loc 1 85 35 is_stmt 0 discriminator 3 view .LVU446
+ 2017 00bc 0134     		adds	r4, r4, #1
+ 2018              	.LVL135:
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 50
+
+
+  85:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 2019              		.loc 1 85 35 discriminator 3 view .LVU447
+ 2020 00be F4E7     		b	.L160
+ 2021              	.LVL136:
+ 2022              	.L166:
+  85:Src/packet_handler.c ****             param[i] = deQueue(message);
+ 2023              		.loc 1 85 35 discriminator 3 view .LVU448
+ 2024              	.LBE4:
+ 2025              	.LBB5:
  109:Src/packet_handler.c ****     }
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 49
-
-
- 1979              		.loc 1 109 9 is_stmt 1 view .LVU429
- 1980 0078 FFF7FEFF 		bl	process_instruction
- 1981              	.LVL136:
- 1982              	.LBE5:
+ 2026              		.loc 1 109 9 is_stmt 1 view .LVU449
+ 2027 00c0 FFF7FEFF 		bl	process_instruction
+ 2028              	.LVL137:
+ 2029              	.LBE5:
  117:Src/packet_handler.c **** 
- 1983              		.loc 1 117 1 is_stmt 0 view .LVU430
- 1984 007c EFE7     		b	.L158
- 1985              	.L168:
- 1986 007e 00BF     		.align	2
- 1987              	.L167:
- 1988 0080 00000000 		.word	message
- 1989 0084 00000000 		.word	instruction
- 1990 0088 00000000 		.word	crc
- 1991 008c 00000000 		.word	.LANCHOR3
- 1992 0090 00000000 		.word	param
- 1993              		.cfi_endproc
- 1994              	.LFE529:
- 1996              		.section	.text.process_queue,"ax",%progbits
- 1997              		.align	1
- 1998              		.global	process_queue
- 1999              		.syntax unified
- 2000              		.thumb
- 2001              		.thumb_func
- 2002              		.fpu softvfp
- 2004              	process_queue:
- 2005              	.LFB528:
+ 2030              		.loc 1 117 1 is_stmt 0 view .LVU450
+ 2031 00c4 EEE7     		b	.L158
+ 2032              	.L168:
+ 2033 00c6 00BF     		.align	2
+ 2034              	.L167:
+ 2035 00c8 00000000 		.word	message
+ 2036 00cc 00000000 		.word	instruction
+ 2037 00d0 00000000 		.word	crc
+ 2038 00d4 00000000 		.word	.LANCHOR3
+ 2039 00d8 CDCCCCCC 		.word	-858993459
+ 2040 00dc 00000000 		.word	param
+ 2041 00e0 00000000 		.word	messages
+ 2042              		.cfi_endproc
+ 2043              	.LFE529:
+ 2045              		.section	.text.process_queue,"ax",%progbits
+ 2046              		.align	1
+ 2047              		.global	process_queue
+ 2048              		.syntax unified
+ 2049              		.thumb
+ 2050              		.thumb_func
+ 2051              		.fpu softvfp
+ 2053              	process_queue:
+ 2054              	.LFB528:
   34:Src/packet_handler.c **** 
- 2006              		.loc 1 34 21 is_stmt 1 view -0
- 2007              		.cfi_startproc
- 2008              		@ args = 0, pretend = 0, frame = 0
- 2009              		@ frame_needed = 0, uses_anonymous_args = 0
- 2010 0000 70B5     		push	{r4, r5, r6, lr}
- 2011              	.LCFI25:
- 2012              		.cfi_def_cfa_offset 16
- 2013              		.cfi_offset 4, -16
- 2014              		.cfi_offset 5, -12
- 2015              		.cfi_offset 6, -8
- 2016              		.cfi_offset 14, -4
+ 2055              		.loc 1 34 21 is_stmt 1 view -0
+ 2056              		.cfi_startproc
+ 2057              		@ args = 0, pretend = 0, frame = 0
+ 2058              		@ frame_needed = 0, uses_anonymous_args = 0
+ 2059 0000 38B5     		push	{r3, r4, r5, lr}
+ 2060              	.LCFI25:
+ 2061              		.cfi_def_cfa_offset 16
+ 2062              		.cfi_offset 3, -16
+ 2063              		.cfi_offset 4, -12
+ 2064              		.cfi_offset 5, -8
+ 2065              		.cfi_offset 14, -4
   37:Src/packet_handler.c ****     uint8_t h2 = 0;
- 2017              		.loc 1 37 5 view .LVU432
- 2018              	.LVL137:
+ 2066              		.loc 1 37 5 view .LVU452
+ 2067              	.LVL138:
   38:Src/packet_handler.c ****     uint8_t h3 = 0;
- 2019              		.loc 1 38 5 view .LVU433
+ 2068              		.loc 1 38 5 view .LVU453
   39:Src/packet_handler.c ****     uint32_t header_block=0;
- 2020              		.loc 1 39 5 view .LVU434
-  40:Src/packet_handler.c ****     uint8_t header_block_found = 0;
- 2021              		.loc 1 40 5 view .LVU435
-  41:Src/packet_handler.c **** 
- 2022              		.loc 1 41 5 view .LVU436
-  43:Src/packet_handler.c **** 
- 2023              		.loc 1 43 5 view .LVU437
-  41:Src/packet_handler.c **** 
- 2024              		.loc 1 41 13 is_stmt 0 view .LVU438
- 2025 0002 0026     		movs	r6, #0
-  39:Src/packet_handler.c ****     uint32_t header_block=0;
- 2026              		.loc 1 39 13 view .LVU439
- 2027 0004 3446     		mov	r4, r6
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 50
+ 2069              		.loc 1 39 5 view .LVU454
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 51
 
 
+  40:Src/packet_handler.c **** 
+ 2070              		.loc 1 40 5 view .LVU455
+  42:Src/packet_handler.c **** 
+ 2071              		.loc 1 42 5 view .LVU456
+  39:Src/packet_handler.c ****     uint32_t header_block=0;
+ 2072              		.loc 1 39 13 is_stmt 0 view .LVU457
+ 2073 0002 0024     		movs	r4, #0
   38:Src/packet_handler.c ****     uint8_t h3 = 0;
- 2028              		.loc 1 38 13 view .LVU440
- 2029 0006 3546     		mov	r5, r6
-  43:Src/packet_handler.c **** 
- 2030              		.loc 1 43 11 view .LVU441
- 2031 0008 01E0     		b	.L170
- 2032              	.LVL138:
- 2033              	.L171:
+ 2074              		.loc 1 38 13 view .LVU458
+ 2075 0004 2546     		mov	r5, r4
+ 2076              	.LVL139:
+ 2077              	.L170:
+  42:Src/packet_handler.c **** 
+ 2078              		.loc 1 42 11 is_stmt 1 view .LVU459
+  42:Src/packet_handler.c **** 
+ 2079              		.loc 1 42 13 is_stmt 0 view .LVU460
+ 2080 0006 0B4B     		ldr	r3, .L176
+ 2081 0008 1868     		ldr	r0, [r3]
+ 2082 000a FFF7FEFF 		bl	isEmpty
+ 2083              	.LVL140:
+  42:Src/packet_handler.c **** 
+ 2084              		.loc 1 42 11 view .LVU461
+ 2085 000e 78B9     		cbnz	r0, .L169
+  45:Src/packet_handler.c ****         h2 = h3;
+ 2086              		.loc 1 45 9 is_stmt 1 view .LVU462
+ 2087              	.LVL141:
+  46:Src/packet_handler.c ****         h3 = deQueue(message);
+ 2088              		.loc 1 46 9 view .LVU463
+  47:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
+ 2089              		.loc 1 47 9 view .LVU464
+  47:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
+ 2090              		.loc 1 47 14 is_stmt 0 view .LVU465
+ 2091 0010 084B     		ldr	r3, .L176
+ 2092 0012 1868     		ldr	r0, [r3]
+ 2093 0014 FFF7FEFF 		bl	deQueue
+ 2094              	.LVL142:
+  48:Src/packet_handler.c ****         if(header_block == 0xFFFFFD) {
+ 2095              		.loc 1 48 9 is_stmt 1 view .LVU466
+  48:Src/packet_handler.c ****         if(header_block == 0xFFFFFD) {
+ 2096              		.loc 1 48 38 is_stmt 0 view .LVU467
+ 2097 0018 2302     		lsls	r3, r4, #8
+  48:Src/packet_handler.c ****         if(header_block == 0xFFFFFD) {
+ 2098              		.loc 1 48 33 view .LVU468
+ 2099 001a 03EB0543 		add	r3, r3, r5, lsl #16
+  48:Src/packet_handler.c ****         if(header_block == 0xFFFFFD) {
+ 2100              		.loc 1 48 43 view .LVU469
+ 2101 001e 0344     		add	r3, r3, r0
+ 2102              	.LVL143:
+  49:Src/packet_handler.c ****             extract_message();
+ 2103              		.loc 1 49 9 is_stmt 1 view .LVU470
+  46:Src/packet_handler.c ****         h3 = deQueue(message);
+ 2104              		.loc 1 46 12 is_stmt 0 view .LVU471
+ 2105 0020 2546     		mov	r5, r4
+ 2106              	.LVL144:
+  49:Src/packet_handler.c ****             extract_message();
+ 2107              		.loc 1 49 11 view .LVU472
+ 2108 0022 054A     		ldr	r2, .L176+4
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 52
+
+
+ 2109 0024 9342     		cmp	r3, r2
+ 2110 0026 01D0     		beq	.L175
+  47:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
+ 2111              		.loc 1 47 14 view .LVU473
+ 2112 0028 0446     		mov	r4, r0
+ 2113              	.LVL145:
+  47:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
+ 2114              		.loc 1 47 14 view .LVU474
+ 2115 002a ECE7     		b	.L170
+ 2116              	.LVL146:
+ 2117              	.L175:
+ 2118              	.LBB6:
+  50:Src/packet_handler.c ****             break;
+ 2119              		.loc 1 50 13 is_stmt 1 view .LVU475
+ 2120 002c FFF7FEFF 		bl	extract_message
+ 2121              	.LVL147:
   51:Src/packet_handler.c ****         }
- 2034              		.loc 1 51 32 view .LVU442
- 2035 000a 2546     		mov	r5, r4
- 2036              	.LVL139:
+ 2122              		.loc 1 51 13 view .LVU476
+ 2123              	.L169:
   51:Src/packet_handler.c ****         }
- 2037              		.loc 1 51 32 view .LVU443
- 2038 000c 0446     		mov	r4, r0
- 2039              	.LVL140:
- 2040              	.L170:
-  43:Src/packet_handler.c **** 
- 2041              		.loc 1 43 11 is_stmt 1 view .LVU444
- 2042 000e 8EB9     		cbnz	r6, .L172
-  43:Src/packet_handler.c **** 
- 2043              		.loc 1 43 36 is_stmt 0 discriminator 1 view .LVU445
- 2044 0010 0B4B     		ldr	r3, .L178
- 2045 0012 1868     		ldr	r0, [r3]
- 2046 0014 FFF7FEFF 		bl	isEmpty
- 2047              	.LVL141:
-  43:Src/packet_handler.c **** 
- 2048              		.loc 1 43 32 discriminator 1 view .LVU446
- 2049 0018 60B9     		cbnz	r0, .L172
-  46:Src/packet_handler.c ****         h2 = h3;
- 2050              		.loc 1 46 9 is_stmt 1 view .LVU447
- 2051              	.LVL142:
-  47:Src/packet_handler.c ****         h3 = deQueue(message);
- 2052              		.loc 1 47 9 view .LVU448
-  48:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
- 2053              		.loc 1 48 9 view .LVU449
-  48:Src/packet_handler.c ****         header_block = (h1<<16) + (h2<<8) + (h3);
- 2054              		.loc 1 48 14 is_stmt 0 view .LVU450
- 2055 001a 094B     		ldr	r3, .L178
- 2056 001c 1868     		ldr	r0, [r3]
- 2057 001e FFF7FEFF 		bl	deQueue
- 2058              	.LVL143:
-  49:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
- 2059              		.loc 1 49 9 is_stmt 1 view .LVU451
-  49:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
- 2060              		.loc 1 49 38 is_stmt 0 view .LVU452
- 2061 0022 2302     		lsls	r3, r4, #8
-  49:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
- 2062              		.loc 1 49 33 view .LVU453
- 2063 0024 03EB0543 		add	r3, r3, r5, lsl #16
-  49:Src/packet_handler.c ****         if(header_block == 0xFFFFFD){
- 2064              		.loc 1 49 43 view .LVU454
- 2065 0028 0344     		add	r3, r3, r0
- 2066              	.LVL144:
-  50:Src/packet_handler.c ****             header_block_found = 1;
- 2067              		.loc 1 50 9 is_stmt 1 view .LVU455
-  50:Src/packet_handler.c ****             header_block_found = 1;
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 51
+ 2124              		.loc 1 51 13 is_stmt 0 view .LVU477
+ 2125              	.LBE6:
+  54:Src/packet_handler.c **** 
+ 2126              		.loc 1 54 1 view .LVU478
+ 2127 0030 38BD     		pop	{r3, r4, r5, pc}
+ 2128              	.L177:
+ 2129 0032 00BF     		.align	2
+ 2130              	.L176:
+ 2131 0034 00000000 		.word	message
+ 2132 0038 FDFFFF00 		.word	16777213
+ 2133              		.cfi_endproc
+ 2134              	.LFE528:
+ 2136              		.global	delay_transmit_uS
+ 2137              		.comm	runtime_param,4,4
+ 2138              		.comm	stored_param,4,4
+ 2139              		.comm	crc,2,4
+ 2140              		.comm	param,20,4
+ 2141              		.comm	instruction,1,1
+ 2142              		.comm	messages,260,4
+ 2143              		.comm	rd_ptr,1,1
+ 2144              		.comm	txBuffer,64,4
+ 2145              		.comm	rxBuffer,64,4
+ 2146              		.section	.rodata
+ 2147              		.align	2
+ 2148              		.set	.LANCHOR1,. + 0
+ 2149              	.LC0:
+ 2150 0000 FFFFFD00 		.ascii	"\377\377\375\000\005\007\000U\000\006\004&\000\000"
+ 2150      05070055 
+ 2150      00060426 
+ 2150      0000
+ 2151              		.section	.bss.forensicCounter.8146,"aw",%nobits
+ 2152              		.set	.LANCHOR3,. + 0
+ 2155              	forensicCounter.8146:
+ 2156 0000 00       		.space	1
+ 2157              		.section	.data.delay_transmit_uS,"aw"
+ 2158              		.align	2
+ 2159              		.set	.LANCHOR2,. + 0
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 53
 
 
- 2068              		.loc 1 50 11 is_stmt 0 view .LVU456
- 2069 002a 064A     		ldr	r2, .L178+4
- 2070 002c 9342     		cmp	r3, r2
- 2071 002e ECD1     		bne	.L171
-  51:Src/packet_handler.c ****         }
- 2072              		.loc 1 51 32 view .LVU457
- 2073 0030 0126     		movs	r6, #1
- 2074              	.LVL145:
-  51:Src/packet_handler.c ****         }
- 2075              		.loc 1 51 32 view .LVU458
- 2076 0032 EAE7     		b	.L171
- 2077              	.LVL146:
- 2078              	.L172:
-  56:Src/packet_handler.c ****         extract_message();
- 2079              		.loc 1 56 5 is_stmt 1 view .LVU459
-  56:Src/packet_handler.c ****         extract_message();
- 2080              		.loc 1 56 8 is_stmt 0 view .LVU460
- 2081 0034 06B9     		cbnz	r6, .L177
- 2082              	.L169:
-  60:Src/packet_handler.c **** 
- 2083              		.loc 1 60 1 view .LVU461
- 2084 0036 70BD     		pop	{r4, r5, r6, pc}
- 2085              	.LVL147:
- 2086              	.L177:
- 2087              	.LBB6:
-  57:Src/packet_handler.c ****     }
- 2088              		.loc 1 57 9 is_stmt 1 view .LVU462
- 2089 0038 FFF7FEFF 		bl	extract_message
- 2090              	.LVL148:
- 2091              	.LBE6:
-  60:Src/packet_handler.c **** 
- 2092              		.loc 1 60 1 is_stmt 0 view .LVU463
- 2093 003c FBE7     		b	.L169
- 2094              	.L179:
- 2095 003e 00BF     		.align	2
- 2096              	.L178:
- 2097 0040 00000000 		.word	message
- 2098 0044 FDFFFF00 		.word	16777213
- 2099              		.cfi_endproc
- 2100              	.LFE528:
- 2102              		.global	delay_transmit_uS
- 2103              		.comm	runtime_param,4,4
- 2104              		.comm	stored_param,4,4
- 2105              		.comm	crc,2,4
- 2106              		.comm	param,20,4
- 2107              		.comm	instruction,1,1
- 2108              		.comm	messages,160,4
- 2109              		.comm	rd_ptr,1,1
- 2110              		.comm	txBuffer,64,4
- 2111              		.comm	rxBuffer,64,4
- 2112              		.section	.rodata
- 2113              		.align	2
- 2114              		.set	.LANCHOR1,. + 0
- 2115              	.LC0:
- 2116 0000 FFFFFD00 		.ascii	"\377\377\375\000\005\007\000U\000\006\004&\000\000"
- 2116      05070055 
- 2116      00060426 
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 52
+ 2162              	delay_transmit_uS:
+ 2163 0000 32000000 		.word	50
+ 2164              		.section	.rodata.crc_table.8400,"a"
+ 2165              		.align	2
+ 2166              		.set	.LANCHOR0,. + 0
+ 2169              	crc_table.8400:
+ 2170 0000 0000     		.short	0
+ 2171 0002 0580     		.short	-32763
+ 2172 0004 0F80     		.short	-32753
+ 2173 0006 0A00     		.short	10
+ 2174 0008 1B80     		.short	-32741
+ 2175 000a 1E00     		.short	30
+ 2176 000c 1400     		.short	20
+ 2177 000e 1180     		.short	-32751
+ 2178 0010 3380     		.short	-32717
+ 2179 0012 3600     		.short	54
+ 2180 0014 3C00     		.short	60
+ 2181 0016 3980     		.short	-32711
+ 2182 0018 2800     		.short	40
+ 2183 001a 2D80     		.short	-32723
+ 2184 001c 2780     		.short	-32729
+ 2185 001e 2200     		.short	34
+ 2186 0020 6380     		.short	-32669
+ 2187 0022 6600     		.short	102
+ 2188 0024 6C00     		.short	108
+ 2189 0026 6980     		.short	-32663
+ 2190 0028 7800     		.short	120
+ 2191 002a 7D80     		.short	-32643
+ 2192 002c 7780     		.short	-32649
+ 2193 002e 7200     		.short	114
+ 2194 0030 5000     		.short	80
+ 2195 0032 5580     		.short	-32683
+ 2196 0034 5F80     		.short	-32673
+ 2197 0036 5A00     		.short	90
+ 2198 0038 4B80     		.short	-32693
+ 2199 003a 4E00     		.short	78
+ 2200 003c 4400     		.short	68
+ 2201 003e 4180     		.short	-32703
+ 2202 0040 C380     		.short	-32573
+ 2203 0042 C600     		.short	198
+ 2204 0044 CC00     		.short	204
+ 2205 0046 C980     		.short	-32567
+ 2206 0048 D800     		.short	216
+ 2207 004a DD80     		.short	-32547
+ 2208 004c D780     		.short	-32553
+ 2209 004e D200     		.short	210
+ 2210 0050 F000     		.short	240
+ 2211 0052 F580     		.short	-32523
+ 2212 0054 FF80     		.short	-32513
+ 2213 0056 FA00     		.short	250
+ 2214 0058 EB80     		.short	-32533
+ 2215 005a EE00     		.short	238
+ 2216 005c E400     		.short	228
+ 2217 005e E180     		.short	-32543
+ 2218 0060 A000     		.short	160
+ 2219 0062 A580     		.short	-32603
+ 2220 0064 AF80     		.short	-32593
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 54
 
 
- 2116      0000
- 2117              		.section	.bss.forensicCounter.8147,"aw",%nobits
- 2118              		.set	.LANCHOR3,. + 0
- 2121              	forensicCounter.8147:
- 2122 0000 00       		.space	1
- 2123              		.section	.data.delay_transmit_uS,"aw"
- 2124              		.align	2
- 2125              		.set	.LANCHOR2,. + 0
- 2128              	delay_transmit_uS:
- 2129 0000 32000000 		.word	50
- 2130              		.section	.rodata.crc_table.8401,"a"
- 2131              		.align	2
- 2132              		.set	.LANCHOR0,. + 0
- 2135              	crc_table.8401:
- 2136 0000 0000     		.short	0
- 2137 0002 0580     		.short	-32763
- 2138 0004 0F80     		.short	-32753
- 2139 0006 0A00     		.short	10
- 2140 0008 1B80     		.short	-32741
- 2141 000a 1E00     		.short	30
- 2142 000c 1400     		.short	20
- 2143 000e 1180     		.short	-32751
- 2144 0010 3380     		.short	-32717
- 2145 0012 3600     		.short	54
- 2146 0014 3C00     		.short	60
- 2147 0016 3980     		.short	-32711
- 2148 0018 2800     		.short	40
- 2149 001a 2D80     		.short	-32723
- 2150 001c 2780     		.short	-32729
- 2151 001e 2200     		.short	34
- 2152 0020 6380     		.short	-32669
- 2153 0022 6600     		.short	102
- 2154 0024 6C00     		.short	108
- 2155 0026 6980     		.short	-32663
- 2156 0028 7800     		.short	120
- 2157 002a 7D80     		.short	-32643
- 2158 002c 7780     		.short	-32649
- 2159 002e 7200     		.short	114
- 2160 0030 5000     		.short	80
- 2161 0032 5580     		.short	-32683
- 2162 0034 5F80     		.short	-32673
- 2163 0036 5A00     		.short	90
- 2164 0038 4B80     		.short	-32693
- 2165 003a 4E00     		.short	78
- 2166 003c 4400     		.short	68
- 2167 003e 4180     		.short	-32703
- 2168 0040 C380     		.short	-32573
- 2169 0042 C600     		.short	198
- 2170 0044 CC00     		.short	204
- 2171 0046 C980     		.short	-32567
- 2172 0048 D800     		.short	216
- 2173 004a DD80     		.short	-32547
- 2174 004c D780     		.short	-32553
- 2175 004e D200     		.short	210
- 2176 0050 F000     		.short	240
- 2177 0052 F580     		.short	-32523
- 2178 0054 FF80     		.short	-32513
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 53
+ 2221 0066 AA00     		.short	170
+ 2222 0068 BB80     		.short	-32581
+ 2223 006a BE00     		.short	190
+ 2224 006c B400     		.short	180
+ 2225 006e B180     		.short	-32591
+ 2226 0070 9380     		.short	-32621
+ 2227 0072 9600     		.short	150
+ 2228 0074 9C00     		.short	156
+ 2229 0076 9980     		.short	-32615
+ 2230 0078 8800     		.short	136
+ 2231 007a 8D80     		.short	-32627
+ 2232 007c 8780     		.short	-32633
+ 2233 007e 8200     		.short	130
+ 2234 0080 8381     		.short	-32381
+ 2235 0082 8601     		.short	390
+ 2236 0084 8C01     		.short	396
+ 2237 0086 8981     		.short	-32375
+ 2238 0088 9801     		.short	408
+ 2239 008a 9D81     		.short	-32355
+ 2240 008c 9781     		.short	-32361
+ 2241 008e 9201     		.short	402
+ 2242 0090 B001     		.short	432
+ 2243 0092 B581     		.short	-32331
+ 2244 0094 BF81     		.short	-32321
+ 2245 0096 BA01     		.short	442
+ 2246 0098 AB81     		.short	-32341
+ 2247 009a AE01     		.short	430
+ 2248 009c A401     		.short	420
+ 2249 009e A181     		.short	-32351
+ 2250 00a0 E001     		.short	480
+ 2251 00a2 E581     		.short	-32283
+ 2252 00a4 EF81     		.short	-32273
+ 2253 00a6 EA01     		.short	490
+ 2254 00a8 FB81     		.short	-32261
+ 2255 00aa FE01     		.short	510
+ 2256 00ac F401     		.short	500
+ 2257 00ae F181     		.short	-32271
+ 2258 00b0 D381     		.short	-32301
+ 2259 00b2 D601     		.short	470
+ 2260 00b4 DC01     		.short	476
+ 2261 00b6 D981     		.short	-32295
+ 2262 00b8 C801     		.short	456
+ 2263 00ba CD81     		.short	-32307
+ 2264 00bc C781     		.short	-32313
+ 2265 00be C201     		.short	450
+ 2266 00c0 4001     		.short	320
+ 2267 00c2 4581     		.short	-32443
+ 2268 00c4 4F81     		.short	-32433
+ 2269 00c6 4A01     		.short	330
+ 2270 00c8 5B81     		.short	-32421
+ 2271 00ca 5E01     		.short	350
+ 2272 00cc 5401     		.short	340
+ 2273 00ce 5181     		.short	-32431
+ 2274 00d0 7381     		.short	-32397
+ 2275 00d2 7601     		.short	374
+ 2276 00d4 7C01     		.short	380
+ 2277 00d6 7981     		.short	-32391
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 55
 
 
- 2179 0056 FA00     		.short	250
- 2180 0058 EB80     		.short	-32533
- 2181 005a EE00     		.short	238
- 2182 005c E400     		.short	228
- 2183 005e E180     		.short	-32543
- 2184 0060 A000     		.short	160
- 2185 0062 A580     		.short	-32603
- 2186 0064 AF80     		.short	-32593
- 2187 0066 AA00     		.short	170
- 2188 0068 BB80     		.short	-32581
- 2189 006a BE00     		.short	190
- 2190 006c B400     		.short	180
- 2191 006e B180     		.short	-32591
- 2192 0070 9380     		.short	-32621
- 2193 0072 9600     		.short	150
- 2194 0074 9C00     		.short	156
- 2195 0076 9980     		.short	-32615
- 2196 0078 8800     		.short	136
- 2197 007a 8D80     		.short	-32627
- 2198 007c 8780     		.short	-32633
- 2199 007e 8200     		.short	130
- 2200 0080 8381     		.short	-32381
- 2201 0082 8601     		.short	390
- 2202 0084 8C01     		.short	396
- 2203 0086 8981     		.short	-32375
- 2204 0088 9801     		.short	408
- 2205 008a 9D81     		.short	-32355
- 2206 008c 9781     		.short	-32361
- 2207 008e 9201     		.short	402
- 2208 0090 B001     		.short	432
- 2209 0092 B581     		.short	-32331
- 2210 0094 BF81     		.short	-32321
- 2211 0096 BA01     		.short	442
- 2212 0098 AB81     		.short	-32341
- 2213 009a AE01     		.short	430
- 2214 009c A401     		.short	420
- 2215 009e A181     		.short	-32351
- 2216 00a0 E001     		.short	480
- 2217 00a2 E581     		.short	-32283
- 2218 00a4 EF81     		.short	-32273
- 2219 00a6 EA01     		.short	490
- 2220 00a8 FB81     		.short	-32261
- 2221 00aa FE01     		.short	510
- 2222 00ac F401     		.short	500
- 2223 00ae F181     		.short	-32271
- 2224 00b0 D381     		.short	-32301
- 2225 00b2 D601     		.short	470
- 2226 00b4 DC01     		.short	476
- 2227 00b6 D981     		.short	-32295
- 2228 00b8 C801     		.short	456
- 2229 00ba CD81     		.short	-32307
- 2230 00bc C781     		.short	-32313
- 2231 00be C201     		.short	450
- 2232 00c0 4001     		.short	320
- 2233 00c2 4581     		.short	-32443
- 2234 00c4 4F81     		.short	-32433
- 2235 00c6 4A01     		.short	330
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 54
+ 2278 00d8 6801     		.short	360
+ 2279 00da 6D81     		.short	-32403
+ 2280 00dc 6781     		.short	-32409
+ 2281 00de 6201     		.short	354
+ 2282 00e0 2381     		.short	-32477
+ 2283 00e2 2601     		.short	294
+ 2284 00e4 2C01     		.short	300
+ 2285 00e6 2981     		.short	-32471
+ 2286 00e8 3801     		.short	312
+ 2287 00ea 3D81     		.short	-32451
+ 2288 00ec 3781     		.short	-32457
+ 2289 00ee 3201     		.short	306
+ 2290 00f0 1001     		.short	272
+ 2291 00f2 1581     		.short	-32491
+ 2292 00f4 1F81     		.short	-32481
+ 2293 00f6 1A01     		.short	282
+ 2294 00f8 0B81     		.short	-32501
+ 2295 00fa 0E01     		.short	270
+ 2296 00fc 0401     		.short	260
+ 2297 00fe 0181     		.short	-32511
+ 2298 0100 0383     		.short	-31997
+ 2299 0102 0603     		.short	774
+ 2300 0104 0C03     		.short	780
+ 2301 0106 0983     		.short	-31991
+ 2302 0108 1803     		.short	792
+ 2303 010a 1D83     		.short	-31971
+ 2304 010c 1783     		.short	-31977
+ 2305 010e 1203     		.short	786
+ 2306 0110 3003     		.short	816
+ 2307 0112 3583     		.short	-31947
+ 2308 0114 3F83     		.short	-31937
+ 2309 0116 3A03     		.short	826
+ 2310 0118 2B83     		.short	-31957
+ 2311 011a 2E03     		.short	814
+ 2312 011c 2403     		.short	804
+ 2313 011e 2183     		.short	-31967
+ 2314 0120 6003     		.short	864
+ 2315 0122 6583     		.short	-31899
+ 2316 0124 6F83     		.short	-31889
+ 2317 0126 6A03     		.short	874
+ 2318 0128 7B83     		.short	-31877
+ 2319 012a 7E03     		.short	894
+ 2320 012c 7403     		.short	884
+ 2321 012e 7183     		.short	-31887
+ 2322 0130 5383     		.short	-31917
+ 2323 0132 5603     		.short	854
+ 2324 0134 5C03     		.short	860
+ 2325 0136 5983     		.short	-31911
+ 2326 0138 4803     		.short	840
+ 2327 013a 4D83     		.short	-31923
+ 2328 013c 4783     		.short	-31929
+ 2329 013e 4203     		.short	834
+ 2330 0140 C003     		.short	960
+ 2331 0142 C583     		.short	-31803
+ 2332 0144 CF83     		.short	-31793
+ 2333 0146 CA03     		.short	970
+ 2334 0148 DB83     		.short	-31781
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 56
 
 
- 2236 00c8 5B81     		.short	-32421
- 2237 00ca 5E01     		.short	350
- 2238 00cc 5401     		.short	340
- 2239 00ce 5181     		.short	-32431
- 2240 00d0 7381     		.short	-32397
- 2241 00d2 7601     		.short	374
- 2242 00d4 7C01     		.short	380
- 2243 00d6 7981     		.short	-32391
- 2244 00d8 6801     		.short	360
- 2245 00da 6D81     		.short	-32403
- 2246 00dc 6781     		.short	-32409
- 2247 00de 6201     		.short	354
- 2248 00e0 2381     		.short	-32477
- 2249 00e2 2601     		.short	294
- 2250 00e4 2C01     		.short	300
- 2251 00e6 2981     		.short	-32471
- 2252 00e8 3801     		.short	312
- 2253 00ea 3D81     		.short	-32451
- 2254 00ec 3781     		.short	-32457
- 2255 00ee 3201     		.short	306
- 2256 00f0 1001     		.short	272
- 2257 00f2 1581     		.short	-32491
- 2258 00f4 1F81     		.short	-32481
- 2259 00f6 1A01     		.short	282
- 2260 00f8 0B81     		.short	-32501
- 2261 00fa 0E01     		.short	270
- 2262 00fc 0401     		.short	260
- 2263 00fe 0181     		.short	-32511
- 2264 0100 0383     		.short	-31997
- 2265 0102 0603     		.short	774
- 2266 0104 0C03     		.short	780
- 2267 0106 0983     		.short	-31991
- 2268 0108 1803     		.short	792
- 2269 010a 1D83     		.short	-31971
- 2270 010c 1783     		.short	-31977
- 2271 010e 1203     		.short	786
- 2272 0110 3003     		.short	816
- 2273 0112 3583     		.short	-31947
- 2274 0114 3F83     		.short	-31937
- 2275 0116 3A03     		.short	826
- 2276 0118 2B83     		.short	-31957
- 2277 011a 2E03     		.short	814
- 2278 011c 2403     		.short	804
- 2279 011e 2183     		.short	-31967
- 2280 0120 6003     		.short	864
- 2281 0122 6583     		.short	-31899
- 2282 0124 6F83     		.short	-31889
- 2283 0126 6A03     		.short	874
- 2284 0128 7B83     		.short	-31877
- 2285 012a 7E03     		.short	894
- 2286 012c 7403     		.short	884
- 2287 012e 7183     		.short	-31887
- 2288 0130 5383     		.short	-31917
- 2289 0132 5603     		.short	854
- 2290 0134 5C03     		.short	860
- 2291 0136 5983     		.short	-31911
- 2292 0138 4803     		.short	840
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 55
+ 2335 014a DE03     		.short	990
+ 2336 014c D403     		.short	980
+ 2337 014e D183     		.short	-31791
+ 2338 0150 F383     		.short	-31757
+ 2339 0152 F603     		.short	1014
+ 2340 0154 FC03     		.short	1020
+ 2341 0156 F983     		.short	-31751
+ 2342 0158 E803     		.short	1000
+ 2343 015a ED83     		.short	-31763
+ 2344 015c E783     		.short	-31769
+ 2345 015e E203     		.short	994
+ 2346 0160 A383     		.short	-31837
+ 2347 0162 A603     		.short	934
+ 2348 0164 AC03     		.short	940
+ 2349 0166 A983     		.short	-31831
+ 2350 0168 B803     		.short	952
+ 2351 016a BD83     		.short	-31811
+ 2352 016c B783     		.short	-31817
+ 2353 016e B203     		.short	946
+ 2354 0170 9003     		.short	912
+ 2355 0172 9583     		.short	-31851
+ 2356 0174 9F83     		.short	-31841
+ 2357 0176 9A03     		.short	922
+ 2358 0178 8B83     		.short	-31861
+ 2359 017a 8E03     		.short	910
+ 2360 017c 8403     		.short	900
+ 2361 017e 8183     		.short	-31871
+ 2362 0180 8002     		.short	640
+ 2363 0182 8582     		.short	-32123
+ 2364 0184 8F82     		.short	-32113
+ 2365 0186 8A02     		.short	650
+ 2366 0188 9B82     		.short	-32101
+ 2367 018a 9E02     		.short	670
+ 2368 018c 9402     		.short	660
+ 2369 018e 9182     		.short	-32111
+ 2370 0190 B382     		.short	-32077
+ 2371 0192 B602     		.short	694
+ 2372 0194 BC02     		.short	700
+ 2373 0196 B982     		.short	-32071
+ 2374 0198 A802     		.short	680
+ 2375 019a AD82     		.short	-32083
+ 2376 019c A782     		.short	-32089
+ 2377 019e A202     		.short	674
+ 2378 01a0 E382     		.short	-32029
+ 2379 01a2 E602     		.short	742
+ 2380 01a4 EC02     		.short	748
+ 2381 01a6 E982     		.short	-32023
+ 2382 01a8 F802     		.short	760
+ 2383 01aa FD82     		.short	-32003
+ 2384 01ac F782     		.short	-32009
+ 2385 01ae F202     		.short	754
+ 2386 01b0 D002     		.short	720
+ 2387 01b2 D582     		.short	-32043
+ 2388 01b4 DF82     		.short	-32033
+ 2389 01b6 DA02     		.short	730
+ 2390 01b8 CB82     		.short	-32053
+ 2391 01ba CE02     		.short	718
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 57
 
 
- 2293 013a 4D83     		.short	-31923
- 2294 013c 4783     		.short	-31929
- 2295 013e 4203     		.short	834
- 2296 0140 C003     		.short	960
- 2297 0142 C583     		.short	-31803
- 2298 0144 CF83     		.short	-31793
- 2299 0146 CA03     		.short	970
- 2300 0148 DB83     		.short	-31781
- 2301 014a DE03     		.short	990
- 2302 014c D403     		.short	980
- 2303 014e D183     		.short	-31791
- 2304 0150 F383     		.short	-31757
- 2305 0152 F603     		.short	1014
- 2306 0154 FC03     		.short	1020
- 2307 0156 F983     		.short	-31751
- 2308 0158 E803     		.short	1000
- 2309 015a ED83     		.short	-31763
- 2310 015c E783     		.short	-31769
- 2311 015e E203     		.short	994
- 2312 0160 A383     		.short	-31837
- 2313 0162 A603     		.short	934
- 2314 0164 AC03     		.short	940
- 2315 0166 A983     		.short	-31831
- 2316 0168 B803     		.short	952
- 2317 016a BD83     		.short	-31811
- 2318 016c B783     		.short	-31817
- 2319 016e B203     		.short	946
- 2320 0170 9003     		.short	912
- 2321 0172 9583     		.short	-31851
- 2322 0174 9F83     		.short	-31841
- 2323 0176 9A03     		.short	922
- 2324 0178 8B83     		.short	-31861
- 2325 017a 8E03     		.short	910
- 2326 017c 8403     		.short	900
- 2327 017e 8183     		.short	-31871
- 2328 0180 8002     		.short	640
- 2329 0182 8582     		.short	-32123
- 2330 0184 8F82     		.short	-32113
- 2331 0186 8A02     		.short	650
- 2332 0188 9B82     		.short	-32101
- 2333 018a 9E02     		.short	670
- 2334 018c 9402     		.short	660
- 2335 018e 9182     		.short	-32111
- 2336 0190 B382     		.short	-32077
- 2337 0192 B602     		.short	694
- 2338 0194 BC02     		.short	700
- 2339 0196 B982     		.short	-32071
- 2340 0198 A802     		.short	680
- 2341 019a AD82     		.short	-32083
- 2342 019c A782     		.short	-32089
- 2343 019e A202     		.short	674
- 2344 01a0 E382     		.short	-32029
- 2345 01a2 E602     		.short	742
- 2346 01a4 EC02     		.short	748
- 2347 01a6 E982     		.short	-32023
- 2348 01a8 F802     		.short	760
- 2349 01aa FD82     		.short	-32003
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 56
-
-
- 2350 01ac F782     		.short	-32009
- 2351 01ae F202     		.short	754
- 2352 01b0 D002     		.short	720
- 2353 01b2 D582     		.short	-32043
- 2354 01b4 DF82     		.short	-32033
- 2355 01b6 DA02     		.short	730
- 2356 01b8 CB82     		.short	-32053
- 2357 01ba CE02     		.short	718
- 2358 01bc C402     		.short	708
- 2359 01be C182     		.short	-32063
- 2360 01c0 4382     		.short	-32189
- 2361 01c2 4602     		.short	582
- 2362 01c4 4C02     		.short	588
- 2363 01c6 4982     		.short	-32183
- 2364 01c8 5802     		.short	600
- 2365 01ca 5D82     		.short	-32163
- 2366 01cc 5782     		.short	-32169
- 2367 01ce 5202     		.short	594
- 2368 01d0 7002     		.short	624
- 2369 01d2 7582     		.short	-32139
- 2370 01d4 7F82     		.short	-32129
- 2371 01d6 7A02     		.short	634
- 2372 01d8 6B82     		.short	-32149
- 2373 01da 6E02     		.short	622
- 2374 01dc 6402     		.short	612
- 2375 01de 6182     		.short	-32159
- 2376 01e0 2002     		.short	544
- 2377 01e2 2582     		.short	-32219
- 2378 01e4 2F82     		.short	-32209
- 2379 01e6 2A02     		.short	554
- 2380 01e8 3B82     		.short	-32197
- 2381 01ea 3E02     		.short	574
- 2382 01ec 3402     		.short	564
- 2383 01ee 3182     		.short	-32207
- 2384 01f0 1382     		.short	-32237
- 2385 01f2 1602     		.short	534
- 2386 01f4 1C02     		.short	540
- 2387 01f6 1982     		.short	-32231
- 2388 01f8 0802     		.short	520
- 2389 01fa 0D82     		.short	-32243
- 2390 01fc 0782     		.short	-32249
- 2391 01fe 0202     		.short	514
- 2392              		.text
- 2393              	.Letext0:
- 2394              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 2395              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 2396              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 2397              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 2398              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
- 2399              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 2400              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
- 2401              		.file 9 "Inc/queue.h"
- 2402              		.file 10 "Inc/packet_handler.h"
- 2403              		.file 11 "Drivers/CMSIS/Include/core_cm3.h"
- 2404              		.file 12 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
- 2405              		.file 13 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
- 2406              		.file 14 "Inc/port_handler.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 57
-
-
- 2407              		.file 15 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 58
+ 2392 01bc C402     		.short	708
+ 2393 01be C182     		.short	-32063
+ 2394 01c0 4382     		.short	-32189
+ 2395 01c2 4602     		.short	582
+ 2396 01c4 4C02     		.short	588
+ 2397 01c6 4982     		.short	-32183
+ 2398 01c8 5802     		.short	600
+ 2399 01ca 5D82     		.short	-32163
+ 2400 01cc 5782     		.short	-32169
+ 2401 01ce 5202     		.short	594
+ 2402 01d0 7002     		.short	624
+ 2403 01d2 7582     		.short	-32139
+ 2404 01d4 7F82     		.short	-32129
+ 2405 01d6 7A02     		.short	634
+ 2406 01d8 6B82     		.short	-32149
+ 2407 01da 6E02     		.short	622
+ 2408 01dc 6402     		.short	612
+ 2409 01de 6182     		.short	-32159
+ 2410 01e0 2002     		.short	544
+ 2411 01e2 2582     		.short	-32219
+ 2412 01e4 2F82     		.short	-32209
+ 2413 01e6 2A02     		.short	554
+ 2414 01e8 3B82     		.short	-32197
+ 2415 01ea 3E02     		.short	574
+ 2416 01ec 3402     		.short	564
+ 2417 01ee 3182     		.short	-32207
+ 2418 01f0 1382     		.short	-32237
+ 2419 01f2 1602     		.short	534
+ 2420 01f4 1C02     		.short	540
+ 2421 01f6 1982     		.short	-32231
+ 2422 01f8 0802     		.short	520
+ 2423 01fa 0D82     		.short	-32243
+ 2424 01fc 0782     		.short	-32249
+ 2425 01fe 0202     		.short	514
+ 2426              		.text
+ 2427              	.Letext0:
+ 2428              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 2429              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 2430              		.file 4 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 2431              		.file 5 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 2432              		.file 6 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
+ 2433              		.file 7 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 2434              		.file 8 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 2435              		.file 9 "Inc/queue.h"
+ 2436              		.file 10 "Inc/packet_handler.h"
+ 2437              		.file 11 "Drivers/CMSIS/Include/core_cm3.h"
+ 2438              		.file 12 "Drivers/CMSIS/Device/ST/STM32F1xx/Include/system_stm32f1xx.h"
+ 2439              		.file 13 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
+ 2440              		.file 14 "Inc/port_handler.h"
+ 2441              		.file 15 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 58
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 packet_handler.c
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:16     .text.initialize_stored_parameters:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:24     .text.initialize_stored_parameters:00000000 initialize_stored_parameters
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:44     .text.initialize_stored_parameters:0000000c $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:16     .text.initialize_stored_parameters:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:24     .text.initialize_stored_parameters:00000000 initialize_stored_parameters
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:44     .text.initialize_stored_parameters:0000000c $d
                             *COM*:00000004 stored_param
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:49     .text.read:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:56     .text.read:00000000 read
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:84     .text.reg_write:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:91     .text.reg_write:00000000 reg_write
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:104    .text.action:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:111    .text.action:00000000 action
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:124    .text.factory_reset:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:131    .text.factory_reset:00000000 factory_reset
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:144    .text.reboot:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:151    .text.reboot:00000000 reboot
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:164    .text.clear:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:171    .text.clear:00000000 clear
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:184    .text.status:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:191    .text.status:00000000 status
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:204    .text.sync_read:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:211    .text.sync_read:00000000 sync_read
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:224    .text.sync_write:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:231    .text.sync_write:00000000 sync_write
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:244    .text.bulk_read:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:251    .text.bulk_read:00000000 bulk_read
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:264    .text.bulk_write:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:271    .text.bulk_write:00000000 bulk_write
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:284    .text.write_to_RAM:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:291    .text.write_to_RAM:00000000 write_to_RAM
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:307    .text.write_to_RAM:0000000a $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:523    .text.write_to_RAM:000000cc $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:49     .text.read:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:56     .text.read:00000000 read
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:84     .text.reg_write:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:91     .text.reg_write:00000000 reg_write
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:104    .text.action:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:111    .text.action:00000000 action
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:124    .text.factory_reset:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:131    .text.factory_reset:00000000 factory_reset
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:144    .text.reboot:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:151    .text.reboot:00000000 reboot
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:164    .text.clear:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:171    .text.clear:00000000 clear
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:184    .text.status:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:191    .text.status:00000000 status
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:204    .text.sync_read:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:211    .text.sync_read:00000000 sync_read
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:224    .text.sync_write:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:231    .text.sync_write:00000000 sync_write
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:244    .text.bulk_read:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:251    .text.bulk_read:00000000 bulk_read
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:264    .text.bulk_write:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:271    .text.bulk_write:00000000 bulk_write
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:284    .text.write_to_RAM:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:291    .text.write_to_RAM:00000000 write_to_RAM
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:307    .text.write_to_RAM:0000000a $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:523    .text.write_to_RAM:000000cc $d
                             *COM*:00000004 runtime_param
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:528    .text.store_motor_ID:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:535    .text.store_motor_ID:00000000 store_motor_ID
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:554    .text.store_motor_ID:00000008 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:559    .text.store_baud_rate:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:566    .text.store_baud_rate:00000000 store_baud_rate
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:597    .text.store_baud_rate:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:603    .text.store_return_delay_time:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:610    .text.store_return_delay_time:00000000 store_return_delay_time
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:641    .text.store_return_delay_time:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:647    .text.store_drive_mode:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:654    .text.store_drive_mode:00000000 store_drive_mode
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:685    .text.store_drive_mode:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:691    .text.store_operating_mode:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:698    .text.store_operating_mode:00000000 store_operating_mode
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:729    .text.store_operating_mode:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:735    .text.store_secondary_ID:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:742    .text.store_secondary_ID:00000000 store_secondary_ID
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:773    .text.store_secondary_ID:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:779    .text.store_protocol_type:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:786    .text.store_protocol_type:00000000 store_protocol_type
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:817    .text.store_protocol_type:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:823    .text.store_homing_offset:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:830    .text.store_homing_offset:00000000 store_homing_offset
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:861    .text.store_homing_offset:00000014 $d
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 59
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:528    .text.store_motor_ID:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:535    .text.store_motor_ID:00000000 store_motor_ID
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:554    .text.store_motor_ID:00000008 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:559    .text.store_baud_rate:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:566    .text.store_baud_rate:00000000 store_baud_rate
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:597    .text.store_baud_rate:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:603    .text.store_return_delay_time:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:610    .text.store_return_delay_time:00000000 store_return_delay_time
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:641    .text.store_return_delay_time:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:647    .text.store_drive_mode:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:654    .text.store_drive_mode:00000000 store_drive_mode
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:685    .text.store_drive_mode:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:691    .text.store_operating_mode:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:698    .text.store_operating_mode:00000000 store_operating_mode
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:729    .text.store_operating_mode:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:735    .text.store_secondary_ID:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:742    .text.store_secondary_ID:00000000 store_secondary_ID
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:773    .text.store_secondary_ID:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:779    .text.store_protocol_type:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:786    .text.store_protocol_type:00000000 store_protocol_type
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:817    .text.store_protocol_type:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:823    .text.store_homing_offset:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:830    .text.store_homing_offset:00000000 store_homing_offset
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:861    .text.store_homing_offset:00000014 $d
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 59
 
 
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:867    .text.store_moving_threshold:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:874    .text.store_moving_threshold:00000000 store_moving_threshold
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:905    .text.store_moving_threshold:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:911    .text.store_temperature_limit:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:918    .text.store_temperature_limit:00000000 store_temperature_limit
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:949    .text.store_temperature_limit:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:955    .text.store_min_voltage_limit:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:962    .text.store_min_voltage_limit:00000000 store_min_voltage_limit
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:993    .text.store_min_voltage_limit:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:999    .text.store_max_voltage_limit:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1006   .text.store_max_voltage_limit:00000000 store_max_voltage_limit
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1037   .text.store_max_voltage_limit:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1043   .text.store_PWM_limit:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1050   .text.store_PWM_limit:00000000 store_PWM_limit
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1081   .text.store_PWM_limit:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1086   .text.store_velocity_limit:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1093   .text.store_velocity_limit:00000000 store_velocity_limit
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1124   .text.store_velocity_limit:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1129   .text.store_min_position_limit:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1136   .text.store_min_position_limit:00000000 store_min_position_limit
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1167   .text.store_min_position_limit:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1172   .text.store_max_position_limit:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1179   .text.store_max_position_limit:00000000 store_max_position_limit
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1210   .text.store_max_position_limit:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1215   .text.store_shutdown:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1222   .text.store_shutdown:00000000 store_shutdown
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1253   .text.store_shutdown:00000014 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1258   .text.write_to_Flash:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1265   .text.write_to_Flash:00000000 write_to_Flash
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1287   .text.write_to_Flash:00000010 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1486   .text.get_value_from_param:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1493   .text.get_value_from_param:00000000 get_value_from_param
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1540   .text.get_value_from_param:00000018 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:867    .text.store_moving_threshold:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:874    .text.store_moving_threshold:00000000 store_moving_threshold
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:905    .text.store_moving_threshold:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:911    .text.store_temperature_limit:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:918    .text.store_temperature_limit:00000000 store_temperature_limit
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:949    .text.store_temperature_limit:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:955    .text.store_min_voltage_limit:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:962    .text.store_min_voltage_limit:00000000 store_min_voltage_limit
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:993    .text.store_min_voltage_limit:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:999    .text.store_max_voltage_limit:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1006   .text.store_max_voltage_limit:00000000 store_max_voltage_limit
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1037   .text.store_max_voltage_limit:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1043   .text.store_PWM_limit:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1050   .text.store_PWM_limit:00000000 store_PWM_limit
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1081   .text.store_PWM_limit:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1086   .text.store_velocity_limit:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1093   .text.store_velocity_limit:00000000 store_velocity_limit
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1124   .text.store_velocity_limit:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1129   .text.store_min_position_limit:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1136   .text.store_min_position_limit:00000000 store_min_position_limit
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1167   .text.store_min_position_limit:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1172   .text.store_max_position_limit:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1179   .text.store_max_position_limit:00000000 store_max_position_limit
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1210   .text.store_max_position_limit:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1215   .text.store_shutdown:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1222   .text.store_shutdown:00000000 store_shutdown
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1253   .text.store_shutdown:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1258   .text.write_to_Flash:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1265   .text.write_to_Flash:00000000 write_to_Flash
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1287   .text.write_to_Flash:00000010 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1486   .text.get_value_from_param:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1493   .text.get_value_from_param:00000000 get_value_from_param
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1540   .text.get_value_from_param:00000018 $d
                             *COM*:00000014 param
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1545   .text.write:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1552   .text.write:00000000 write
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1617   .text.write:00000034 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1623   .text.updateCRC:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1630   .text.updateCRC:00000000 updateCRC
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1703   .text.updateCRC:0000002c $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1708   .text.ping:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1715   .text.ping:00000000 ping
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1766   .text.ping:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1771   .text.process_instruction:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1778   .text.process_instruction:00000000 process_instruction
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1823   .text.process_instruction:00000028 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1545   .text.write:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1552   .text.write:00000000 write
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1617   .text.write:00000034 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1623   .text.updateCRC:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1630   .text.updateCRC:00000000 updateCRC
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1703   .text.updateCRC:0000002c $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1708   .text.ping:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1715   .text.ping:00000000 ping
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1766   .text.ping:00000030 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1771   .text.process_instruction:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1778   .text.process_instruction:00000000 process_instruction
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1823   .text.process_instruction:00000028 $d
                             *COM*:00000001 instruction
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1829   .text.extract_message:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1836   .text.extract_message:00000000 extract_message
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1988   .text.extract_message:00000080 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1829   .text.extract_message:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1836   .text.extract_message:00000000 extract_message
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:2035   .text.extract_message:000000c8 $d
                             *COM*:00000002 crc
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1997   .text.process_queue:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:2004   .text.process_queue:00000000 process_queue
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:2097   .text.process_queue:00000040 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:2128   .data.delay_transmit_uS:00000000 delay_transmit_uS
-                            *COM*:000000a0 messages
+                            *COM*:00000104 messages
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:2046   .text.process_queue:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:2053   .text.process_queue:00000000 process_queue
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:2131   .text.process_queue:00000034 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:2162   .data.delay_transmit_uS:00000000 delay_transmit_uS
                             *COM*:00000001 rd_ptr
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s 			page 60
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s 			page 60
 
 
                             *COM*:00000040 txBuffer
                             *COM*:00000040 rxBuffer
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:2113   .rodata:00000000 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:2121   .bss.forensicCounter.8147:00000000 forensicCounter.8147
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:2122   .bss.forensicCounter.8147:00000000 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:2124   .data.delay_transmit_uS:00000000 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:2131   .rodata.crc_table.8401:00000000 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:2135   .rodata.crc_table.8401:00000000 crc_table.8401
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:364    .text.write_to_RAM:00000043 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:364    .text.write_to_RAM:00000044 $t
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1344   .text.write_to_Flash:00000049 $d
-C:\Users\Brandon\AppData\Local\Temp\ccqmhyXQ.s:1344   .text.write_to_Flash:0000004a $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:2147   .rodata:00000000 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:2155   .bss.forensicCounter.8146:00000000 forensicCounter.8146
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:2156   .bss.forensicCounter.8146:00000000 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:2158   .data.delay_transmit_uS:00000000 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:2165   .rodata.crc_table.8400:00000000 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:2169   .rodata.crc_table.8400:00000000 crc_table.8400
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:364    .text.write_to_RAM:00000043 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:364    .text.write_to_RAM:00000044 $t
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1344   .text.write_to_Flash:00000049 $d
+C:\Users\Brandon\AppData\Local\Temp\cca5HxOe.s:1344   .text.write_to_Flash:0000004a $t
 
 UNDEFINED SYMBOLS
 Flash_Write

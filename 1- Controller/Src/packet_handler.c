@@ -6,7 +6,7 @@
 /* Fields -------------------------------------------------------------------*/
 extern MessageQueue *message;
 
-uint8_t messages[20][8];
+uint8_t messages[20][13];
 
 uint8_t instruction;
 uint8_t param[20];
@@ -38,26 +38,25 @@ void process_queue(){
     uint8_t h2 = 0;
     uint8_t h3 = 0;
     uint32_t header_block=0;
-    uint8_t header_block_found = 0;
 
-    while (!header_block_found && !isEmpty(message)){
+    while (!isEmpty(message)){
 
         // shift one byte
         h1 = h2;
         h2 = h3;
         h3 = deQueue(message);
         header_block = (h1<<16) + (h2<<8) + (h3);
-        if(header_block == 0xFFFFFD){
-            header_block_found = 1;
+        if(header_block == 0xFFFFFD) {
+            extract_message();
+            break;
         }
-
     }
-    
-    if (header_block_found) {
-        extract_message();
-    }
-
 }
+
+
+
+
+
 
 /* @brief After header block is found, extract reserved, id, length,
  * instruction, and message parameters.
@@ -92,16 +91,17 @@ void extract_message(){
     crc[0] = deQueue(message);
     crc[1] = deQueue(message);
 
-    // messages[forensicCounter][0] = reserved;
-    // messages[forensicCounter][1] = id;
-    // messages[forensicCounter][2] = length1;
-    // messages[forensicCounter][3] = length2;
-    // messages[forensicCounter][4] = instruction;
-    // messages[forensicCounter][5] = crc[0];
-    // messages[forensicCounter][6] = crc[1];
-    // messages[forensicCounter][7] = 0x00;
+    messages[forensicCounter][0] = reserved;
+    messages[forensicCounter][1] = id;
+    messages[forensicCounter][2] = length1;
+    messages[forensicCounter][3] = length2;
+    messages[forensicCounter][4] = instruction;
+    messages[forensicCounter][5] = crc[0];
+    messages[forensicCounter][6] = crc[1];
+    messages[forensicCounter][7] = 0x00;
 
     forensicCounter++;
+    forensicCounter%=20;
 
     // TODO: fix memory ID storage
     // message fully received, proccess

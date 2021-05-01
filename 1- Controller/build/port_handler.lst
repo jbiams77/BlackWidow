@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 1
   35              		.cfi_offset 14, -4
   22:Src/port_handler.c ****   rd_ptr = 0;
   36              		.loc 1 22 3 view .LVU1
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 2
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s 			page 2
 
 
   37              		.loc 1 22 10 is_stmt 0 view .LVU2
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 1
   36:Src/port_handler.c ****   message_transferred = 0;
   37:Src/port_handler.c ****   UART_rx_transfer_to_queue();  
   38:Src/port_handler.c **** }
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 3
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s 			page 3
 
 
   39:Src/port_handler.c **** 
@@ -131,10 +131,10 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 1
   46:Src/port_handler.c ****  */
   47:Src/port_handler.c **** void UART_rx_transfer_to_queue(void) {
   48:Src/port_handler.c **** 
-  49:Src/port_handler.c ****   while(!rxBuffer_is_empty() && !isFull(message)){
+  49:Src/port_handler.c ****   while(!rxBuffer_is_empty() && !isFull(message)) {
   50:Src/port_handler.c ****     enQueue(message, rxBuffer_Get());
   51:Src/port_handler.c ****     message_transferred = 1;
-  52:Src/port_handler.c ****   }   
+  52:Src/port_handler.c ****   }
   53:Src/port_handler.c **** 
   54:Src/port_handler.c **** // TODO: good 
   55:Src/port_handler.c ****   // if(!message_transferred){
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 1
  104 0014 9A42     		cmp	r2, r3
  105 0016 01D0     		beq	.L7
   69:Src/port_handler.c **** 		return 1;
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 4
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s 			page 4
 
 
   70:Src/port_handler.c **** 	}
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 1
  148              		.loc 1 82 12 is_stmt 0 view .LVU23
  149 000a 0A4A     		ldr	r2, .L13+4
  150 000c 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 5
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s 			page 5
 
 
  151 000e 91B2     		uxth	r1, r2
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 1
   47:Src/port_handler.c **** 
  201              		.loc 1 47 38 is_stmt 1 view -0
  202              		.cfi_startproc
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 6
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s 			page 6
 
 
  203              		@ args = 0, pretend = 0, frame = 0
@@ -339,9 +339,9 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 1
  231 001c 2046     		mov	r0, r4
  232 001e FFF7FEFF 		bl	enQueue
  233              	.LVL14:
-  51:Src/port_handler.c ****   }   
+  51:Src/port_handler.c ****   }
  234              		.loc 1 51 5 view .LVU43
-  51:Src/port_handler.c ****   }   
+  51:Src/port_handler.c ****   }
  235              		.loc 1 51 25 is_stmt 0 view .LVU44
  236 0022 034B     		ldr	r3, .L20+4
  237 0024 0122     		movs	r2, #1
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 1
  247 0030 00000000 		.word	message_transferred
  248              		.cfi_endproc
  249              	.LFE529:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 7
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s 			page 7
 
 
  251              		.section	.text.HAL_UART_RxCpltCallback,"ax",%progbits
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 1
   90:Src/port_handler.c ****  * 
   91:Src/port_handler.c ****  * @param1 response[] message to send back to master
   92:Src/port_handler.c ****  * @param2 length message length
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 8
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s 			page 8
 
 
   93:Src/port_handler.c ****  * @return void *
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 1
  344              		.loc 1 98 24 discriminator 3 view .LVU67
  345 001e F8E7     		b	.L27
  346              	.L30:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 9
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s 			page 9
 
 
  100:Src/port_handler.c ****   }
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 1
  390              		.comm	temp_length,1,1
  391              		.comm	rd_ptr,1,1
  392              		.comm	txBuffer,64,4
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 10
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s 			page 10
 
 
  393              		.comm	rxBuffer,64,4
@@ -562,32 +562,32 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 1
  411              		.file 17 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h"
  412              		.file 18 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
  413              		.file 19 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s 			page 11
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s 			page 11
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 port_handler.c
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:16     .text.UART_DMA_Init:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:24     .text.UART_DMA_Init:00000000 UART_DMA_Init
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:63     .text.UART_DMA_Init:0000002c $d
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:16     .text.UART_DMA_Init:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:24     .text.UART_DMA_Init:00000000 UART_DMA_Init
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:63     .text.UART_DMA_Init:0000002c $d
                             *COM*:00000001 rd_ptr
                             *COM*:00000040 rxBuffer
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:71     .text.rxBuffer_is_empty:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:78     .text.rxBuffer_is_empty:00000000 rxBuffer_is_empty
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:117    .text.rxBuffer_is_empty:00000020 $d
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:123    .text.rxBuffer_Get:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:130    .text.rxBuffer_Get:00000000 rxBuffer_Get
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:185    .text.rxBuffer_Get:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:192    .text.UART_rx_transfer_to_queue:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:199    .text.UART_rx_transfer_to_queue:00000000 UART_rx_transfer_to_queue
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:246    .text.UART_rx_transfer_to_queue:0000002c $d
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:71     .text.rxBuffer_is_empty:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:78     .text.rxBuffer_is_empty:00000000 rxBuffer_is_empty
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:117    .text.rxBuffer_is_empty:00000020 $d
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:123    .text.rxBuffer_Get:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:130    .text.rxBuffer_Get:00000000 rxBuffer_Get
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:185    .text.rxBuffer_Get:00000030 $d
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:192    .text.UART_rx_transfer_to_queue:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:199    .text.UART_rx_transfer_to_queue:00000000 UART_rx_transfer_to_queue
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:246    .text.UART_rx_transfer_to_queue:0000002c $d
                             *COM*:00000001 message_transferred
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:252    .text.HAL_UART_RxCpltCallback:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:259    .text.HAL_UART_RxCpltCallback:00000000 HAL_UART_RxCpltCallback
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:285    .text.HAL_UART_RxCpltCallback:00000010 $d
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:290    .text.transmit_buffer:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:297    .text.transmit_buffer:00000000 transmit_buffer
-C:\Users\Brandon\AppData\Local\Temp\ccPdSIE8.s:383    .text.transmit_buffer:00000044 $d
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:252    .text.HAL_UART_RxCpltCallback:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:259    .text.HAL_UART_RxCpltCallback:00000000 HAL_UART_RxCpltCallback
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:285    .text.HAL_UART_RxCpltCallback:00000010 $d
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:290    .text.transmit_buffer:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:297    .text.transmit_buffer:00000000 transmit_buffer
+C:\Users\Brandon\AppData\Local\Temp\cc9kYtAO.s:383    .text.transmit_buffer:00000044 $d
                             *COM*:00000040 txBuffer
                             *COM*:00000001 temp_length
 
