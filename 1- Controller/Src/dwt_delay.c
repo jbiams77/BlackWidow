@@ -46,14 +46,12 @@ void DWT_Init(void)
     __ASM volatile ("NOP");
     __ASM volatile ("NOP");
     /* Check if clock cycle counter has started */
-    if(DWT->CYCCNT)
-    {
-       return 0; /*clock cycle counter started*/
-    }
-    else
-    {
-      return 1; /*clock cycle counter not started*/
-    } 
+    // if(DWT->CYCCNT)
+    // {
+    //    return 0; /*clock cycle counter started*/
+    // }
+    // return 1; /*clock cycle counter not started*/
+  
     
 }
 

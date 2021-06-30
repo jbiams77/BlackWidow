@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 1
   35              		.cfi_offset 14, -4
   22:Src/port_handler.c ****   rd_ptr = 0;
   36              		.loc 1 22 3 view .LVU1
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 2
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s 			page 2
 
 
   37              		.loc 1 22 10 is_stmt 0 view .LVU2
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 1
   84              	rxBuffer_is_empty:
   85              	.LFB530:
   32:Src/port_handler.c **** 
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 3
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s 			page 3
 
 
   33:Src/port_handler.c **** /* @brief Callback for UART RX idle line interrupt.
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 1
  101 000a 064A     		ldr	r2, .L8+4
  102 000c 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
  103              		.loc 1 71 4 view .LVU13
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 4
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s 			page 4
 
 
  104 000e 5B42     		rsbs	r3, r3, #0
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 1
  146              		.loc 1 84 22 is_stmt 0 view .LVU22
  147 0000 0B4B     		ldr	r3, .L13
  148 0002 5B6B     		ldr	r3, [r3, #52]
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 5
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s 			page 5
 
 
  149 0004 1B68     		ldr	r3, [r3]
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 1
  197              		.section	.text.UART_rx_transfer_to_queue,"ax",%progbits
  198              		.align	1
  199              		.global	UART_rx_transfer_to_queue
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 6
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s 			page 6
 
 
  200              		.syntax unified
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 1
  245 0028 EBE7     		b	.L16
  246              	.L15:
   62:Src/port_handler.c **** 
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 7
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s 			page 7
 
 
  247              		.loc 1 62 1 view .LVU46
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 1
  298              		.syntax unified
  299              		.thumb
  300              		.thumb_func
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 8
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s 			page 8
 
 
  301              		.fpu softvfp
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 1
  344 0018 0B4A     		ldr	r2, .L32+4
  345 001a D454     		strb	r4, [r2, r3]
  101:Src/port_handler.c ****   for (i=0; i<length; i++){
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 9
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s 			page 9
 
 
  346              		.loc 1 101 23 is_stmt 1 discriminator 3 view .LVU66
@@ -538,7 +538,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 1
  386              		.loc 1 110 1 view .LVU79
  387              		.align	2
  388              	.L32:
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 10
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s 			page 10
 
 
  389 0044 000C0140 		.word	1073810432
@@ -571,32 +571,32 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 1
  417              		.file 17 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h"
  418              		.file 18 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h"
  419              		.file 19 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s 			page 11
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s 			page 11
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 port_handler.c
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:16     .text.UART_DMA_Init:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:24     .text.UART_DMA_Init:00000000 UART_DMA_Init
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:69     .text.UART_DMA_Init:00000038 $d
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:16     .text.UART_DMA_Init:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:24     .text.UART_DMA_Init:00000000 UART_DMA_Init
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:69     .text.UART_DMA_Init:00000038 $d
                             *COM*:00000001 rd_ptr
                             *COM*:00000040 rxBuffer
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:77     .text.rxBuffer_is_empty:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:84     .text.rxBuffer_is_empty:00000000 rxBuffer_is_empty
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:123    .text.rxBuffer_is_empty:00000020 $d
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:129    .text.rxBuffer_Get:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:136    .text.rxBuffer_Get:00000000 rxBuffer_Get
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:191    .text.rxBuffer_Get:00000030 $d
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:198    .text.UART_rx_transfer_to_queue:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:205    .text.UART_rx_transfer_to_queue:00000000 UART_rx_transfer_to_queue
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:252    .text.UART_rx_transfer_to_queue:0000002c $d
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:77     .text.rxBuffer_is_empty:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:84     .text.rxBuffer_is_empty:00000000 rxBuffer_is_empty
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:123    .text.rxBuffer_is_empty:00000020 $d
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:129    .text.rxBuffer_Get:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:136    .text.rxBuffer_Get:00000000 rxBuffer_Get
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:191    .text.rxBuffer_Get:00000030 $d
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:198    .text.UART_rx_transfer_to_queue:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:205    .text.UART_rx_transfer_to_queue:00000000 UART_rx_transfer_to_queue
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:252    .text.UART_rx_transfer_to_queue:0000002c $d
                             *COM*:00000001 message_transferred
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:258    .text.HAL_UART_RxCpltCallback:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:265    .text.HAL_UART_RxCpltCallback:00000000 HAL_UART_RxCpltCallback
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:291    .text.HAL_UART_RxCpltCallback:00000010 $d
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:296    .text.transmit_buffer:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:303    .text.transmit_buffer:00000000 transmit_buffer
-C:\Users\Brandon\AppData\Local\Temp\ccGHNimX.s:389    .text.transmit_buffer:00000044 $d
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:258    .text.HAL_UART_RxCpltCallback:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:265    .text.HAL_UART_RxCpltCallback:00000000 HAL_UART_RxCpltCallback
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:291    .text.HAL_UART_RxCpltCallback:00000010 $d
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:296    .text.transmit_buffer:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:303    .text.transmit_buffer:00000000 transmit_buffer
+C:\Users\Brandon\AppData\Local\Temp\ccBXqVX0.s:389    .text.transmit_buffer:00000044 $d
                             *COM*:00000040 txBuffer
                             *COM*:00000001 temp_length
 

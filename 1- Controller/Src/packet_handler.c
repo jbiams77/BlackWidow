@@ -617,7 +617,7 @@ void store_shutdown(uint32_t value){
  * @return uint32_t packed message parameter value
  */
 uint32_t get_value_from_param(void){
-    uint32_t value;
+    uint32_t value=0;
     /* Pack value */
     int i;
     int bit_shift = 0;

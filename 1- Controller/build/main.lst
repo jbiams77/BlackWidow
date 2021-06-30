@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccVzC1gW.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 1
   30:Src/main.c    **** 
   31:Src/main.c    **** 
   32:Src/main.c    **** /* Private function prototypes -----------------------------------------------*/
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 2
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccVzC1gW.s 			page 2
 
 
   33:Src/main.c    **** 
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 1
   64              	.LVL7:
   50:Src/main.c    **** 	DRV8825_initStepper();
   65              		.loc 1 50 2 view .LVU11
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 3
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccVzC1gW.s 			page 3
 
 
   66 0026 FFF7FEFF 		bl	DRV8825_initStepper
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 1
   63:Src/main.c    **** // TODO: remove or replace function in appropriate place
   64:Src/main.c    **** uint16_t angleToHex(uint16_t angle){
  109              		.loc 1 64 36 view -0
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 4
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccVzC1gW.s 			page 4
 
 
  110              		.cfi_startproc
@@ -238,23 +238,23 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 1
  161              		.file 14 "Inc/port_handler.h"
  162              		.file 15 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h"
  163              		.file 16 "Inc/utility.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 5
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccVzC1gW.s 			page 5
 
 
  164              		.file 17 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h"
  165              		.file 18 "Inc/packet_handler.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s 			page 6
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccVzC1gW.s 			page 6
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s:16     .text.main:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s:24     .text.main:00000000 main
-C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s:90     .text.main:00000044 $d
+C:\Users\Brandon\AppData\Local\Temp\ccVzC1gW.s:16     .text.main:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccVzC1gW.s:24     .text.main:00000000 main
+C:\Users\Brandon\AppData\Local\Temp\ccVzC1gW.s:90     .text.main:00000044 $d
                             *COM*:00000004 message
-C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s:99     .text.angleToHex:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s:106    .text.angleToHex:00000000 angleToHex
-C:\Users\Brandon\AppData\Local\Temp\ccJPc3nn.s:139    .text.angleToHex:00000014 $d
+C:\Users\Brandon\AppData\Local\Temp\ccVzC1gW.s:99     .text.angleToHex:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccVzC1gW.s:106    .text.angleToHex:00000000 angleToHex
+C:\Users\Brandon\AppData\Local\Temp\ccVzC1gW.s:139    .text.angleToHex:00000014 $d
                             *COM*:00000001 rd_ptr
                             *COM*:00000040 txBuffer
                             *COM*:00000040 rxBuffer

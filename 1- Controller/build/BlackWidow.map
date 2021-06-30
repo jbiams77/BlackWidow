@@ -1101,77 +1101,77 @@ LOAD c:/program files (x86)/gnu tools arm embedded/9 2019-q4-major/bin/../lib/gc
                 0x08001bc0       0x10 build/as5600.o
                 0x08001bc0                AS5600_SetZero
  .text.DWT_Init
-                0x08001bd0       0x3c build/dwt_delay.o
+                0x08001bd0       0x38 build/dwt_delay.o
                 0x08001bd0                DWT_Init
  .text.DWT_Delay
-                0x08001c0c       0x38 build/dwt_delay.o
-                0x08001c0c                DWT_Delay
+                0x08001c08       0x38 build/dwt_delay.o
+                0x08001c08                DWT_Delay
  .text.Flash_Write
-                0x08001c44       0x1c build/flash.o
-                0x08001c44                Flash_Write
- .text.main     0x08001c60       0x4c build/main.o
-                0x08001c60                main
+                0x08001c40       0x1c build/flash.o
+                0x08001c40                Flash_Write
+ .text.main     0x08001c5c       0x4c build/main.o
+                0x08001c5c                main
  .text.write_to_RAM
-                0x08001cac       0xd0 build/packet_handler.o
-                0x08001cac                write_to_RAM
+                0x08001ca8       0xd0 build/packet_handler.o
+                0x08001ca8                write_to_RAM
  .text.store_motor_ID
-                0x08001d7c        0xc build/packet_handler.o
-                0x08001d7c                store_motor_ID
+                0x08001d78        0xc build/packet_handler.o
+                0x08001d78                store_motor_ID
  .text.store_baud_rate
-                0x08001d88       0x1c build/packet_handler.o
-                0x08001d88                store_baud_rate
+                0x08001d84       0x1c build/packet_handler.o
+                0x08001d84                store_baud_rate
  .text.store_return_delay_time
-                0x08001da4       0x1c build/packet_handler.o
-                0x08001da4                store_return_delay_time
+                0x08001da0       0x1c build/packet_handler.o
+                0x08001da0                store_return_delay_time
  .text.store_drive_mode
-                0x08001dc0       0x1c build/packet_handler.o
-                0x08001dc0                store_drive_mode
+                0x08001dbc       0x1c build/packet_handler.o
+                0x08001dbc                store_drive_mode
  .text.store_operating_mode
-                0x08001ddc       0x1c build/packet_handler.o
-                0x08001ddc                store_operating_mode
+                0x08001dd8       0x1c build/packet_handler.o
+                0x08001dd8                store_operating_mode
  .text.store_secondary_ID
-                0x08001df8       0x1c build/packet_handler.o
-                0x08001df8                store_secondary_ID
+                0x08001df4       0x1c build/packet_handler.o
+                0x08001df4                store_secondary_ID
  .text.store_protocol_type
-                0x08001e14       0x1c build/packet_handler.o
-                0x08001e14                store_protocol_type
+                0x08001e10       0x1c build/packet_handler.o
+                0x08001e10                store_protocol_type
  .text.store_homing_offset
-                0x08001e30       0x1c build/packet_handler.o
-                0x08001e30                store_homing_offset
+                0x08001e2c       0x1c build/packet_handler.o
+                0x08001e2c                store_homing_offset
  .text.store_moving_threshold
-                0x08001e4c       0x1c build/packet_handler.o
-                0x08001e4c                store_moving_threshold
+                0x08001e48       0x1c build/packet_handler.o
+                0x08001e48                store_moving_threshold
  .text.store_temperature_limit
-                0x08001e68       0x1c build/packet_handler.o
-                0x08001e68                store_temperature_limit
+                0x08001e64       0x1c build/packet_handler.o
+                0x08001e64                store_temperature_limit
  .text.store_min_voltage_limit
-                0x08001e84       0x1c build/packet_handler.o
-                0x08001e84                store_min_voltage_limit
+                0x08001e80       0x1c build/packet_handler.o
+                0x08001e80                store_min_voltage_limit
  .text.store_max_voltage_limit
-                0x08001ea0       0x1c build/packet_handler.o
-                0x08001ea0                store_max_voltage_limit
+                0x08001e9c       0x1c build/packet_handler.o
+                0x08001e9c                store_max_voltage_limit
  .text.store_PWM_limit
-                0x08001ebc       0x18 build/packet_handler.o
-                0x08001ebc                store_PWM_limit
+                0x08001eb8       0x18 build/packet_handler.o
+                0x08001eb8                store_PWM_limit
  .text.store_velocity_limit
-                0x08001ed4       0x18 build/packet_handler.o
-                0x08001ed4                store_velocity_limit
+                0x08001ed0       0x18 build/packet_handler.o
+                0x08001ed0                store_velocity_limit
  .text.store_min_position_limit
-                0x08001eec       0x18 build/packet_handler.o
-                0x08001eec                store_min_position_limit
+                0x08001ee8       0x18 build/packet_handler.o
+                0x08001ee8                store_min_position_limit
  .text.store_max_position_limit
-                0x08001f04       0x18 build/packet_handler.o
-                0x08001f04                store_max_position_limit
+                0x08001f00       0x18 build/packet_handler.o
+                0x08001f00                store_max_position_limit
  .text.store_shutdown
-                0x08001f1c       0x18 build/packet_handler.o
-                0x08001f1c                store_shutdown
+                0x08001f18       0x18 build/packet_handler.o
+                0x08001f18                store_shutdown
  .text.write_to_Flash
-                0x08001f34       0xb2 build/packet_handler.o
-                0x08001f34                write_to_Flash
- *fill*         0x08001fe6        0x2 
+                0x08001f30       0xb2 build/packet_handler.o
+                0x08001f30                write_to_Flash
+ *fill*         0x08001fe2        0x2 
  .text.get_value_from_param
-                0x08001fe8       0x1c build/packet_handler.o
-                0x08001fe8                get_value_from_param
+                0x08001fe4       0x20 build/packet_handler.o
+                0x08001fe4                get_value_from_param
  .text.write    0x08002004       0x3c build/packet_handler.o
                 0x08002004                write
  .text.updateCRC
@@ -1725,7 +1725,7 @@ OUTPUT(build/BlackWidow.elf elf32-littlearm)
  .debug_abbrev  0x00003153      0x285 build/utility.o
  .debug_abbrev  0x000033d8       0x12 build/startup_stm32f103xb.o
 
-.debug_loc      0x00000000     0xa3dc
+.debug_loc      0x00000000     0xa3ea
  .debug_loc     0x00000000      0x1bb build/stm32f1xx_hal.o
  .debug_loc     0x000001bb      0x7af build/stm32f1xx_hal_cortex.o
  .debug_loc     0x0000096a      0x901 build/stm32f1xx_hal_dma.o
@@ -1738,14 +1738,14 @@ OUTPUT(build/BlackWidow.elf elf32-littlearm)
  .debug_loc     0x00008cc4       0x85 build/dwt_delay.o
  .debug_loc     0x00008d49       0x8c build/flash.o
  .debug_loc     0x00008dd5       0x7a build/main.o
- .debug_loc     0x00008e4f      0xb84 build/packet_handler.o
- .debug_loc     0x000099d3      0x1bb build/port_handler.o
- .debug_loc     0x00009b8e      0x210 build/queue.o
- .debug_loc     0x00009d9e      0x124 build/stepper.o
- .debug_loc     0x00009ec2      0x241 build/stm32f1xx_hal_msp.o
- .debug_loc     0x0000a103       0xc4 build/stm32f1xx_it.o
- .debug_loc     0x0000a1c7       0xff build/system_stm32f1xx.o
- .debug_loc     0x0000a2c6      0x116 build/utility.o
+ .debug_loc     0x00008e4f      0xb92 build/packet_handler.o
+ .debug_loc     0x000099e1      0x1bb build/port_handler.o
+ .debug_loc     0x00009b9c      0x210 build/queue.o
+ .debug_loc     0x00009dac      0x124 build/stepper.o
+ .debug_loc     0x00009ed0      0x241 build/stm32f1xx_hal_msp.o
+ .debug_loc     0x0000a111       0xc4 build/stm32f1xx_it.o
+ .debug_loc     0x0000a1d5       0xff build/system_stm32f1xx.o
+ .debug_loc     0x0000a2d4      0x116 build/utility.o
 
 .debug_aranges  0x00000000      0xc38
  .debug_aranges
@@ -1814,7 +1814,7 @@ OUTPUT(build/BlackWidow.elf elf32-littlearm)
  .debug_ranges  0x00000b60       0x38 build/utility.o
  .debug_ranges  0x00000b98       0x20 build/startup_stm32f103xb.o
 
-.debug_line     0x00000000     0xd342
+.debug_line     0x00000000     0xd341
  .debug_line    0x00000000      0x524 build/stm32f1xx_hal.o
  .debug_line    0x00000524      0x67e build/stm32f1xx_hal_cortex.o
  .debug_line    0x00000ba2      0xa9d build/stm32f1xx_hal_dma.o
@@ -1824,18 +1824,18 @@ OUTPUT(build/BlackWidow.elf elf32-littlearm)
  .debug_line    0x00007382      0xc45 build/stm32f1xx_hal_rcc.o
  .debug_line    0x00007fc7     0x1be7 build/stm32f1xx_hal_uart.o
  .debug_line    0x00009bae      0x397 build/as5600.o
- .debug_line    0x00009f45      0x25e build/dwt_delay.o
- .debug_line    0x0000a1a3      0x27a build/flash.o
- .debug_line    0x0000a41d      0x372 build/main.o
- .debug_line    0x0000a78f      0xbda build/packet_handler.o
- .debug_line    0x0000b369      0x4c0 build/port_handler.o
- .debug_line    0x0000b829      0x3d9 build/queue.o
- .debug_line    0x0000bc02      0x453 build/stepper.o
- .debug_line    0x0000c055      0x569 build/stm32f1xx_hal_msp.o
- .debug_line    0x0000c5be      0x476 build/stm32f1xx_it.o
- .debug_line    0x0000ca34      0x2ce build/system_stm32f1xx.o
- .debug_line    0x0000cd02      0x5cc build/utility.o
- .debug_line    0x0000d2ce       0x74 build/startup_stm32f103xb.o
+ .debug_line    0x00009f45      0x25a build/dwt_delay.o
+ .debug_line    0x0000a19f      0x27a build/flash.o
+ .debug_line    0x0000a419      0x372 build/main.o
+ .debug_line    0x0000a78b      0xbdd build/packet_handler.o
+ .debug_line    0x0000b368      0x4c0 build/port_handler.o
+ .debug_line    0x0000b828      0x3d9 build/queue.o
+ .debug_line    0x0000bc01      0x453 build/stepper.o
+ .debug_line    0x0000c054      0x569 build/stm32f1xx_hal_msp.o
+ .debug_line    0x0000c5bd      0x476 build/stm32f1xx_it.o
+ .debug_line    0x0000ca33      0x2ce build/system_stm32f1xx.o
+ .debug_line    0x0000cd01      0x5cc build/utility.o
+ .debug_line    0x0000d2cd       0x74 build/startup_stm32f103xb.o
 
 .debug_str      0x00000000     0x38c0
  .debug_str     0x00000000      0x800 build/stm32f1xx_hal.o

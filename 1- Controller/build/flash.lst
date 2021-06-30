@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccynDD5s.s 			page 1
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccN5KjdU.s 			page 1
 
 
    1              		.cpu cortex-m3
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccynDD5s.s 			page 1
   12:Src/flash.c   **** 	
   13:Src/flash.c   **** 	// TODO: catch falsh write error in if statement
   14:Src/flash.c   ****     HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, StartPageAddress, DATA_32); //== HAL_OK));
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccynDD5s.s 			page 2
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccN5KjdU.s 			page 2
 
 
   45              		.loc 1 14 5 view .LVU3
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccynDD5s.s 			page 1
   87              	.Letext0:
   88              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
   89              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccynDD5s.s 			page 3
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccN5KjdU.s 			page 3
 
 
   90              		.file 4 "Drivers/CMSIS/Include/core_cm3.h"
@@ -129,15 +129,15 @@ ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccynDD5s.s 			page 1
   95              		.file 9 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eabi
   96              		.file 10 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
   97              		.file 11 "Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h"
-ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccynDD5s.s 			page 4
+ARM GAS  C:\Users\Brandon\AppData\Local\Temp\ccN5KjdU.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:00000000 flash.c
-C:\Users\Brandon\AppData\Local\Temp\ccynDD5s.s:16     .text.Flash_Write:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccynDD5s.s:24     .text.Flash_Write:00000000 Flash_Write
-C:\Users\Brandon\AppData\Local\Temp\ccynDD5s.s:62     .text.Flash_Read:00000000 $t
-C:\Users\Brandon\AppData\Local\Temp\ccynDD5s.s:69     .text.Flash_Read:00000000 Flash_Read
+C:\Users\Brandon\AppData\Local\Temp\ccN5KjdU.s:16     .text.Flash_Write:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccN5KjdU.s:24     .text.Flash_Write:00000000 Flash_Write
+C:\Users\Brandon\AppData\Local\Temp\ccN5KjdU.s:62     .text.Flash_Read:00000000 $t
+C:\Users\Brandon\AppData\Local\Temp\ccN5KjdU.s:69     .text.Flash_Read:00000000 Flash_Read
 
 UNDEFINED SYMBOLS
 HAL_FLASH_Unlock
