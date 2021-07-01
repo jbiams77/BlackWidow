@@ -7,6 +7,8 @@ ControllerCopy/*
 .stmignore
 .pioenvs
 .piolibdeps
+*.o
+.pio
 BlackWidow.ioc
 Makefile
 startup_stm32f103xb.s

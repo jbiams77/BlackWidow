@@ -52,23 +52,11 @@ int main(void)
   UART_DMA_Init();
   //initialize_stored_parameters();
 
-  while (1)
-  {
-    HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
-    
-    HAL_Delay(1000);
-
-    HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 1);
-    
-    HAL_Delay(1000);
-  
+  while(1) {
+    //transmit_buffer(array, sizeof(array));
+    //HAL_Delay(5000);
+    process_queue();
   }
-
-  // while(1) {
-  //   //transmit_buffer(array, sizeof(array));
-  //   //HAL_Delay(5000);
-  //   process_queue();
-  // }
 }
 
 
