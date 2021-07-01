@@ -1,5 +1,5 @@
-#ifndef __UTILITY_H_
-#define __UTILITY_H_
+#ifndef _UTILITY_H_
+#define _UTILITY_H_
 
 void SystemClock_Config(void);
 void MX_GPIO_Init(void);
