@@ -5,6 +5,7 @@ ControllerCopy/*
 .mxproject
 .stm32ignore
 .stmignore
+.pio/build
 BlackWidow.ioc
 Makefile
 startup_stm32f103xb.s
