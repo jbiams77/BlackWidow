@@ -1,5 +1,4 @@
 #include "port_handler.h"
-#include "main.h"
 
 /* Fields -------------------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_usart1_rx;
@@ -96,15 +95,15 @@ uint8_t rxBuffer_Get(void) {
  * @return void *
  */
 void transmit_buffer(uint8_t response[], uint16_t length){
-  int i;
-  HAL_GPIO_WritePin(DATA_DIR_GPIO_Port, DATA_DIR_Pin, HIGH);
-  for (i=0; i<length; i++){
-    txBuffer[i] = response[i];
-  }
-  /*  Fill rest of buffer with 0's*/
-  for (i; i<UART_TX__SZ; i++){
-    txBuffer[i] = 0;
-  }
-  HAL_UART_Transmit(&huart1, txBuffer, UART_TX__SZ, 2);
-  HAL_GPIO_WritePin(DATA_DIR_GPIO_Port, DATA_DIR_Pin, LOW);
+  // int i;
+  // HAL_GPIO_WritePin(DATA_DIR_GPIO_Port, DATA_DIR_Pin, HIGH);
+  // for (i=0; i<length; i++){
+  //   txBuffer[i] = response[i];
+  // }
+  // /*  Fill rest of buffer with 0's*/
+  // for (i; i<UART_TX__SZ; i++){
+  //   txBuffer[i] = 0;
+  // }
+  // HAL_UART_Transmit(&huart1, txBuffer, UART_TX__SZ, 2);
+  // HAL_GPIO_WritePin(DATA_DIR_GPIO_Port, DATA_DIR_Pin, LOW);
 }

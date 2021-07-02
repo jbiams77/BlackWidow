@@ -1,7 +1,5 @@
 #include "fifo.h"
 
-
-
 MessageQueue* constructMessage(){
     MessageQueue *queue = (MessageQueue*) malloc(sizeof (MessageQueue)); 
     int i;

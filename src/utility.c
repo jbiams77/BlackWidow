@@ -1,11 +1,4 @@
 #include "utility.h"
-#include "main.h"
-#include "port_handler.h"
-
-I2C_HandleTypeDef hi2c2;
-UART_HandleTypeDef huart1;
-DMA_HandleTypeDef hdma_usart1_rx;
-DMA_HandleTypeDef hdma_usart1_tx;
 
 /**
   * @brief System Clock Configuration

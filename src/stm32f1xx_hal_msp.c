@@ -20,8 +20,8 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
 /* USER CODE BEGIN Includes */
+#include "utility.h"
 
 /* USER CODE END Includes */
 extern DMA_HandleTypeDef hdma_usart1_rx;

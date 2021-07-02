@@ -20,7 +20,7 @@
  * http://www.gnu.org/licenses/.
  */
 
-#include <stdint.h>
+#include "utility.h"
 
 #ifndef INC_DWT_DELAY_H_
 #define INC_DWT_DELAY_H_
