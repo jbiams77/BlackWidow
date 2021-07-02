@@ -199,13 +199,22 @@ void DMA1_Channel5_IRQHandler(void)
   */
 void USART1_IRQHandler(void)
 {
+  
+  HAL_UART_IRQHandler(&huart1);
+  HAL_UART_RxCpltCallback (&huart1);  
+  // uint32_t tmp_flag = 0;
+  // tmp_flag = __HAL_UART_GET_FLAG (&huart1, UART_FLAG_IDLE);
+  // uint32_t temp;
+  // if (tmp_flag != RESET)
+  // {
+  //   __HAL_UART_CLEAR_IDLEFLAG (&huart1);
+  //   temp = huart1.Instance->SR;
+  //   temp = huart1.Instance->DR;
+  //   HAL_UART_DMAStop(&huart1);
+  //   temp = hdma_usart1_rx.Instance->CNDTR;
 
-  if (__HAL_UART_GET_FLAG (&huart1, UART_FLAG_IDLE))
-  {
-    __HAL_UART_CLEAR_IDLEFLAG (&huart1);
-    HAL_UART_RxCpltCallback (&huart1);       
-    SET_BIT(huart1.Instance->CR1, USART_CR1_IDLEIE);
-  }
+  //   HAL_UART_RxCpltCallback (&huart1);       
+  // }
   
   
 

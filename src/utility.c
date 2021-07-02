@@ -78,7 +78,7 @@ void MX_I2C2_Init(void)
   */
 void MX_USART1_UART_Init(void)
 {
-
+  
   /* USER CODE BEGIN USART1_Init 0 */
 
   /* USER CODE END USART1_Init 0 */

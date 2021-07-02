@@ -19,17 +19,13 @@ uint8_t temp_length;
 void UART_DMA_Init(void) {
   rd_ptr = 0;
   
-  
-  //HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rxBuffer, UART_RX__SZ);
-  
+  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // enable idle line interrupt    
   if (HAL_UART_Receive_DMA(&huart1, rxBuffer, UART_RX__SZ) != HAL_OK) {
     Error_Handler();
   }
-  __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // enable idle line interrupt  
-  __HAL_DMA_ENABLE_IT (&hdma_usart1_rx, DMA_IT_TC);  // enable DMA Tx cplt interrupt
+  //__HAL_DMA_ENABLE_IT (&hdma_usart1_rx, DMA_IT_TC);  // enable DMA Tx cplt interrupt
   __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT); // disable DMA half-transfer interrupt
-
-  //HAL_UART_Receive_IT(&huart1, rxBuffer, UART_RX__SZ);
+  HAL_UART_Receive_IT(&huart1, rxBuffer, UART_RX__SZ);
 }
 
 /* @brief Callback for UART RX idle line interrupt.
@@ -39,11 +35,37 @@ void UART_DMA_Init(void) {
  */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  validate_header(get_header());
+  if(USART1 == huart1.Instance)                                   //Determine whether it is serial port 1
+  {
+      if(RESET != __HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE))   //Judging whether it is idle interruption
+      {
+          __HAL_UART_CLEAR_IDLEFLAG(&huart1);                     //Clear idle interrupt sign (otherwise it will continue to enter interrupt)
+          printf("\r\nUART1 Idle IQR Detected\r\n");
+          USAR_UART_IDLECallback(huart);                          //Call interrupt handler
+      }
+  }
+  //validate_header(get_header());
   // if () {
     
   // }
   // UART_rx_transfer_to_queue();  
+}
+
+//Declare external variables                                                 
+void USAR_UART_IDLECallback(UART_HandleTypeDef *huart)
+{
+  //Stop this DMA transmission
+  HAL_UART_DMAStop(&huart1);  
+                                                      
+  //Calculate the length of the received data
+  uint8_t data_length  = UART_RX__SZ - __HAL_DMA_GET_COUNTER(&hdma_usart1_rx);   
+  
+  //Zero Receiving Buffer
+  memset(rxBuffer,0,data_length);                                            
+  data_length = 0;
+  
+  //Restart to start DMA transmission of 255 bytes of data at a time
+  HAL_UART_Receive_DMA(&huart1, (uint8_t*)rxBuffer, UART_RX__SZ);                    
 }
 
 /* @brief Transfers UART receive buffer to queue to enable prompt 
