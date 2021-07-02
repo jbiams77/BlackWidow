@@ -199,12 +199,12 @@ void DMA1_Channel5_IRQHandler(void)
   */
 void USART1_IRQHandler(void)
 {
- 
+
   if (__HAL_UART_GET_FLAG (&huart1, UART_FLAG_IDLE))
   {
     __HAL_UART_CLEAR_IDLEFLAG (&huart1);
-    HAL_UART_RxCpltCallback (&huart1);   
-    
+    HAL_UART_RxCpltCallback (&huart1);       
+    SET_BIT(huart1.Instance->CR1, USART_CR1_IDLEIE);
   }
   
   

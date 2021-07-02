@@ -20,12 +20,11 @@ void UART_DMA_Init(void) {
   rd_ptr = 0;
   
   
-  HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rxBuffer, UART_RX__SZ);
-
-  // if (HAL_UART_Receive_DMA(&huart1, rxBuffer, UART_RX__SZ) != HAL_OK) {
-  //   Error_Handler();
-  // }
-
+  //HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rxBuffer, UART_RX__SZ);
+  
+  if (HAL_UART_Receive_DMA(&huart1, rxBuffer, UART_RX__SZ) != HAL_OK) {
+    Error_Handler();
+  }
   __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // enable idle line interrupt  
   __HAL_DMA_ENABLE_IT (&hdma_usart1_rx, DMA_IT_TC);  // enable DMA Tx cplt interrupt
   __HAL_DMA_DISABLE_IT(&hdma_usart1_rx, DMA_IT_HT); // disable DMA half-transfer interrupt
