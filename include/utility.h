@@ -28,6 +28,10 @@
 #define UART_RX__SZ 64
 #define UART_TX__SZ 64
 #define UART_DMA_WRITE_PTR ((UART_RX__SZ - huart1.hdmarx->Instance->CNDTR) & (UART_RX__SZ - 1)) 
+#define HEADER_SIZE 4
+#define HEADER_MASK (uint32_t)0xFFFFFD00
+
+typedef enum {false, true} bool;
 
 I2C_HandleTypeDef hi2c2;
 UART_HandleTypeDef huart1;

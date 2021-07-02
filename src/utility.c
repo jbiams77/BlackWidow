@@ -173,8 +173,8 @@ void Error_Handler(void)
 {
   while (1){
     HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, HIGH);
-    HAL_Delay(1000);
+    HAL_Delay(100);
     HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, LOW);
-    HAL_Delay(1000);  
+    HAL_Delay(100);  
   }
 }

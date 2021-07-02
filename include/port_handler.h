@@ -14,4 +14,6 @@ void UART_RxComplete(void);
 void UART_DMA_Init(void);
 void UART_rx_transfer_to_queue(void);
 uint8_t rxBuffer_is_empty(void);
-uint8_t rxBuffer_Get(void);
+uint8_t get_one_byte_from_buffer(void);
+uint32_t* get_header(void);
+bool validate_header(uint32_t header);

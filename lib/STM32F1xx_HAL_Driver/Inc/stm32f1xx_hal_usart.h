@@ -28,6 +28,7 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal_def.h"
 
+
 /** @addtogroup STM32F1xx_HAL_Driver
   * @{
   */
@@ -480,6 +481,10 @@ typedef  void (*pUSART_CallbackTypeDef)(USART_HandleTypeDef *husart);  /*!< poin
 /**
   * @}
   */
+ 
+/* Include USART HAL Extended module */
+#include "stm32f1xx_hal_usart_ex.h"
+
 /* Exported functions --------------------------------------------------------*/
 /** @addtogroup USART_Exported_Functions
   * @{

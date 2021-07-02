@@ -6,7 +6,6 @@ extern DMA_HandleTypeDef hdma_usart1_tx;
 extern UART_HandleTypeDef huart1;
 extern MessageQueue *message;
 uint8_t temp_length;
-uint8_t message_transferred;
 
 /* Methods ------------------------------------------------------------------*/
 
@@ -20,7 +19,12 @@ uint8_t message_transferred;
 void UART_DMA_Init(void) {
   rd_ptr = 0;
   
-  HAL_UART_Receive_DMA(&huart1, rxBuffer, UART_RX__SZ);
+  
+  HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rxBuffer, UART_RX__SZ);
+
+  // if (HAL_UART_Receive_DMA(&huart1, rxBuffer, UART_RX__SZ) != HAL_OK) {
+  //   Error_Handler();
+  // }
 
   __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);   // enable idle line interrupt  
   __HAL_DMA_ENABLE_IT (&hdma_usart1_rx, DMA_IT_TC);  // enable DMA Tx cplt interrupt
@@ -36,8 +40,11 @@ void UART_DMA_Init(void) {
  */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  message_transferred = 0;
-  UART_rx_transfer_to_queue();  
+  validate_header(get_header());
+  // if () {
+    
+  // }
+  // UART_rx_transfer_to_queue();  
 }
 
 /* @brief Transfers UART receive buffer to queue to enable prompt 
@@ -48,29 +55,41 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
  * @return void
  */
 void UART_rx_transfer_to_queue(void) {
+
   while(!rxBuffer_is_empty() && !isFull(message)) {
     enQueue(message, rxBuffer_Get());
-    message_transferred = 1;
   }
-
-// TODO: good 
-  // if(!message_transferred){
-  //   Error_Handler();
-  // }
-
 }
+
+uint32_t* get_header(void) {
+  int i;
+  uint32_t header = 0;
+  for (i=0; i<4; i++) {
+    header += (get_one_byte_from_buffer() << i);
+  }
+  return header;
+}
+
+bool validate_header(uint32_t header) {
+  bool flag = ((header & HEADER_MASK) == HEADER_MASK);
+  return flag;
+}
+
+// void rx_filter(uint64_t) {
+
+// }
 
 /* @brief Determines receive buffer is empty.
  * 
  * @param void
- * @return 1 if buffer is empty
+ * @return true if buffer is empty
  */
-uint8_t rxBuffer_is_empty(void) {
+bool rxBuffer_is_empty(void) {
   uint16_t dma_ptr = UART_DMA_WRITE_PTR;
 	if(rd_ptr == dma_ptr) {
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
 /* @brief Grabs 1 byte of receive buffer.
@@ -78,7 +97,7 @@ uint8_t rxBuffer_is_empty(void) {
  * @param void
  * @return 1 byte from receive buffer
  */
-uint8_t rxBuffer_Get(void) {
+uint8_t get_one_byte_from_buffer(void) {
 	uint8_t message_byte = 0;
   uint16_t dma_ptr = UART_DMA_WRITE_PTR;
 	if(rd_ptr != dma_ptr) {
